@@ -16,15 +16,6 @@ function respondWithMessage(res, message) {
 	res.end(message);
 }
 
-function respondWithRedirect(res, url) {
-	res.writeHead(200, {
-		'Access-Control-Allow-Origin': '*',
-		'Access-Control-Allow-Methods': 'GET, POST',
-		'Location': url
-	});
-	res.end();
-}
-
 function invalidRequest(res) {
 	respondWithMessage(res, 'Invalid request.');
 }
@@ -55,7 +46,7 @@ function startServer() {
 						if (tokens[2] === 'create') {
 							if (postData['name'] !== undefined) {
 								let name = postData['name'].replace(/[^\w-]/, '');
-								if (name !== postData['name'] || postData['name'].length == 0) {
+								if (name !== postData['name'] || postData['name'].length === 0) {
 									respondWithMessage(res, 'The account name "' + postData['name'] + '" is not a valid account name. Please use only alphanumeric, underscore, and dash characters.');
 								}
 								else {
@@ -65,6 +56,32 @@ function startServer() {
 									else {
 										fs.mkdirSync('data/accounts/' + name);
 										respondWithMessage(res, 'The account "' + name + '" has been created.');
+									}
+								}
+							}
+							else {
+								respondWithMessage(res, 'Please enter an account name.');
+							}
+						}
+						else if (tokens[2] === 'delete') {
+							if (postData['name'] !== undefined) {
+								let name = postData['name'].replace(/[^\w-]/, '');
+								if (name !== postData['name'] || postData['name'].length === 0) {
+									respondWithMessage(res, 'The account name "' + postData['name'] + '" is not a valid account name. Please use only alphanumeric, underscore, and dash characters.');
+								}
+								else {
+									if (fs.existsSync('data/accounts/' + name)) {
+										if (fs.existsSync('data/accounts/' + name + '/info.json')) {
+											fs.unlinkSync('data/accounts/' + name + '/info.json');
+										}
+										if (fs.existsSync('data/accounts/' + name + '/transactions.json')) {
+											fs.unlinkSync('data/accounts/' + name + '/transactions.json');
+										}
+										fs.rmdirSync('data/accounts/' + name);
+										respondWithMessage(res, 'The account "' + name + '" has been deleted.');
+									}
+									else {
+										respondWithMessage(res, 'The account "' + name + '" does not exist.');
 									}
 								}
 							}

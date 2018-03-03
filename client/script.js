@@ -12,7 +12,7 @@ async function populateAccountList() {
 			if (Array.isArray(json)) {
 				let html = '<ul>';
 				for (let i = 0; i < json.length; i++) {
-					html += '<li>' + json[i] + '</li>';
+					html += '<li>' + json[i] + ' <a href="javascript:void(null);" onclick="if (confirm(\'Delete the account &quot;' + json[i] + '&quot;?\')) { deleteAccount(\'' + json[i] + '\'); }">DELETE</a></li>';
 				}
 				html += '</ul>';
 				account_list_elem.innerHTML = html;
@@ -30,6 +30,23 @@ async function populateAccountList() {
 async function createAccount(name) {
 	try {
 		let res = await fetch(server_host + '/account/create', {
+			method: 'post',
+			body: JSON.stringify({
+				name: name
+			})
+		});
+		let text = await res.text();
+		message_elem.innerHTML = text;
+		populateAccountList();
+	}
+	catch (err) {
+		message_elem.innerHTML = err;
+	}
+}
+
+async function deleteAccount(name) {
+	try {
+		let res = await fetch(server_host + '/account/delete', {
 			method: 'post',
 			body: JSON.stringify({
 				name: name
