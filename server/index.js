@@ -5,13 +5,28 @@ const querystring = require('querystring');
 const fs = require('fs');
 const util = require('util')
 
-var sentMessage = false;
+const client = '//localhost/projects/financio/client/';
+
 function respondWithMessage(res, message) {
 	res.writeHead(200, {
-		'Content-Type': 'text/plain'
+		'Content-Type': 'text/plain',
+		'Access-Control-Allow-Origin': '*',
+		'Access-Control-Allow-Methods': 'GET, POST'
 	});
 	res.end(message);
-	sentMessage = true;
+}
+
+function respondWithRedirect(res, url) {
+	res.writeHead(200, {
+		'Access-Control-Allow-Origin': '*',
+		'Access-Control-Allow-Methods': 'GET, POST',
+		'Location': url
+	});
+	res.end();
+}
+
+function invalidRequest(res) {
+	respondWithMessage(res, 'Invalid request.');
 }
 
 function setupFolders() {
@@ -24,17 +39,18 @@ function setupFolders() {
 }
 
 function startServer() {
-	http.createServer(function (req, res) {
+	http.createServer((req, res) => {
 		let tokens = req.url.split('/');
+		let invalidRequest = false;
 
 		if (tokens.length >= 3) {
 			if (req.method === 'POST') {
 				let postData = '';
-				req.on('data', function (data) {
+				req.on('data', data => {
 					postData += data;
 				});
-				req.on('end', function () {
-					postData = querystring.parse(postData);
+				req.on('end', () => {
+					postData = JSON.parse(postData);
 					if (tokens[1] === 'account') {
 						if (tokens[2] === 'create') {
 							if (postData['name'] !== undefined) {
@@ -52,13 +68,36 @@ function startServer() {
 									}
 								}
 							}
+							else {
+								respondWithMessage(res, 'Please enter an account name.');
+							}
 						}
+						else {
+							invalidRequest(res);
+						}
+					}
+					else {
+						invalidRequest(res);
 					}
 				});
 			}
-			else if (req.method === 'GET') {}
-			if (!sentMessage) {
-				respondWithMessage(res, 'Invalid request.');
+			else if (req.method === 'GET') {
+				if (tokens[1] === 'account') {
+					if (tokens[2] === 'list') {
+						fs.readdir('data/accounts/', (err, items) => {
+							respondWithMessage(res, JSON.stringify(items));
+						});
+					}
+					else {
+						invalidRequest(res);
+					}
+				}
+				else {
+					invalidRequest(res);
+				}
+			}
+			else {
+				invalidRequest(res);
 			}
 		}
 
