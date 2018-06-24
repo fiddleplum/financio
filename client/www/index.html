@@ -1,0 +1,24 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="style.css"/>
+		<script src="index.js"></script>
+		<title>Financio</title>
+	</head>
+	<body>
+		<h1>Financio</h1>
+		<div id="message"></div>
+		<form action="javascript:void(null);">
+			<div>Create an account: <input type="text" id="create_account_name" /></div>
+			<div>Debt/Credit: <input type="radio" value="credit" name="type" id="create_account_type_credit" /></div>
+			<div>Asset/Debit: <input type="radio" value="debit" name="type" id="create_account_type_debit" /></div>
+			<div><input type="submit" onclick="createAccount();" /></div>
+		</form>
+		<h2>Account List</h2>
+		<div id="account_list">
+		</div>
+		<div id="account_view">
+		</div>
+	</body>
+</html>

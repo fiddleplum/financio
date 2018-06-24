@@ -1,0 +1,14 @@
+{
+	"extends": "standard",
+	"env" : {
+		"browser": true
+	},
+	"rules": {
+		"indent": ["error", "tab"],
+		"no-tabs": "off",
+		"semi": ["error", "always"],
+		"space-before-function-paren": ["error", "never"],
+		"brace-style": ["error", "stroustrup"],
+		"yoda": "off"
+	}
+}
