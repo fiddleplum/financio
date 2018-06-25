@@ -1,3 +1,5 @@
+const fsPromises = require('fs').promises;
+
 class Accounts {
 	static async list() {
 		return fsPromises.readdir('data/accounts/');

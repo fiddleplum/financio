@@ -1,5 +1,7 @@
+import WS from './ws';
+
 class App {
-	static initialize() {
+	static async initialize() {
 		this.serverHost = '//localhost:8080';
 
 		this.accountListElem = document.getElementById('account_list');
@@ -7,16 +9,9 @@ class App {
 		this.messageElem = document.getElementById('message');
 
 		// Start the web socket connection.
-		this.webSocket = new WebSocket('ws:' + this.serverHost);
-		this.webSocket.onopen = (event) => {
-			// this.webSocket.send('TESTING TESTING');
-		};
-		this.webSocket.onmessage = (message) => {
-			
-		};
-		window.addEventListener('beforeunload', () => {
-			this.webSocket.close();
-		});
+		this.ws = new WS(this.serverHost);
+
+		await this.ws.getReadyPromise();
 
 		this.populateAccountList();
 	}
@@ -26,28 +21,16 @@ class App {
 	}
 
 	static async populateAccountList() {
-		try {
-			this.webSocket.send(
-			let res = await fetch(this.serverHost + '/account/list');
-			let text = await res.text();
-			try {
-				let json = JSON.parse(text);
-				if (Array.isArray(json)) {
-					let html = '<ul>';
-					for (let i = 0; i < json.length; i++) {
-						html += '<li><a href="javascript:viewAccount(\'' + json[i] + '\');">' + json[i] + '</a> <a href="javascript:if (confirm(\'Delete the account &quot;' + json[i] + '&quot;?\')) { deleteAccount(\'' + json[i] + '\'); }">DELETE</a></li>';
-					}
-					html += '</ul>';
-					this.accountListElem.innerHTML = html;
-				}
-			}
-			catch (err) {
-				this.showMessage(text);
-			}
+		let accounts = await this.ws.send({
+			'subject': 'accounts',
+			'verb': 'list'
+		});
+		let html = '<ul>';
+		for (let i = 0; i < accounts.length; i++) {
+			html += '<li><a href="javascript:viewAccount(\'' + accounts[i] + '\');">' + accounts[i] + '</a> <a href="javascript:if (confirm(\'Delete the account &quot;' + accounts[i] + '&quot;?\')) { deleteAccount(\'' + accounts[i] + '\'); }">DELETE</a></li>';
 		}
-		catch (err) {
-			this.showMessage(err);
-		}
+		html += '</ul>';
+		this.accountListElem.innerHTML = html;
 	}
 
 	static async createAccount() {
