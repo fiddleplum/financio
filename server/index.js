@@ -10,19 +10,17 @@ async function processMessage(ws, message) {
 	let request = JSON.parse(message);
 	let requestData = request.data;
 	let responseData = null;
-	if (requestData.subject === 'accounts') {
-		if (requestData.verb === 'list') {
-			responseData = await Accounts.list();
-		}
-		else if (requestData.verb === 'get') {
-			responseData = await Accounts.get(request.name);
-		}
-		else if (requestData.verb === 'create') {
-			responseData = await Accounts.create(request.name, request.type);
-		}
-		else if (requestData.verb === 'delete') {
-			responseData = await Accounts.delete(request.name);
-		}
+	if (requestData.command === 'list accounts') {
+		responseData = await Accounts.list();
+	}
+	else if (requestData.command === 'create account') {
+		responseData = await Accounts.create(requestData.name, requestData.type);
+	}
+	else if (requestData.command === 'delete account') {
+		responseData = await Accounts.delete(requestData.name);
+	}
+	else if (requestData.command === 'get account info') {
+		responseData = await Accounts.getInfo(requestData.name);
 	}
 	ws.send(JSON.stringify({
 		id: request.id,

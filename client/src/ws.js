@@ -10,6 +10,10 @@ import UniqueIds from './unique_ids';
  * A message sending and receiving WebSocket interface.
  */
 class WS {
+	/**
+	 * Constructor.
+	 * @param {string} url the url to connect to
+	 */
 	constructor(url) {
 		/**
 		 * The WebSocket connection.
@@ -70,6 +74,10 @@ class WS {
 		});
 	}
 
+	/**
+	 * Gets the promise that resolves when the web socket is ready to be used.
+	 * @returns {Promise}
+	 */
 	getReadyPromise() {
 		return this._readyPromise;
 	}

@@ -1,36 +1,47 @@
-const fsPromises = require('fs').promises;
+const fs = require('fs');
 
 class Accounts {
 	static async list() {
-		return fsPromises.readdir('data/accounts/');
+		return fs.promises.readdir('data/accounts/');
 	}
 
-	static async get(name) {
-		if (!validateName(name)) {
+	static async getInfo(name) {
+		if (!this._validateName(name)) {
 			return Promise.reject('The name "' + name + '" is not a valid account name. Please use only alphanumeric, underscore, and dash characters.');
 		}
-		let fd = await fsPromises.open('data/accounts/' + name, 'r');
-		return {}
+		let fileHandle = await fs.promises.open('data/accounts/' + name + '/info.json', 'r');
+		let fileContent = await fileHandle.readFile();
+		return JSON.parse(fileContent);
 	}
 	
 	static async create(name, type) {
-		if (!validateName(name)) {
+		if (!this._validateName(name)) {
 			return Promise.reject('The name "' + name + '" is not a valid account name. Please use only alphanumeric, underscore, and dash characters.');
 		}
-		await fsPromises.mkdir('data/accounts/' + name);
-		await fsPromises.writeFile('data/accounts/' + name + '/info.json', JSON.stringify({
+		await fs.promises.mkdir('data/accounts/' + name);
+		await fs.promises.writeFile('data/accounts/' + name + '/info.json', JSON.stringify({
 			type: type
 		}));
 		return {};
 	}
 	
 	static async delete(name) {
-		if (!validateName(name)) {
+		if (!this._validateName(name)) {
 			return Promise.reject('The name "' + name + '" is not a valid account name. Please use only alphanumeric, underscore, and dash characters.');
 		}
-		await fsPromises.unlink('data/accounts/' + name + '/info.json');
-		await fsPromises.unlink('data/accounts/' + name + '/transactions.json');
-		await fsPromises.rmdir('data/accounts/' + name);
+
+		try {
+			await fs.promises.unlink('data/accounts/' + name + '/info.json');
+		}
+		catch (e) {}
+		try {
+			await fs.promises.unlink('data/accounts/' + name + '/transactions.json');
+		}
+		catch (e) {}
+		try {
+			await fs.promises.rmdir('data/accounts/' + name);
+		}
+		catch (e) {}
 		return {}
 	}
 
