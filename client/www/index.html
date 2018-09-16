@@ -7,18 +7,10 @@
 		<title>Financio</title>
 	</head>
 	<body>
-		<h1>Financio</h1>
+		<h1>FINANCIO</h1>
+		<elem-account-list></elem-account-list>
 		<div id="message"></div>
-		<form id="createAccountForm" action="javascript:void(null);">
-			<div>Create an account: <input type="text" id="create_account_name" /></div>
-			<div>Debt/Credit: <input type="radio" value="credit" name="type" id="create_account_type_credit" /></div>
-			<div>Asset/Debit: <input type="radio" value="debit" name="type" id="create_account_type_debit" /></div>
-			<div><input type="submit" onclick="App.createAccount();" /></div>
-		</form>
-		<h2>Account List</h2>
-		<div id="account_list">
-		</div>
-		<div id="account_view">
-		</div>
+		<div id="view"></div>
+		<elem-message></elem-message>
 	</body>
 </html>

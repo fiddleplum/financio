@@ -1,7 +1,23 @@
+@import url('https://fonts.googleapis.com/css?family=Muli');
+
 * {
-	box-sizing: border-box
+	box-sizing: border-box;
+	margin: 0;
 }
 
 body {
 	margin: 0;
+	font-family: 'Muli', sans-serif;
+}
+
+h1 {
+	text-align: center;
+	padding: .5em;
+	background: lightgrey;
+	line-height: 1em;
+	letter-spacing: .25em;
+}
+
+#view {
+	height: calc(100% - 8em);
 }
