@@ -19,5 +19,6 @@ h1 {
 }
 
 #view {
+	padding: .25em;
 	height: calc(100% - 8em);
 }

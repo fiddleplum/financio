@@ -27,6 +27,8 @@ class ElemAccountList extends HTMLElement {
 
 					#root {
 						padding: .25em;
+						height: 1.5em;
+						background: grey;
 					}
 
 					a {

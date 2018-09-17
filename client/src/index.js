@@ -1,6 +1,7 @@
 import WS from './ws';
 import './elem_mesage';
 import './elem_account_list';
+import './elem_transaction_list';
 
 /**
  * The main Financio application.
@@ -49,10 +50,12 @@ class App {
 			'name': name
 		});
 
-		let html = '<h1>' + name + '</h1>';
-		html += '<h2>' + accountInfo.type + '</h2>';
+		let html = '<h2>' + name + '</h2>';
+		html += '<h3>' + accountInfo.type + '</h3>';
+		html += '<elem-transaction-list></elem-transaction-list>';
 
-		document.querySelector('#account_view').innerHTML = html;
+		document.querySelector('#view').innerHTML = html;
+		document.querySelector('elem-transaction-list').initialize(this.ws, document.querySelector('elem-message'), name);
 	}
 }
 
