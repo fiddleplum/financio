@@ -1,52 +1,52 @@
-class ElemMessage extends HTMLElement {
+class ElemMessages extends HTMLElement {
 	constructor() {
 		super();
 
+		/** @type {number} */
 		this._numVisibleMessages = 1;
 
+		/** @type {string[]} */
 		this._messages = [];
 
-		this._shadowRoot = this.attachShadow({mode: 'open'});
+		/** @type {HTMLDivElement} */
+		this._root = null;
+	}
 
-		this._shadowRoot.innerHTML = `
+	connectedCallback() {
+		this.innerHTML = `
 			<style>
-			* {
-				margin: 0;
-			}
-
-			#root {
-				overflow-y: hidden;
-				background: grey;
-			}
-
-			p {
-				padding: .25em;
-				line-height: 1.5em;
-			}
-
-			@keyframes movedown {
-				from {
-					margin-top: 0;
+				elem-messages #root {
+					overflow-y: hidden;
 				}
-				to {
-					margin-top: 2.0em;
+
+				elem-messages p {
+					margin: 0;
+					padding: .25em;
+					line-height: 1.5em;
 				}
-			}
 
-			.movingdown {
-				animation-duration: .25s;
-				animation-name: movedown;
-			}
+				@keyframes movedown {
+					from {
+						margin-top: 0;
+					}
+					to {
+						margin-top: 2.0em;
+					}
+				}
 
-			.invisible {
-				display: none;
-			}
+				elem-messages .movingdown {
+					animation-duration: .25s;
+					animation-name: movedown;
+				}
 
+				elem-messages .invisible {
+					display: none;
+				}
 			</style>
 			<div id="root">
 			</div>`;
 
-		this._root = this._shadowRoot.querySelector('#root');
+		this._root = this.querySelector('#root');
 		this._root.addEventListener('animationend', (event) => {
 			this._pruneEndMessages();
 			this._root.children[0].classList.remove('invisible');
@@ -92,6 +92,6 @@ class ElemMessage extends HTMLElement {
 	}
 }
 
-window.customElements.define('elem-message', ElemMessage);
+window.customElements.define('elem-messages', ElemMessages);
 
-export default ElemMessage;
+export default ElemMessages;

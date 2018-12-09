@@ -1,15 +1,7 @@
 'use strict';
 
-import Account from './account';
-
-const fsPromises = require('fs').promise;
 const WebSocket = require('ws');
 const Accounts = require('./accounts.js');
-
-/**
- * @type {Map<string, Account>}
- */
-let accounts = {};
 
 /**
  * @param {WebSocket} ws
@@ -20,7 +12,7 @@ async function processMessage(ws, message) {
 
 	let request = JSON.parse(message);
 	let requestData = request.data;
-	let responseData = undefined;
+	let responseData;
 	if (requestData.command === 'list accounts') {
 		responseData = await Accounts.list();
 	}
@@ -33,17 +25,17 @@ async function processMessage(ws, message) {
 		let name = requestData.name;
 		responseData = await Accounts.delete(name);
 	}
-	else if (requestData.command === 'get account info') {
+	else if (requestData.command === 'view account') {
 		let name = requestData.name;
-		responseData = await Accounts.getInfo(name);
+		responseData = await Accounts.view(name);
 	}
 	else if (requestData.command === 'list transactions') {
 		let name = requestData.name;
-		let start = requestData.start;
-		let length = requestData.length;
-		responseData = await Accounts.listTransactions(name, start, length);
+		let startDate = requestData.startDate;
+		let endDate = requestData.endDate;
+		responseData = await Accounts.listTransactions(name, startDate, endDate);
 	}
-	else if (requestedData.command === 'add transactions') {
+	else if (requestData.command === 'add transactions') {
 		let name = requestData.name;
 		let transactions = requestData.transactions;
 		responseData = await Accounts.addTransactions(name, transactions);
@@ -54,24 +46,14 @@ async function processMessage(ws, message) {
 	}));
 }
 
-async function setupFolders() {
-	try {
-		await fsPromises.mkdir('data');
-	}
-	catch (e) {
-	}
-
-	try {
-		await fsPromises.mkdir('data/accounts');
-	}
-	catch (e) {
-	}
-}
-
 function startServer() {
 	const wss = new WebSocket.Server({
 		port: 8080
 	});
+
+	Accounts.initialize();
+
+	console.log('The server has started.');
 
 	wss.on('connection', (ws) => {
 		console.log('Accepted a new connection.');
@@ -87,5 +69,4 @@ function startServer() {
 	});
 }
 
-setupFolders();
 startServer();

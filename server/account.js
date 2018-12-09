@@ -1,4 +1,4 @@
-import Transaction from './transaction';
+const Transaction = require('./transaction');
 
 class Account {
 	constructor() {
@@ -12,4 +12,4 @@ class Account {
 	}
 }
 
-export default Account;
+module.exports = Account;

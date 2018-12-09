@@ -1,24 +1,84 @@
-@import url('https://fonts.googleapis.com/css?family=Muli');
+/* @import url('https://fonts.googleapis.com/css?family=Muli'); */
 
 * {
 	box-sizing: border-box;
-	margin: 0;
 }
 
 body {
+	display: grid;
+	grid-template-rows: 3.125em auto 2.125em;
+	grid-template-columns: 16.125em auto 16.125em;
+	grid-template-areas: 
+		'title title title'
+		'nav main right'
+		'messages messages messages';
 	margin: 0;
 	font-family: 'Muli', sans-serif;
+	width: 100vw;
+	height: 100%;
+	background: rgb(185, 197, 252);
 }
 
-h1 {
+body > #title {
+	grid-area: title;
 	text-align: center;
-	padding: .5em;
-	background: lightgrey;
-	line-height: 1em;
+	font-size: 2em;
+	line-height: 1.5em;
 	letter-spacing: .25em;
 }
 
-#view {
-	padding: .25em;
-	height: calc(100% - 8em);
+body > #nav {
+	padding: 0 1em 0 1em;
 }
+
+body > #right {
+	padding: 0 1em 0 1em;
+}
+
+body > #messages {
+	grid-area: messages;
+	line-height: 2em;
+}
+
+body > #main {
+	padding: .25em;
+	height: 100%;
+	background: white;
+	border-radius: 1em;
+}
+
+.title {
+	font-size: 1.5em;
+	line-height: 1.5em;
+	border-bottom: 1px solid black;
+	margin-bottom: .5em;
+}
+
+.button, input[type=submit] {
+	display: block;
+	cursor: pointer;
+	background: white;
+	color: black;
+	border: 0;
+	border-radius: .125em;
+	line-height: 1.5em;
+	padding: .25em;
+	text-align: center;
+	text-decoration: none;
+	margin-bottom: .5em;
+}
+
+input, select {
+	background: white;
+	color: black;
+	line-height: 1.5em;
+	padding: .25em;
+	border: 0;
+	border-radius: .125em;
+	margin-bottom: .5em;	
+}
+
+.hidden {
+	display: none;
+}
+

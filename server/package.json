@@ -4,7 +4,9 @@
 	"description": "Financio Server",
 	"private": true,
 	"main": "index.html",
-	"scripts": {},
+	"scripts": {
+		"start": "node ."
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/fiddleplum/financio.git"
@@ -15,7 +17,9 @@
 		"url": "https://github.com/fiddleplum/financio/issues"
 	},
 	"homepage": "https://github.com/fiddleplum/financio",
-	"dependencies": {},
+	"dependencies": {
+		"ws": "latest"
+	},
 	"devDependencies": {
 		"eslint": "latest",
 		"eslint-config-standard": "latest",

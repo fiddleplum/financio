@@ -91,6 +91,7 @@ class WS {
 
 	/**
 	 * Sends the JSON data along the web socket. Returns a promise resolving with response JSON data.
+	 * @param {object} data
 	 * @returns {Promise}
 	 */
 	send(data) {
