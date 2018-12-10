@@ -1,4 +1,3 @@
-// import {parse as parseOFX} from 'ofx-js';
 import Transaction from './transaction';
 
 class ElemTransactionList extends HTMLElement {
@@ -7,13 +6,18 @@ class ElemTransactionList extends HTMLElement {
 
 		this._ws = null;
 
-		this._root = this.attachShadow({mode: 'open'});
+		this._accountName = '';
 	}
 
-	initialize(ws, messageElement, name) {
+	connectedCallback() {
+		this.innerHTML = `
+			<div class="title">Transactions</div>
+			<div id="transactions"></div>`;
+	}
+
+	initialize(ws, accountName) {
 		this._ws = ws;
-		this._messageElement = messageElement;
-		this._name = name;
+		this._accountName = accountName;
 		this.update();
 	}
 
@@ -21,7 +25,7 @@ class ElemTransactionList extends HTMLElement {
 		if (this._ws !== null) {
 			let transactions = await this._ws.send({
 				'command': 'list transactions',
-				'name': this._name,
+				'name': this._accountName,
 				'start': 0,
 				'length': 1000
 			});
@@ -56,7 +60,7 @@ class ElemTransactionList extends HTMLElement {
 			html += `
 					</ol>
 				</div>`;
-			this._root.innerHTML = html;
+			this.querySelector('#transactions').innerHTML = html;
 
 			let contentElem = this._root.querySelector('#content');
 			contentElem.addEventListener('dragover', (e) => {
@@ -80,7 +84,7 @@ class ElemTransactionList extends HTMLElement {
 							let transactions = await ElemTransactionList._getTransactionsFromOFX(e2.target.result);
 							await this._ws.send({
 								'command': 'add transactions',
-								'name': this._name,
+								'name': this._accountName,
 								'transactions': transactions
 							});				
 						};

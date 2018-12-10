@@ -4,10 +4,13 @@ import './elem_messages';
 import './elem_account_list';
 import './elem_create_account';
 import './elem_transaction_list';
+import './elem_account_toolbar';
 
 /** @typedef {import('./elem_messages').default} ElemMessages */
 /** @typedef {import('./elem_account_list').default} ElemAccountList */
+/** @typedef {import('./elem_create_account').default} ElemCreateAccount */
 /** @typedef {import('./elem_transaction_list').default} ElemTransactionList */
+/** @typedef {import('./elem_account_toolbar').default} ElemAccountToolbar */
 
 /**
  * The main Financio application.
@@ -44,7 +47,12 @@ class App {
 		// Notify the user that Financio is connected.
 		this.showMessage('Financio is connected.');
 
-		document.querySelector('elem-account-list').initialize(this._ws);
+		let elemAccountList = document.createElement('elem-account-list');
+		elemAccountList.initialize(this._ws);
+		document.body.querySelector('#nav').appendChild(elemAccountList);
+
+		let elemCreateAccount = document.createElement('elem-create-account');
+		document.body.querySelector('#nav').appendChild(elemCreateAccount);
 	}
 
 	/**
@@ -52,6 +60,7 @@ class App {
 	 * @param {string} message
 	 */
 	showMessage(message) {
+		console.log(document.querySelector('elem-messages'));
 		document.querySelector('elem-messages').addMessage(message);
 	}
 
@@ -73,9 +82,21 @@ class App {
 	async viewAccount(name) {
 		// Send the command to the server to get the account info.
 		const accountInfo = await Data.viewAccount(this._ws, name);
+		console.log(accountInfo);
 
 		if (accountInfo.type === 'credit' || accountInfo.type === 'debit') {
 			let transactions = await Data.listTransactions(this._ws, name, '2018-01-01', '2019-01-01');
+			console.log(transactions);
+
+			let elemTransactionList = document.createElement('elem-transaction-list');
+			elemTransactionList.initialize(this._ws, name);
+			document.body.querySelector('#main').innerHTML = '';
+			document.body.querySelector('#main').appendChild(elemTransactionList);
+
+			let elemAccountToolbar = document.createElement('elem-account-toolbar');
+			elemAccountToolbar.initialize(this._ws, name);
+			document.body.querySelector('#right').innerHTML = '';
+			document.body.querySelector('#right').appendChild(elemAccountToolbar);
 		}
 	}
 }

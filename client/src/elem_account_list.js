@@ -11,6 +11,12 @@ class ElemAccountList extends HTMLElement {
 
 	connectedCallback() {
 		this.innerHTML = `
+			<style>
+				elem-account-list .button {
+					display: block;
+					margin-bottom: .5em;
+				}
+			</style>
 			<div class="title">Accounts</div>
 			<div id="accounts"></div>`;
 	}
