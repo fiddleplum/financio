@@ -62,7 +62,7 @@ class ElemTransactionList extends HTMLElement {
 				</div>`;
 			this.querySelector('#transactions').innerHTML = html;
 
-			let contentElem = this._root.querySelector('#content');
+			let contentElem = this.querySelector('#content');
 			contentElem.addEventListener('dragover', (e) => {
 				console.log('dragover');
 				e.stopPropagation();

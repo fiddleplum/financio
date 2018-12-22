@@ -13,35 +13,45 @@ async function processMessage(ws, message) {
 	let request = JSON.parse(message);
 	let requestData = request.data;
 	let responseData;
-	if (requestData.command === 'list accounts') {
-		responseData = await Accounts.list();
+	let success = false;
+	let error = '';
+	try {
+		if (requestData.command === 'list accounts') {
+			responseData = await Accounts.list();
+		}
+		else if (requestData.command === 'create account') {
+			let name = requestData.name;
+			let type = requestData.type;
+			responseData = await Accounts.create(name, type);
+		}
+		else if (requestData.command === 'delete account') {
+			let name = requestData.name;
+			responseData = await Accounts.delete(name);
+		}
+		else if (requestData.command === 'view account') {
+			let name = requestData.name;
+			responseData = await Accounts.view(name);
+		}
+		else if (requestData.command === 'list transactions') {
+			let name = requestData.name;
+			let startDate = requestData.startDate;
+			let endDate = requestData.endDate;
+			responseData = await Accounts.listTransactions(name, startDate, endDate);
+		}
+		else if (requestData.command === 'add transactions') {
+			let name = requestData.name;
+			let transactions = requestData.transactions;
+			responseData = await Accounts.addTransactions(name, transactions);
+		}
+		success = true;
 	}
-	else if (requestData.command === 'create account') {
-		let name = requestData.name;
-		let type = requestData.type;
-		responseData = await Accounts.create(name, type);
-	}
-	else if (requestData.command === 'delete account') {
-		let name = requestData.name;
-		responseData = await Accounts.delete(name);
-	}
-	else if (requestData.command === 'view account') {
-		let name = requestData.name;
-		responseData = await Accounts.view(name);
-	}
-	else if (requestData.command === 'list transactions') {
-		let name = requestData.name;
-		let startDate = requestData.startDate;
-		let endDate = requestData.endDate;
-		responseData = await Accounts.listTransactions(name, startDate, endDate);
-	}
-	else if (requestData.command === 'add transactions') {
-		let name = requestData.name;
-		let transactions = requestData.transactions;
-		responseData = await Accounts.addTransactions(name, transactions);
+	catch (e) {
+		error = e.message;
 	}
 	ws.send(JSON.stringify({
 		id: request.id,
+		success: success,
+		error: error,
 		data: responseData
 	}));
 }

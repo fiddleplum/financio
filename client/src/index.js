@@ -60,13 +60,18 @@ class App {
 	 * @param {string} message
 	 */
 	showMessage(message) {
-		console.log(document.querySelector('elem-messages'));
 		document.querySelector('elem-messages').addMessage(message);
 	}
 
 	async createAccount(name, type) {
 		// Send the command to the server.
-		await Data.createAccount(this._ws, name, type);
+		try {
+			await Data.createAccount(this._ws, name, type);
+		}
+		catch (errorMessage) {
+			this.showMessage(errorMessage);
+			return;
+		}
 
 		// Repopulate the account list.
 		let elemAccountList = document.querySelector('elem-account-list');

@@ -38,7 +38,7 @@ class WS {
 
 		/**
 		 * The list of active sent messages awaiting a received message.
-		 * @type {Map<number, receivedPromiseResolve>}
+		 * @type {Map<number, {receivedPromiseResolve, receivedPromiseReject}>}
 		 * @private
 		 */
 		this._activeSends = new Map();
@@ -60,7 +60,11 @@ class WS {
 			let id = json.id;
 
 			// Get the function to be resolved using the id in the json.
-			let resolve = this._activeSends.get(id);
+			let { resolve, reject } = this._activeSends.get(id);
+
+			if (json.success === false) {
+				reject(json.error);
+			}
 
 			// Remove the id from the actively sending message list and release the id.
 			this._activeSends.delete(id);
@@ -101,7 +105,7 @@ class WS {
 				id: id,
 				data: data
 			};
-			this._activeSends.set(id, resolve);
+			this._activeSends.set(id, { resolve, reject });
 			this._webSocket.send(JSON.stringify(json));
 		});
 	}

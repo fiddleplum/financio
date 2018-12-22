@@ -125,7 +125,7 @@ class Accounts {
 	}
 
 	static _validateName(name) {
-		if (name !== name.replace(/[^\w-]/, '') || name.length === 0) {
+		if (name !== name.replace(/[^\w- ']/, '') || name.length === 0) {
 			return false;
 		}
 		return true;
