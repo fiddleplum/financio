@@ -71,23 +71,29 @@ class Accounts {
 		}
 	}
 
-	static listTransactions(name, yearStart, monthStart, yearEnd, monthEnd) {
+	/**
+	 * Gets a list of the transacionts.
+	 * @param {string} name
+	 * @param {string} startDate - format 'YYYY-MM-DD'
+	 * @param {string} endDate - format 'YYYY-MM-DD'
+	 */
+	static listTransactions(name, startDate, endDate) {
 		if (!this._validateName(name)) {
 			throw new Error('The name "' + name + '" is not a valid account name. Please use only alphanumeric, underscore, and dash characters.');
 		}
 
 		let transactions = [];
 		if (fs.existsSync('data/accounts/' + name + '_transactions/')) {
-			let dateStart = new Date(yearStart, monthStart - 1);
-			let dateEnd = new Date(yearEnd, monthEnd - 1);
-			let date = new Date(dateStart);
-			while (date <= dateEnd) {
-				const filePath = this.getTransactionsFilePath(date);
-				if (!fs.existsSync(filePath)) {
-					break;
+			const start = new Date(startDate);
+			const end = new Date(endDate);
+			let date = new Date(start);
+			while (date <= end) {
+				const filePath = this.getTransactionsFilePath(name, date);
+				console.log(filePath);
+				if (fs.existsSync(filePath)) {
+					transactions = transactions.concat(JSON.parse(fs.readFileSync(filePath)));
 				}
-				transactions = transactions.concat(JSON.parse(fs.readFileSync(filePath)));
-				date = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+				date.setMonth(date.getMonth() + 1);
 			}
 		}
 		return transactions;
@@ -102,19 +108,24 @@ class Accounts {
 			fs.mkdirSync('data/accounts/' + name + '_transactions/');
 		}
 
-		let currentTransactionsFilePath = ''
+		let currentTransactionsFilePath = '';
 		let currentTransactions = null;
-		for (let i = 0, l = transactions.length; i < l; i++) {
-			let transaction = transactions[i];
+		for (let transaction of transactions) {
 			let date = new Date(transaction.date);
-			let transactionFilePath = this.getTransactionsFilePath(date);
+			let transactionFilePath = this.getTransactionsFilePath(name, date);
 			if (currentTransactionsFilePath !== transactionFilePath) {
 				if (currentTransactionsFilePath !== '') {
 					this.sortTransactions(currentTransactions);
 					fs.writeFileSync(currentTransactionsFilePath, JSON.stringify(currentTransactions));
 				}
 				currentTransactionsFilePath = transactionFilePath;
-				currentTransactions = JSON.parse(fs.readFileSync(transactionFilePath));
+				if (!fs.existsSync(currentTransactionsFilePath)) {
+					fs.writeFileSync(currentTransactionsFilePath, '');
+					currentTransactions = [];
+				}
+				else {
+					currentTransactions = JSON.parse(fs.readFileSync(currentTransactionsFilePath));
+				}
 			}
 			currentTransactions.push(transaction);
 		}
@@ -124,6 +135,10 @@ class Accounts {
 		}
 	}
 
+	/**
+	 * Validates the account name.
+	 * @param {string} name
+	 */
 	static _validateName(name) {
 		if (name !== name.replace(/[^\w- ']/, '') || name.length === 0) {
 			return false;
@@ -131,8 +146,12 @@ class Accounts {
 		return true;
 	}
 
-	static getTransactionsFilePath(date) {
-		return 'data/accounts/' + name + '_transactions/' + date.getFullYear().toString().padStart(4, '0') + (date.getMonth() + 1).toString(padStart(2, '0')) + '.json';
+	/**
+	 * @param {string} name
+	 * @param {Date} date
+	 */
+	static getTransactionsFilePath(name, date) {
+		return 'data/accounts/' + name + '_transactions/' + date.getFullYear().toString().padStart(4, '0') + (date.getMonth() + 1).toString().padStart(2, '0') + '.json';
 	}
 
 	static sortTransactions(transactions) {

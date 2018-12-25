@@ -1,5 +1,9 @@
 /* @import url('https://fonts.googleapis.com/css?family=Muli'); */
 
+:root {
+	--bg: rgb(185, 197, 252);
+}
+
 * {
 	box-sizing: border-box;
 }
@@ -16,7 +20,7 @@ body {
 	font-family: 'Muli', sans-serif;
 	width: 100vw;
 	height: 100%;
-	background: rgb(185, 197, 252);
+	background: var(--bg);
 }
 
 body > #title {
@@ -71,7 +75,7 @@ body > #main {
 }
 
 #main .button {
-	background: rgb(185, 197, 252);
+	background: var(--bg);
 }
 
 input, select {

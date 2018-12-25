@@ -1,11 +1,20 @@
 class Elem extends HTMLElement {
-	constructor(css) {
+	/**
+	 * Constructor.
+	 * @param {string} css
+	 * @param {string} html
+	 */
+	constructor(css, html) {
 		super();
 
-		this._root = this.attachShadow({mode: 'open'});
-		this._root.innerHTML = `
-			<style>` + css + `
-			</style>`;
+		this._css = css;
+		this._html = html;
+	}
+
+	connectedCallback() {
+		this.innerHTML = `<style>` + this._css + `</style>` + this._html;
+		delete this._css;
+		delete this._html;
 	}
 
 	/**
@@ -25,7 +34,7 @@ class Elem extends HTMLElement {
 		window.customElements.define(tag, ElemClass);
 	}
 
-	initialize(ws, messageElement) {
+	initialize() {
 		this._ws = ws;
 		this._messageElement = messageElement;
 		this.update();

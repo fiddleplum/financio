@@ -87,12 +87,8 @@ class App {
 	async viewAccount(name) {
 		// Send the command to the server to get the account info.
 		const accountInfo = await Data.viewAccount(this._ws, name);
-		console.log(accountInfo);
 
 		if (accountInfo.type === 'credit' || accountInfo.type === 'debit') {
-			let transactions = await Data.listTransactions(this._ws, name, '2018-01-01', '2019-01-01');
-			console.log(transactions);
-
 			let elemTransactionList = document.createElement('elem-transaction-list');
 			elemTransactionList.initialize(this._ws, name);
 			document.body.querySelector('#main').innerHTML = '';

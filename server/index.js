@@ -8,13 +8,13 @@ const Accounts = require('./accounts.js');
  * @param {string} message
  */
 async function processMessage(ws, message) {
-	console.log('received: %s', message);
 
 	let request = JSON.parse(message);
 	let requestData = request.data;
 	let responseData;
 	let success = false;
 	let error = '';
+	console.log('received: %s', JSON.stringify(requestData));
 	try {
 		if (requestData.command === 'list accounts') {
 			responseData = await Accounts.list();
@@ -46,6 +46,7 @@ async function processMessage(ws, message) {
 		success = true;
 	}
 	catch (e) {
+		console.log(e.message);
 		error = e.message;
 	}
 	ws.send(JSON.stringify({

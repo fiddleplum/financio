@@ -99,6 +99,7 @@ class WS {
 	 * @returns {Promise}
 	 */
 	send(data) {
+		console.log('ws.send ' + JSON.stringify(data));
 		return new Promise((resolve, reject) => {
 			let id = this._uniqueIds.get();
 			let json = {
