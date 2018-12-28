@@ -4,15 +4,34 @@ class ElemTransactionList extends HTMLElement {
 	constructor() {
 		super();
 
+		/**
+		 * The web socket.
+		 * @type {WebSocket}
+		 * @private
+		 */
 		this._ws = null;
 
+		/**
+		 * The name of the account.
+		 * @type {string}
+		 * @private
+		 */
 		this._accountName = '';
 
-		let end = new Date();
-		let start = new Date(end);
-		start.setMonth(start.getMonth() - 3);
-		this._startDate = start.toISOString().split('T')[0];
-		this._endDate = end.toISOString().split('T')[0];
+		/**
+		 * The starting date for the list.
+		 * @type {Date}
+		 * @private
+		 */
+		this._startDate = new Date();
+		this._startDate.setMonth(this._startDate.getMonth() - 3);
+
+		/**
+		 * The ending date for the list.
+		 * @type {Date}
+		 * @private
+		 */
+		this._endDate = new Date();
 	}
 
 	connectedCallback() {
@@ -20,6 +39,7 @@ class ElemTransactionList extends HTMLElement {
 			<style>
 				elem-transaction-list #content {
 					text-align: center;
+					min-height: 100%;
 				}
 				elem-transaction-list #import {
 					margin-top: 1em;
@@ -59,8 +79,8 @@ class ElemTransactionList extends HTMLElement {
 				}
 			</style>
 			<div id="content">
-				<div class="title">Transactions</div>
-				<div id="import">(Drag a file here To import it)</div>
+				<div class="page_title">Transactions</div>
+				<div id="import">(Drag a file here to import it)</div>
 				<table id="transactions">
 				</table>
 			</div>`;
@@ -89,6 +109,7 @@ class ElemTransactionList extends HTMLElement {
 							'name': this._accountName,
 							'transactions': transactions
 						});
+						this._update();
 					};
 					reader.readAsText(file); // start reading the file data.
 				}
@@ -96,12 +117,22 @@ class ElemTransactionList extends HTMLElement {
 		}, false);
 	}
 
+	/**
+	 * Initializes the element.
+	 * @param {WebSocket} ws
+	 * @param {string} accountName
+	 */
 	initialize(ws, accountName) {
 		this._ws = ws;
 		this._accountName = accountName;
 		this._update();
 	}
 
+	/**
+	 * Sets the date range for the transaction list.
+	 * @param {string} startDate
+	 * @param {string} endDate
+	 */
 	async setDateRange(startDate, endDate) {
 		this._startDate = startDate;
 		this._endDate = endDate;
@@ -135,7 +166,10 @@ class ElemTransactionList extends HTMLElement {
 	}
 
 	/**
+	 * Returns a list of transactions imported from an OFX file.
 	 * @param {string} content
+	 * @returns {Transaction[]}
+	 * @private
 	 */
 	static async _getTransactionsFromOFX(content) {
 		/** @type {Transaction[]} */

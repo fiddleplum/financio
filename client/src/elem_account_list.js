@@ -17,15 +17,15 @@ class ElemAccountList extends HTMLElement {
 					margin-bottom: .5em;
 				}
 			</style>
-			<div class="title">Accounts</div>
+			<div class="page_title">Accounts</div>
 			<div id="accounts"></div>`;
 	}
 
 	/**
-	 * @param {WS} ws
+	 * @param {any} options
 	 */
-	initialize(ws) {
-		this._ws = ws;
+	initialize(options) {
+		this._ws = options.ws;
 
 		this.refresh();
 	}

@@ -1,4 +1,5 @@
 const fs = require('fs');
+/** @typedef {import('../src/transaction').default} Transaction */
 
 class Accounts {
 	static initialize() {
@@ -74,22 +75,21 @@ class Accounts {
 	/**
 	 * Gets a list of the transacionts.
 	 * @param {string} name
-	 * @param {string} startDate - format 'YYYY-MM-DD'
-	 * @param {string} endDate - format 'YYYY-MM-DD'
+	 * @param {string} startDate - ISO format
+	 * @param {string} endDate - ISO format
 	 */
 	static listTransactions(name, startDate, endDate) {
 		if (!this._validateName(name)) {
 			throw new Error('The name "' + name + '" is not a valid account name. Please use only alphanumeric, underscore, and dash characters.');
 		}
 
+		/** @type {Transaction[]} */
 		let transactions = [];
 		if (fs.existsSync('data/accounts/' + name + '_transactions/')) {
-			const start = new Date(startDate);
+			let date = new Date(startDate);
 			const end = new Date(endDate);
-			let date = new Date(start);
 			while (date <= end) {
 				const filePath = this.getTransactionsFilePath(name, date);
-				console.log(filePath);
 				if (fs.existsSync(filePath)) {
 					transactions = transactions.concat(JSON.parse(fs.readFileSync(filePath)));
 				}
@@ -99,6 +99,11 @@ class Accounts {
 		return transactions;
 	}
 
+	/**
+	 * Adds a list of transactions to the existing transactions. Ignored transactions with duplicate ids.
+	 * @param {string} name
+	 * @param {Transaction[]} transactions
+	 */
 	static addTransactions(name, transactions) {
 		if (!this._validateName(name)) {
 			throw new Error('The name "' + name + '" is not a valid account name. Please use only alphanumeric, underscore, and dash characters.');
@@ -109,6 +114,7 @@ class Accounts {
 		}
 
 		let currentTransactionsFilePath = '';
+		/** @type {Transaction[]} */
 		let currentTransactions = null;
 		for (let transaction of transactions) {
 			let date = new Date(transaction.date);
@@ -127,7 +133,17 @@ class Accounts {
 					currentTransactions = JSON.parse(fs.readFileSync(currentTransactionsFilePath));
 				}
 			}
-			currentTransactions.push(transaction);
+
+			// Check for a duplicate id.
+			let duplicateFound = false;
+			for (let otherTransaction of currentTransactions) {
+				if (otherTransaction.id === transaction.id) {
+					duplicateFound = true;
+				}
+			}
+			if (!duplicateFound) {
+				currentTransactions.push(transaction);
+			}
 		}
 		if (currentTransactionsFilePath !== '') {
 			this.sortTransactions(currentTransactions);

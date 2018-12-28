@@ -1,5 +1,7 @@
+import App from './app';
 import WS from './ws';
 import Data from './data';
+import Util from './util';
 import './elem_messages';
 import './elem_account_list';
 import './elem_create_account';
@@ -15,8 +17,10 @@ import './elem_account_toolbar';
 /**
  * The main Financio application.
  */
-class App {
+class FinancioApp extends App {
 	constructor() {
+		super();
+
 		/**
 		 * The web socket host url.
 		 * @type {string}
@@ -47,12 +51,23 @@ class App {
 		// Notify the user that Financio is connected.
 		this.showMessage('Financio is connected.');
 
-		let elemAccountList = document.createElement('elem-account-list');
-		elemAccountList.initialize(this._ws);
-		document.body.querySelector('#nav').appendChild(elemAccountList);
+		await this.showPage('elem-account-list', {
+			ws: this._ws
+		});
+	}
 
-		let elemCreateAccount = document.createElement('elem-create-account');
-		document.body.querySelector('#nav').appendChild(elemCreateAccount);
+	async showPage(elemTag, options) {
+		let elem = document.createElement(elemTag);
+		elem.initialize(options);
+		elem.style.display = 'none';
+		elem.style.opacity = '0';
+		let mainElem = document.body.querySelector('#main');
+		if (mainElem.children.length > 0) {
+			await Util.hideElement(mainElem.child[0], 0.25);
+			mainElem.innerHTML = '';
+		}
+		mainElem.appendChild(elem);
+		Util.showElement(elem, 0.25);
 	}
 
 	/**
@@ -102,14 +117,6 @@ class App {
 	}
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-	/**
-	 * The main application.
-	 * @type {App}
-	 */
-	window.app = new App();
-
-	window.app.initialize();
-});
+App.setAppType(FinancioApp);
 
 export default App;

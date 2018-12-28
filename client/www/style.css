@@ -10,12 +10,12 @@
 
 body {
 	display: grid;
-	grid-template-rows: 3.125em auto 2.125em;
-	grid-template-columns: 16.125em auto 16.125em;
+	grid-template-rows: 1.5em auto 1em 1em;
 	grid-template-areas: 
-		'title title title'
-		'nav main right'
-		'messages messages messages';
+		'title'
+		'main'
+		'messages'
+		'toolbar';
 	margin: 0;
 	font-family: 'Muli', sans-serif;
 	width: 100vw;
@@ -26,17 +26,16 @@ body {
 body > #title {
 	grid-area: title;
 	text-align: center;
-	font-size: 2em;
+	font-size: 1em;
 	line-height: 1.5em;
 	letter-spacing: .25em;
 }
 
-body > #nav {
-	padding: 0 1em 0 1em;
-}
-
-body > #right {
-	padding: 0 1em 0 1em;
+body > #main {
+	grid-area: main;
+	height: 100%;
+	background: white;
+	border-radius: 1em;
 }
 
 body > #messages {
@@ -44,15 +43,14 @@ body > #messages {
 	line-height: 2em;
 }
 
-body > #main {
-	padding: .25em;
-	height: 100%;
-	background: white;
-	border-radius: 1em;
+body > #toolbar {
+	grid-area: toolbar;
+	padding: 0 1em 0 1em;
 }
 
-.title {
-	font-size: 1.5em;
+.page_title {
+	text-align: center;
+	font-size: 1em;
 	line-height: 1.5em;
 	border-bottom: 1px solid black;
 	margin-bottom: .5em;
