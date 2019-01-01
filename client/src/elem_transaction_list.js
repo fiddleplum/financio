@@ -5,11 +5,10 @@ class ElemTransactionList extends HTMLElement {
 		super();
 
 		/**
-		 * The web socket.
-		 * @type {WebSocket}
+		 * @type {FinancioApp}
 		 * @private
 		 */
-		this._ws = null;
+		this._app = window.app;
 
 		/**
 		 * The name of the account.

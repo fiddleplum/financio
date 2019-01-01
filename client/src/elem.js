@@ -1,26 +1,32 @@
 class Elem extends HTMLElement {
 	/**
 	 * Constructor.
-	 * @param {string} css
-	 * @param {string} html
 	 */
-	constructor(css, html) {
+	construct() {
 		super();
-
-		this._css = css;
-		this._html = html;
-	}
-
-	connectedCallback() {
-		this.innerHTML = `<style>` + this._css + `</style>` + this._html;
-		delete this._css;
-		delete this._html;
 	}
 
 	/**
-	 * @param {new function()} ElemClass
+	 * Called when the element is connected to the DOM.
 	 */
-	static register(ElemClass) {
+	connectedCallback() {
+		this.__constructHTML();
+	}
+
+	/**
+	 * Constructs the HTML.
+	 * @abstract
+	 * @protected
+	 */
+	__constructHTML() {
+	}
+
+	/**
+	 * Registers a subclass.
+	 * @param {new function()} ElemClass
+	 * @protected
+	 */
+	static __register(ElemClass) {
 		// Make the tag from UpperCamelCase to tags-with-dashes
 		let tag = ElemClass.name;
 		for (let i = 0; i < tag.length; i++) {

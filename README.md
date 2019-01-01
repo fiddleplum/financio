@@ -1,3 +1,15 @@
+# Notes
+
+* Accounts
+* Categories
+* Rules
+
+There should be three sections for each account: actual, projections, budget
+* actual is the actual transacations (including splits and whatnot)
+* projections is trend lines projecting into the future
+  * every transaction can have a "one time" that indicates that it is not to be used in projections (or it can be made more complicated than that, like setting intervals and whatnot, per received person)
+* budget is the budget
+
 # File Structure
 
 ```

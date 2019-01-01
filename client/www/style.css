@@ -1,85 +1,34 @@
 /* @import url('https://fonts.googleapis.com/css?family=Muli'); */
 
-:root {
-	--bg: rgb(185, 197, 252);
-}
-
-* {
-	box-sizing: border-box;
-}
-
-body {
-	display: grid;
-	grid-template-rows: 1.5em auto 1em 1em;
-	grid-template-areas: 
-		'title'
-		'main'
-		'messages'
-		'toolbar';
-	margin: 0;
-	font-family: 'Muli', sans-serif;
-	width: 100vw;
-	height: 100%;
-	background: var(--bg);
-}
-
-body > #title {
-	grid-area: title;
-	text-align: center;
-	font-size: 1em;
-	line-height: 1.5em;
-	letter-spacing: .25em;
-}
-
-body > #main {
-	grid-area: main;
-	height: 100%;
-	background: white;
-	border-radius: 1em;
-}
-
-body > #messages {
-	grid-area: messages;
-	line-height: 2em;
-}
-
-body > #toolbar {
-	grid-area: toolbar;
-	padding: 0 1em 0 1em;
-}
-
 .page_title {
 	text-align: center;
 	font-size: 1em;
 	line-height: 1.5em;
-	border-bottom: 1px solid black;
+	border-bottom: 1px solid var(--color4);
 	margin-bottom: .5em;
 }
 
 .button, input[type=submit] {
-	cursor: pointer;
-	background: white;
-	color: black;
+	width: 100%;
+	display: block;
+	margin-bottom: .5em;
 	border: 0;
 	border-radius: .125em;
+	padding: .25em;
+	cursor: pointer;
+	background: var(--color4);
+	text-align: center;
+	text-decoration: none;
+	color: var(--color1);
 	font-size: inherit;
 	font-family: inherit;
 	line-height: 1.5em;
-	padding: .25em;
-	text-align: center;
-	text-decoration: none;
-	display: block;
-	margin-bottom: .5em;
-}
-
-#main .button {
-	background: var(--bg);
 }
 
 input, select {
-	background: white;
-	color: black;
-	font-size: .75em;
+	background: var(--color4);
+	color: var(--color1);
+	font-size: 1em;
 	font-family: inherit;
 	line-height: 1.5em;
 	padding: .25em;

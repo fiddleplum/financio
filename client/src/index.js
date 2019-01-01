@@ -1,18 +1,16 @@
-import App from './app';
-import WS from './ws';
-import Data from './data';
-import Util from './util';
-import './elem_messages';
-import './elem_account_list';
-import './elem_create_account';
-import './elem_transaction_list';
-import './elem_account_toolbar';
-
-/** @typedef {import('./elem_messages').default} ElemMessages */
 /** @typedef {import('./elem_account_list').default} ElemAccountList */
+/** @typedef {import('./elem_account_add').default} ElemAccountAdd */
 /** @typedef {import('./elem_create_account').default} ElemCreateAccount */
 /** @typedef {import('./elem_transaction_list').default} ElemTransactionList */
 /** @typedef {import('./elem_account_toolbar').default} ElemAccountToolbar */
+import App from './app';
+import WS from './ws';
+import Data from './data';
+import './elem_main_menu';
+import './elem_account_list';
+import './elem_account_add';
+import './elem_transaction_list';
+import './elem_account_toolbar';
 
 /**
  * The main Financio application.
@@ -36,8 +34,18 @@ class FinancioApp extends App {
 		this._ws = null;
 	}
 
+	/**
+	 * Gets the web socket that connects to the host.
+	 * @returns {WS};
+	 */
+	get ws() {
+		return this._ws;
+	}
+
 	async initialize() {
-		// let urlParams = new URLSearchParams(document.location.search.substring(1));
+		super.initialize();
+
+		this.title = 'FINANCIO';
 
 		// Notify the user that Financio is connecting.
 		this.showMessage('Financio is connecting...');
@@ -51,31 +59,7 @@ class FinancioApp extends App {
 		// Notify the user that Financio is connected.
 		this.showMessage('Financio is connected.');
 
-		await this.showPage('elem-account-list', {
-			ws: this._ws
-		});
-	}
-
-	async showPage(elemTag, options) {
-		let elem = document.createElement(elemTag);
-		elem.initialize(options);
-		elem.style.display = 'none';
-		elem.style.opacity = '0';
-		let mainElem = document.body.querySelector('#main');
-		if (mainElem.children.length > 0) {
-			await Util.hideElement(mainElem.child[0], 0.25);
-			mainElem.innerHTML = '';
-		}
-		mainElem.appendChild(elem);
-		Util.showElement(elem, 0.25);
-	}
-
-	/**
-	 * Add a message to show to the user.
-	 * @param {string} message
-	 */
-	showMessage(message) {
-		document.querySelector('elem-messages').addMessage(message);
+		await this.showPage('elem-main-menu', {});
 	}
 
 	async createAccount(name, type) {
@@ -117,6 +101,6 @@ class FinancioApp extends App {
 	}
 }
 
-App.setAppType(FinancioApp);
+App.appType = FinancioApp;
 
-export default App;
+export default FinancioApp;
