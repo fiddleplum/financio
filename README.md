@@ -7,8 +7,15 @@
 There should be three sections for each account: actual, projections, budget
 * actual is the actual transacations (including splits and whatnot)
 * projections is trend lines projecting into the future
-  * every transaction can have a "one time" that indicates that it is not to be used in projections (or it can be made more complicated than that, like setting intervals and whatnot, per received person)
+  * every transaction can have a "one time" flag that indicates that it is not to be used in projections (or it can be made more complicated than that, like setting intervals and whatnot, per received person)
 * budget is the budget
+
+# Coding Structure
+
+Every element will be a component that will fit in a particular view. Right now there is just the "view" view.
+* They can have an initialize(options) function
+* A `connectedCallback` function where the component-specific css and html is created. Use a string for the whole thing and this.innerHTML.
+* A constructor just sets up the state variable default values.
 
 # File Structure
 

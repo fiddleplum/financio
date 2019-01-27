@@ -3,12 +3,11 @@
 class Data {
 	/**
 	 * Sends to the websocket a 'list account' message, and returns the list of accounts.
-	 * @param {WS} ws
 	 * @returns {string[]}
 	 */
-	static async listAccounts(ws) {
+	static async listAccounts() {
 		/** @type string[]} */
-		let accountNames = await ws.send({
+		let accountNames = await window.app.ws.send({
 			'command': 'list accounts'
 		});
 		return accountNames;
@@ -16,12 +15,11 @@ class Data {
 
 	/**
 	 * Sends to the websocket a 'create account' message.
-	 * @param {WS} ws
 	 * @param {string} name
 	 * @param {string} type
 	 */
-	static async createAccount(ws, name, type) {
-		await ws.send({
+	static async createAccount(name, type) {
+		await window.app.ws.send({
 			'command': 'create account',
 			'name': name,
 			'type': type
@@ -30,18 +28,20 @@ class Data {
 
 	/**
 	 * Sends to the websocket a 'delete account' message.
-	 * @param {WS} ws
 	 * @param {string} name
 	 */
-	static async deleteAccount(ws, name) {
-		await ws.send({
+	static async deleteAccount(name) {
+		await window.app.ws.send({
 			'command': 'delete account',
 			'name': name
 		});
 	}
 
-	static async viewAccount(ws, name) {
-		const accountInfo = await ws.send({
+	/**
+	 * Sends to the websock a 'view account' message.
+	 */
+	static async viewAccount(name) {
+		const accountInfo = await window.app.ws.send({
 			'command': 'view account',
 			'name': name
 		});
@@ -50,13 +50,12 @@ class Data {
 
 	/**
 	 * Sents to the websocket a 'list transactions' message, and returns the list of transactions.
-	 * @param {WS} ws
 	 * @param {string} name
 	 * @param {string} startDate
 	 * @param {string} endDate
 	 */
-	static async listTransactions(ws, name, startDate, endDate) {
-		let transactions = await ws.send({
+	static async listTransactions(name, startDate, endDate) {
+		let transactions = await window.app.ws.send({
 			'command': 'list transactions',
 			'name': name,
 			'startDate': startDate,

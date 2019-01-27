@@ -10,6 +10,7 @@
 			"asyncArrow": "always"
 		}],
 		"brace-style": ["error", "stroustrup"],
-		"yoda": "off"
+		"yoda": "off",
+		"no-new": "off"
 	}
 }

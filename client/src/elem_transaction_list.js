@@ -5,12 +5,6 @@ class ElemTransactionList extends HTMLElement {
 		super();
 
 		/**
-		 * @type {FinancioApp}
-		 * @private
-		 */
-		this._app = window.app;
-
-		/**
 		 * The name of the account.
 		 * @type {string}
 		 * @private
@@ -82,7 +76,8 @@ class ElemTransactionList extends HTMLElement {
 				<div id="import">(Drag a file here to import it)</div>
 				<table id="transactions">
 				</table>
-			</div>`;
+			</div>
+			`;
 
 		// Setup the drag-and-drop import capability.
 		let contentElem = this.querySelector('#content');

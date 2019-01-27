@@ -1,23 +1,15 @@
-/** @typedef {import('./elem_account_list').default} ElemAccountList */
-/** @typedef {import('./elem_account_add').default} ElemAccountAdd */
-/** @typedef {import('./elem_create_account').default} ElemCreateAccount */
-/** @typedef {import('./elem_transaction_list').default} ElemTransactionList */
-/** @typedef {import('./elem_account_toolbar').default} ElemAccountToolbar */
-import App from './app';
 import WS from './ws';
 import Data from './data';
-import './elem_main_menu';
-import './elem_account_list';
-import './elem_account_add';
-import './elem_transaction_list';
-import './elem_account_toolbar';
+import Title from './components/title';
+import MainMenu from './components/main_menu';
+import Messages from './components/messages';
 
 /**
  * The main Financio application.
  */
-class FinancioApp extends App {
+class FinancioApp {
 	constructor() {
-		super();
+		window.app = this;
 
 		/**
 		 * The web socket host url.
@@ -32,6 +24,10 @@ class FinancioApp extends App {
 		 * @private
 		*/
 		this._ws = null;
+
+		this._title = new Title('header', 'FINANCIO');
+		this._main = new MainMenu('main');
+		this._messages = new Messages('footer');
 	}
 
 	/**
@@ -43,10 +39,6 @@ class FinancioApp extends App {
 	}
 
 	async initialize() {
-		super.initialize();
-
-		this.title = 'FINANCIO';
-
 		// Notify the user that Financio is connecting.
 		this.showMessage('Financio is connecting...');
 
@@ -59,13 +51,21 @@ class FinancioApp extends App {
 		// Notify the user that Financio is connected.
 		this.showMessage('Financio is connected.');
 
-		await this.showPage('elem-main-menu', {});
+		await super.ready();
+	}
+
+	/**
+	 * Add a message to show to the user.
+	 * @param {string} message
+	 */
+	showMessage(message) {
+		this._messages.addMessage(message);
 	}
 
 	async createAccount(name, type) {
 		// Send the command to the server.
 		try {
-			await Data.createAccount(this._ws, name, type);
+			await Data.createAccount(name, type);
 		}
 		catch (errorMessage) {
 			this.showMessage(errorMessage);
@@ -85,7 +85,7 @@ class FinancioApp extends App {
 
 	async viewAccount(name) {
 		// Send the command to the server to get the account info.
-		const accountInfo = await Data.viewAccount(this._ws, name);
+		const accountInfo = await Data.viewAccount(name);
 
 		if (accountInfo.type === 'credit' || accountInfo.type === 'debit') {
 			let elemTransactionList = document.createElement('elem-transaction-list');
@@ -101,6 +101,13 @@ class FinancioApp extends App {
 	}
 }
 
-App.appType = FinancioApp;
+document.addEventListener('DOMContentLoaded', async () => {
+	/**
+	 * @type {number}
+	 * @global
+	 */
+	new FinancioApp();
+	await window.app.initialize();
+});
 
 export default FinancioApp;

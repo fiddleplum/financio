@@ -2,19 +2,9 @@ import Data from './data';
 /** @typedef {import('./index').default} FinancioApp */
 /** @typedef {import('./ws').default} WS */
 
-class ElemAccountAdd extends HTMLElement {
-	constructor() {
-		super();
-
-		/**
-		 * @type {FinancioApp}
-		 * @private
-		 */
-		this._app = window.app;
-	}
-
-	connectedCallback() {
-		this.innerHTML = `
+class ElemAccountAdd {
+	constructor(div) {
+		div.innerHTML = `
 			<style>
 				elem-account-add form {
 				}
@@ -52,18 +42,18 @@ class ElemAccountAdd extends HTMLElement {
 
 		// Send the command to the server.
 		try {
-			await Data.createAccount(this._app.ws, name, type);
+			await Data.createAccount(name, type);
 		}
 		catch (errorMessage) {
-			this._app.showMessage(errorMessage);
+			window.app.showMessage(errorMessage);
 			return;
 		}
 
 		// Notify the user of success.
 		this.showMessage('The account "' + name + '" was created.');
 
-		// Show the newly created account.
-		this._app.showPage('elem-account-list');
+		// Show the newly created account in the account list.
+		window.app.showPage('accounts');
 	}
 }
 

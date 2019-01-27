@@ -1,6 +1,7 @@
-/** @typedef {import('./elem_messages').default} ElemMessages */
+/** @typedef {import('./components/messages').default} ElemMessages */
 import Util from './util';
-import './elem_messages';
+import Router from './router';
+import './components/messages';
 
 /**
  * An abstract class for building apps.
@@ -8,37 +9,24 @@ import './elem_messages';
  */
 class App {
 	/**
-	 * Gets the app type.
-	 * @returns {new function()};
-	 */
-	static get appType() {
-		return this._appType;
-	}
-
-	/**
-	 * Sets the app type. It must be an extension of App.
-	 * @param {new function()} appType;
-	 */
-	static set appType(appType) {
-		this._appType = appType;
-	}
-
-	/**
 	 * The constructor.
 	 */
 	constructor() {
 		window.app = this;
 
 		/**
-		 * @type {string[]}
+		 * @type {Map<string, string>}
+		 * @private
 		 */
-		this._route = [];
+		this._registeredPages = new Map();
+
+		this._router = new Router();
 	}
 
 	/**
 	 * Initializes the application.
 	 */
-	async initialize() {
+	initialize() {
 		document.body.innerHTML = `
 			<style>
 				:root {
@@ -95,11 +83,13 @@ class App {
 			`;
 		document.title = 'Untitled App';
 
-		// Parse hash tag url.
-		this._route = document.location.hash.split('/');
-		if (this._route.length === 1 && this._route[0] === '') {
-			this._route = [];
-		}
+		window.addEventListener('popstate', async (event) => {
+			this.showPage(document.location.hash.substr(1));
+		});
+	}
+
+	async ready() {
+		await this.showPage(document.location.hash.substr(1));
 	}
 
 	/**
@@ -118,10 +108,11 @@ class App {
 	}
 
 	/**
-	 * @returns {string[]}
+	 * Gets the router.
+	 * @returns {Router}
 	 */
-	get route() {
-		return this._route;
+	get router() {
+		return this._router;
 	}
 
 	/**
@@ -133,23 +124,67 @@ class App {
 	}
 
 	/**
-	 * Sets the view to a new view of elemTag kind, with optional arguments.
+	 * @param {string} route
 	 * @param {string} elemTag
-	 * @param {object} options
+	 */
+	registerPage(route, elemTag) {
+		this._registeredPages.set(route, elemTag);
+	}
+
+	/**
+	 * Sets the view to a new view of elemTag kind, with optional arguments.
+	 * @param {string} route
 	 * @returns {HTMLElement}
 	 */
-	async showPage(elemTag) {
+	async showPage(route) {
+		let routeArray = route.split('/');
+		if (routeArray.length === 1 && routeArray[0] === '') {
+			routeArray = [];
+		}
+
+		let elemTag = '';
+		if (routeArray.length === 0) {
+			elemTag = this._registeredPages.get('');
+		}
+		else {
+			elemTag = this._registeredPages.get(routeArray[0]);
+		}
+		if (!elemTag) {
+			this.showMessage('Page ' + route + ' not found.');
+			return;
+		}
+		console.log(route + ' -> ' + routeArray + ' -> ' + elemTag);
 		let elem = document.createElement(elemTag);
 		elem.style.display = 'none';
 		elem.style.opacity = '0';
+		if (elem.initialize) {
+			elem.initialize(routeArray.shift());
+		}
 		let viewElem = document.querySelector('#view');
 		if (viewElem.children.length > 0) {
 			await Util.hideElement(viewElem.children[0], 0.25);
 			viewElem.innerHTML = '';
 		}
+		history.pushState(undefined, '', '#' + route);
 		viewElem.appendChild(elem);
 		await Util.showElement(elem, 0.25);
 		return elem;
+	}
+
+	/**
+	 * Gets the app type.
+	 * @returns {new function()};
+	 */
+	static get appType() {
+		return this._appType;
+	}
+
+	/**
+	 * Sets the app type. It must be an extension of App.
+	 * @param {new function()} appType;
+	 */
+	static set appType(appType) {
+		this._appType = appType;
 	}
 }
 
