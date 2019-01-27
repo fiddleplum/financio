@@ -5,7 +5,7 @@ class MainMenu extends Component {
 		super(gridArea);
 		this.__div.innerHTML = `
 			<div class="page_title">Main Menu</div>
-			<div class="button" onclick="window.app.listAccounts();">Accounts</div>
+			<div class="button" onclick="window.financio.router.pushRoute('accounts');">Accounts</div>
 			<div class="button">Categories</div>
 			<div class="button">Rules</div>
 			<div class="button">Budget</div>

@@ -1,7 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Muli');
 
-:root {
+* {
 	box-sizing: border-box;
+}
+
+:root {
 	--bg-light: rgb(255, 255, 255);
 	--fg-light: rgb(42, 69, 151);
 	--bg-dark: rgb(42, 69, 151);
@@ -24,6 +27,10 @@ body {
 	font-family: Muli, sans-serif;
 }
 
+.component {
+	width: 100%;
+}
+
 .page_title {
 	text-align: center;
 	margin-top: .5em;
@@ -31,26 +38,46 @@ body {
 	font-size: 2em;
 }
 
+/* Forms and Buttons */
+
+form {
+	margin: 0 auto;
+	max-width: 20em;
+}
+
+form label {
+	display: block;
+	margin-bottom: .25em;
+}
+
+form input[type=text], select {
+	display: block;
+	width: 100%;
+	margin-bottom: 1em;
+}
+
 .button, input[type=submit] {
 	display: block;
-	margin-top: .5em;
-	margin-bottom: .5em;
+	margin: .5em auto;
+	width: 100%;
+	max-width: 20em;
 	border: 0;
 	border-radius: .125em;
 	padding: .25em;
 	cursor: pointer;
-	background: var(--color4);
+	background: var(--bg-dark);
+	color: var(--fg-dark);
 	text-align: center;
 	text-decoration: none;
-	color: var(--color1);
 	font-size: inherit;
 	font-family: inherit;
 	line-height: 1.5em;
 }
 
 input, select {
-	background: var(--color4);
-	color: var(--color1);
+	background: var(--bg-dark);
+	color: var(--fg-dark);
+	max-width: 20em;
 	font-size: 1em;
 	font-family: inherit;
 	line-height: 1.5em;

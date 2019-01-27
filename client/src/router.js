@@ -19,7 +19,7 @@ class Router {
 
 		// Add an event listener so that it processes an event when the user uses the History API.
 		window.addEventListener('popstate', async (event) => {
-			this.processRoute(decodeURIComponent(document.location.hash.substr(1)));
+			this.processDocumentLocation();
 		});
 	}
 
@@ -30,7 +30,12 @@ class Router {
 	 * @param {function(string[]):undefined} callback
 	 */
 	registerRoute(patternString, callback) {
-		this._routePatterns.push(new RoutePattern(patternString, callback));
+		if (patternString !== '') {
+			this._routePatterns.push(new RoutePattern(patternString, callback));
+		}
+		else {
+			this._defaultCallback = callback;
+		}
 	}
 
 	/**
@@ -61,22 +66,27 @@ class Router {
 	}
 
 	/**
+	 * Process the route in the document location hash.
+	 */
+	processDocumentLocation() {
+		this.processRoute(decodeURIComponent(document.location.hash.substr(1)));
+	}
+
+	/**
 	 * Parse a route and call the matching route pattern's callback.
 	 * @param {string} routeString
 	 */
 	processRoute(routeString) {
 		let route = routeString.split('/');
-		if (route.length === 1 && route[0] === '') {
-			this._defaultCallback(route);
-		}
-
-		for (let i = 0; i < this._routePatterns.length; i++) {
-			let routePattern = this._routePatterns[i];
-			if (routePattern.match(route)) {
-				if (routePattern.callback) {
-					routePattern.callback(route);
+		if (route.length > 1 || route[0] !== '') {
+			for (let i = 0; i < this._routePatterns.length; i++) {
+				let routePattern = this._routePatterns[i];
+				if (routePattern.match(route)) {
+					if (routePattern.callback) {
+						routePattern.callback(route);
+					}
+					return;
 				}
-				return;
 			}
 		}
 		if (this._defaultCallback) {
@@ -104,7 +114,7 @@ class RoutePattern {
 		/**
 		 * @type {function(string[]):undefined}
 		 */
-		this.callback = null;
+		this.callback = callback;
 
 		// Parse patternString to create regular expressions.
 		let patternTokens = patternString.split('/');

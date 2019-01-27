@@ -1,15 +1,16 @@
-import Transaction from '../../src/transaction';
+import Transaction from '../../../src/transaction';
+import Component from '../component';
 
-class ElemTransactionList extends HTMLElement {
-	constructor() {
-		super();
+class TransactionList extends Component {
+	constructor(gridArea, accountName) {
+		super(gridArea);
 
 		/**
 		 * The name of the account.
 		 * @type {string}
 		 * @private
 		 */
-		this._accountName = '';
+		this._accountName = accountName;
 
 		/**
 		 * The starting date for the list.
@@ -25,52 +26,51 @@ class ElemTransactionList extends HTMLElement {
 		 * @private
 		 */
 		this._endDate = new Date();
-	}
 
-	connectedCallback() {
-		this.innerHTML = `
-			<style>
-				elem-transaction-list #content {
-					text-align: center;
-					min-height: 100%;
-				}
-				elem-transaction-list #import {
-					margin-top: 1em;
-					margin-bottom: 1em;
-				}
-				elem-transaction-list table {
-					display: inline-block;
-					border-collapse: collapse;
-				}
-				elem-transaction-list table td.date.heading{
-					width: 6em;
-				}
-				elem-transaction-list table td.description.heading{
-					width: 18em;
-					overflow-x: none;
-				}
-				elem-transaction-list table td.amount.heading{
-					width: 6em;
-				}
-				elem-transaction-list table td.category.heading{
-					width: 12em;
-				}
-				elem-transaction-list td {
-					padding: .25em;
-				}
-				elem-transaction-list td.amount {
-					text-align: right;
-				}
-				elem-transaction-list tr:first-child td:first-child {
-					border-top-left-radius: .25em;
-				}
-				elem-transaction-list tr:first-child td:last-child {
-					border-top-right-radius: .25em;
-				}
-				elem-transaction-list .odd td {
-					background: var(--bg);
-				}
-			</style>
+		this.__style = `
+			#transaction-list #content {
+				text-align: center;
+				min-height: 100%;
+			}
+			#transaction-list #import {
+				margin-top: 1em;
+				margin-bottom: 1em;
+			}
+			#transaction-list table {
+				display: inline-block;
+				border-collapse: collapse;
+			}
+			#transaction-list table td.date.heading{
+				width: 6em;
+			}
+			#transaction-list table td.description.heading{
+				width: 18em;
+				overflow-x: none;
+			}
+			#transaction-list table td.amount.heading{
+				width: 6em;
+			}
+			#transaction-list table td.category.heading{
+				width: 12em;
+			}
+			#transaction-list td {
+				padding: .25em;
+			}
+			#transaction-list td.amount {
+				text-align: right;
+			}
+			#transaction-list tr:first-child td:first-child {
+				border-top-left-radius: .25em;
+			}
+			#transaction-list tr:first-child td:last-child {
+				border-top-right-radius: .25em;
+			}
+			#transaction-list .odd td {
+				background: var(--bg-dark);
+				color: var(--fg-dark);
+			}
+			`;
+		this.__div.innerHTML = `
 			<div id="content">
 				<div class="page_title">Transactions</div>
 				<div id="import">(Drag a file here to import it)</div>
@@ -80,7 +80,7 @@ class ElemTransactionList extends HTMLElement {
 			`;
 
 		// Setup the drag-and-drop import capability.
-		let contentElem = this.querySelector('#content');
+		let contentElem = this.__div.querySelector('#content');
 		contentElem.addEventListener('dragover', (e) => {
 			e.stopPropagation();
 			e.preventDefault();
@@ -97,8 +97,8 @@ class ElemTransactionList extends HTMLElement {
 				var reader = new FileReader();
 				if (extension === 'qfx' || extension === 'ofx') {
 					reader.onload = async (e2) => {
-						let transactions = await ElemTransactionList._getTransactionsFromOFX(e2.target.result);
-						await this._ws.send({
+						let transactions = await TransactionList._getTransactionsFromOFX(e2.target.result);
+						await window.financio.ws.send({
 							'command': 'add transactions',
 							'name': this._accountName,
 							'transactions': transactions
@@ -109,16 +109,7 @@ class ElemTransactionList extends HTMLElement {
 				}
 			}
 		}, false);
-	}
 
-	/**
-	 * Initializes the element.
-	 * @param {WebSocket} ws
-	 * @param {string} accountName
-	 */
-	initialize(ws, accountName) {
-		this._ws = ws;
-		this._accountName = accountName;
 		this._update();
 	}
 
@@ -138,25 +129,23 @@ class ElemTransactionList extends HTMLElement {
 	 * @private
 	 */
 	async _update() {
-		if (this._ws !== null) {
-			let transactions = await this._ws.send({
-				'command': 'list transactions',
-				'name': this._accountName,
-				'startDate': this._startDate,
-				'endDate': this._endDate
-			});
-			let html = `<tr class="odd"><td class="date heading">Date</td><td class="description heading">Description</td><td class="amount heading">Amount</td><td class="category heading">Category</td></tr>`;
-			if (transactions.length > 0) {
-				for (let i = 0, l = transactions.length; i < l; i++) {
-					let transaction = transactions[i];
-					html += `<tr class="` + (i % 2 === 0 ? `even` : `odd`) + `"><td class="date">` + transaction.date + `</td><td class="description">` + transaction.description + `</td><td class="amount">` + transaction.amount + `</td><td class="category">` + transaction.category + `</td></tr>`;
-				}
+		let transactions = await window.financio.ws.send({
+			'command': 'list transactions',
+			'name': this._accountName,
+			'startDate': this._startDate,
+			'endDate': this._endDate
+		});
+		let html = `<tr class="odd"><td class="date heading">Date</td><td class="description heading">Description</td><td class="amount heading">Amount</td><td class="category heading">Category</td></tr>`;
+		if (transactions.length > 0) {
+			for (let i = 0, l = transactions.length; i < l; i++) {
+				let transaction = transactions[i];
+				html += `<tr class="` + (i % 2 === 0 ? `even` : `odd`) + `"><td class="date">` + transaction.date + `</td><td class="description">` + transaction.description + `</td><td class="amount">` + transaction.amount + `</td><td class="category">` + transaction.category + `</td></tr>`;
 			}
-			else {
-				html = `<tr><td colspan=4>There are no transactions.</td></tr>`;
-			}
-			this.querySelector('#transactions').innerHTML = html;
 		}
+		else {
+			html = `<tr><td colspan=4>There are no transactions.</td></tr>`;
+		}
+		this.__div.querySelector('#transactions').innerHTML = html;
 	}
 
 	/**
@@ -195,6 +184,4 @@ class ElemTransactionList extends HTMLElement {
 	}
 }
 
-window.customElements.define('elem-transaction-list', ElemTransactionList);
-
-export default ElemTransactionList;
+export default TransactionList;

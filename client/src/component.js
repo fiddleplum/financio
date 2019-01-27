@@ -18,6 +18,7 @@ class Component {
 		 */
 		this._div = document.createElement('div');
 		this._div.style.gridArea = gridArea;
+		this._div.classList.add('component');
 		document.body.appendChild(this._div);
 	}
 

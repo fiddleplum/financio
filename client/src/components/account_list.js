@@ -1,7 +1,10 @@
-import Data from '../data';
 import Component from '../component';
 
 class AccountList extends Component {
+	/**
+	 * Constructor.
+	 * @param {string} gridArea
+	 */
 	constructor(gridArea) {
 		super(gridArea);
 		this._div.innerHTML = `
@@ -12,12 +15,16 @@ class AccountList extends Component {
 	}
 
 	async refresh() {
-		const accounts = await Data.listAccounts();
+		/** @type string[]} */
+		let accountNames = await window.financio.ws.send({
+			'command': 'list accounts'
+		});
+
 		let html = ``;
-		for (let name of accounts) {
-			html += `<div onclick="window.app.showPage('account/` + name + `');" class="button">` + name + `</div>`;
+		for (let name of accountNames) {
+			html += `<div onclick="window.financio.router.pushRoute('account/` + name + `');" class="button">` + name + `</div>`;
 		}
-		html += `<div onclick="window.app.showPage('accountadd');" class="button">+</div>`;
+		html += `<div onclick="window.financio.router.pushRoute('accountAdd');" class="button">+</div>`;
 		this.__div.querySelector('#accounts').innerHTML = html;
 	}
 }
