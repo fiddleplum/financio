@@ -3,6 +3,7 @@ import Data from './data';
 import Title from './components/title';
 import MainMenu from './components/main_menu';
 import Messages from './components/messages';
+import AccountList from './components/account_list';
 
 /**
  * The main Financio application.
@@ -26,7 +27,7 @@ class FinancioApp {
 		this._ws = null;
 
 		this._title = new Title('header', 'FINANCIO');
-		this._main = new MainMenu('main');
+		this._main = null;
 		this._messages = new Messages('footer');
 	}
 
@@ -46,12 +47,19 @@ class FinancioApp {
 		this._ws = new WS(this._serverHost);
 
 		// Wait until the web socket is connected.
-		await this._ws.getReadyPromise();
+		try {
+			await this._ws.getReadyPromise();
+		}
+		catch (e) {
+			this.showMessage('Financio could not connect.');
+			return;
+		}
 
 		// Notify the user that Financio is connected.
 		this.showMessage('Financio is connected.');
 
-		await super.ready();
+		// Show the main menu.
+		this._main = new MainMenu('main');
 	}
 
 	/**
@@ -60,6 +68,11 @@ class FinancioApp {
 	 */
 	showMessage(message) {
 		this._messages.addMessage(message);
+	}
+
+	async listAccounts() {
+		this._main.destroy();
+		this._main = new AccountList('main');
 	}
 
 	async createAccount(name, type) {

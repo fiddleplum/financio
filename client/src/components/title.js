@@ -12,8 +12,9 @@ class Title extends Component {
 			#title {
 				text-align: center;
 				font-size: 1em;
-				line-height: 1.5em;
-				border-bottom: 1px solid var(--color4);
+				line-height: 2em;
+				background: var(--bg-dark);
+				color: var(--fg-dark);
 			}
 			`;
 		this.__div.innerHTML = title;

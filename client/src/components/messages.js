@@ -24,13 +24,15 @@ class Messages extends Component {
 
 		this.__style = `
 			#messages {
+				background: var(--bg-dark);
+				color: var(--fg-dark);
 				overflow-y: hidden;
 			}
 
 			#messages p {
 				margin: 0;
-				padding: .25em;
-				line-height: 1.5em;
+				padding-left: .5em;
+				line-height: 2em;
 			}
 
 			@keyframes movedown {

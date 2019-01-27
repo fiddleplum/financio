@@ -49,6 +49,7 @@ class WS {
 		// Setup the promise that resolves when the web socket is ready to be used.
 		this._readyPromise = new Promise((resolve, reject) => {
 			this._webSocket.onopen = resolve;
+			this._webSocket.onerror = reject;
 		});
 
 		// When a message is received...

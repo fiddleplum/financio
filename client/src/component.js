@@ -25,9 +25,11 @@ class Component {
 	 * Destroys this when it is no longer needed. Call to clean up the object.
 	 */
 	destroy() {
-		document.head.removeChild(this._style);
+		if (this._style !== null) {
+			document.head.removeChild(this._style);
+			this._style = null;
+		}
 		document.body.removeChild(this._div);
-		this._style = null;
 		this._div = null;
 	}
 
