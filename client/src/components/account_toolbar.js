@@ -1,35 +1,39 @@
-class ElemAccountToolbar extends HTMLElement {
-	constructor() {
-		super();
+import Component from '../component';
 
-		this._ws = null;
-	}
+class TransactionToolbar extends Component {
+	/**
+	 * Constructor.
+	 * @param {string} gridArea
+	 */
+	constructor(gridArea) {
+		super(gridArea);
 
-	connectedCallback() {
-		this.innerHTML = `
-			<style>
-				elem-account-toolbar form {
-					display: grid;
-					grid-template-columns: 6em auto;
-				}
+		this.__style = `
+			#account-toolbar form {
+				display: grid;
+				grid-template-columns: 6em auto;
+			}
 
-				elem-account-toolbar label {
-					display: block;
-					color: black;
-					width: 6em;
-				}
-				elem-account-toolbar input[type=text], select {
-					display: block;
-					color: black;
-				}
-				elem-account-toolbar input[type=submit] {
-					grid-column-start: 1;
-					grid-column-end: 3;
-					display: block;
-					color: black;
-					width: 100%;
-				}
-			</style>
+			#account-toolbar label {
+				display: block;
+				color: black;
+				width: 6em;
+			}
+			#account-toolbar input[type=text], select {
+				display: block;
+				color: black;
+			}
+			#account-toolbar input[type=submit] {
+				grid-column-start: 1;
+				grid-column-end: 3;
+				display: block;
+				color: black;
+				width: 100%;
+			}
+			`;
+
+		this.__div.id = 'account-toolbar';
+		this.__div.innerHTML = `
 			<form id="showTransactions" action="javascript:void(null);">
 				<label for="start_year">Start Year:</label>
 				<input type="text" id="start_year" />
@@ -72,30 +76,22 @@ class ElemAccountToolbar extends HTMLElement {
 		let end = new Date();
 		let start = new Date(end);
 		start.setMonth(start.getMonth() - 3);
-		this.querySelector('#showTransactions #start_year').value = start.getFullYear();
-		this.querySelector('#showTransactions #start_month').value = start.getMonth() + 1;
-		this.querySelector('#showTransactions #end_year').value = end.getFullYear();
-		this.querySelector('#showTransactions #end_month').value = end.getMonth() + 1;
+		this.__div.querySelector('#showTransactions #start_year').value = start.getFullYear();
+		this.__div.querySelector('#showTransactions #start_month').value = start.getMonth() + 1;
+		this.__div.querySelector('#showTransactions #end_year').value = end.getFullYear();
+		this.__div.querySelector('#showTransactions #end_month').value = end.getMonth() + 1;
 
-		this.querySelector('#showTransactions #submit').addEventListener('click', () => {
-			let startYear = this.querySelector('#showTransactions #start_year').value;
-			let startMonth = this.querySelector('#showTransactions #start_month').value;
+		this.__div.querySelector('#showTransactions #submit').addEventListener('click', () => {
+			let startYear = this.__div.querySelector('#showTransactions #start_year').value;
+			let startMonth = this.__div.querySelector('#showTransactions #start_month').value;
 			let startDate = startYear + '-' + startMonth + '-01';
-			let endYear = this.querySelector('#showTransactions #end_year').value;
-			let endMonth = this.querySelector('#showTransactions #end_month').value;
+			let endYear = this.__div.querySelector('#showTransactions #end_year').value;
+			let endMonth = this.__div.querySelector('#showTransactions #end_month').value;
 			let daysInEndMonth = new Date(endYear, endMonth, 0).getDate();
 			let endDate = endYear.padStart(4, '0') + '-' + endMonth.padStart(2, '0') + '-' + daysInEndMonth.toString().padStart(2, '0');
-			document.body.querySelector('elem-transaction-list').setDateRange(startDate, endDate);
+			document.body.querySelector('transaction-list').setDateRange(startDate, endDate);
 		});
 	}
-
-	initialize(ws, accountName) {
-		this._ws = ws;
-		this._accountName = accountName;
-	}
-
 }
 
-window.customElements.define('elem-account-toolbar', ElemAccountToolbar);
-
-export default ElemAccountToolbar;
+export default TransactionToolbar;
