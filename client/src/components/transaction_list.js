@@ -1,8 +1,8 @@
 import Transaction from '../../../src/transaction';
-import Component from '../component';
+import { Component } from 'app-js';
 
 class TransactionList extends Component {
-	constructor(gridArea, accountName) {
+	constructor(gridArea, accountName, startDate, endDate, searchTerm) {
 		super(gridArea);
 
 		/**
@@ -17,20 +17,27 @@ class TransactionList extends Component {
 		 * @type {Date}
 		 * @private
 		 */
-		this._startDate = new Date();
-		this._startDate.setMonth(this._startDate.getMonth() - 3);
+		this._startDate = startDate;
 
 		/**
 		 * The ending date for the list.
 		 * @type {Date}
 		 * @private
 		 */
-		this._endDate = new Date();
+		this._endDate = endDate;
+
+		/**
+		 * The search term for the list.
+		 * @type {string}
+		 * @private
+		 */
+		this._searchTerm = searchTerm;
 
 		this.__style = `
-			#transaction-list #content {
+			#transaction-list {
+				padding: 1em;
+				overflow-y: auto;
 				text-align: center;
-				min-height: 100%;
 			}
 			#transaction-list #import {
 				margin-top: 1em;
@@ -41,10 +48,10 @@ class TransactionList extends Component {
 				border-collapse: collapse;
 			}
 			#transaction-list table td.date.heading{
-				width: 6em;
+				width: 10em;
 			}
 			#transaction-list table td.description.heading{
-				width: 18em;
+				width: 30em;
 				overflow-x: none;
 			}
 			#transaction-list table td.amount.heading{
@@ -70,23 +77,22 @@ class TransactionList extends Component {
 				color: var(--fg-dark);
 			}
 			`;
+		this.__div.id = 'transaction-list';
 		this.__div.innerHTML = `
-			<div id="content">
-				<div class="page_title">Transactions</div>
-				<div id="import">(Drag a file here to import it)</div>
-				<table id="transactions">
-				</table>
-			</div>
+			<div class="page_title">Transactions</div>
+			<div id="import">(Drag a file here to import it)</div>
+			<table id="transactions">
+			</table>
 			`;
 
 		// Setup the drag-and-drop import capability.
-		let contentElem = this.__div.querySelector('#content');
-		contentElem.addEventListener('dragover', (e) => {
+		let importElem = this.__div.querySelector('#import');
+		importElem.addEventListener('dragover', (e) => {
 			e.stopPropagation();
 			e.preventDefault();
 			e.dataTransfer.dropEffect = 'copy';
 		}, false);
-		contentElem.addEventListener('drop', (e) => {
+		importElem.addEventListener('drop', (e) => {
 			e.stopPropagation();
 			e.preventDefault();
 			var files = e.dataTransfer.files;
@@ -129,6 +135,7 @@ class TransactionList extends Component {
 	 * @private
 	 */
 	async _update() {
+		/** @type {Transaction[]} */
 		let transactions = await window.financio.ws.send({
 			'command': 'list transactions',
 			'name': this._accountName,
@@ -139,7 +146,13 @@ class TransactionList extends Component {
 		if (transactions.length > 0) {
 			for (let i = 0, l = transactions.length; i < l; i++) {
 				let transaction = transactions[i];
-				html += `<tr class="` + (i % 2 === 0 ? `even` : `odd`) + `"><td class="date">` + transaction.date + `</td><td class="description">` + transaction.description + `</td><td class="amount">` + transaction.amount + `</td><td class="category">` + transaction.category + `</td></tr>`;
+				html += `
+					<tr class="` + (i % 2 === 0 ? `even` : `odd`) + `">
+						<td class="date">` + transaction.date.substr(0, 10) + `</td>
+						<td class="description">` + transaction.description + `</td>
+						<td class="amount">` + Number.parseFloat(transaction.amount).toFixed(2) + `</td>
+						<td class="category">` + transaction.category + `</td>
+					</tr>`;
 			}
 		}
 		else {

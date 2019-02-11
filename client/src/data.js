@@ -1,4 +1,4 @@
-/** @typedef {import('./ws').default} WS */
+/** @typedef {import('app-s').WS} WS */
 
 class Data {
 	/**

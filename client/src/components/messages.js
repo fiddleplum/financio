@@ -1,4 +1,4 @@
-import Component from '../component';
+import { Component } from 'app-js';
 
 class Messages extends Component {
 	/**

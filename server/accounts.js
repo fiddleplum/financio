@@ -88,7 +88,7 @@ class Accounts {
 		if (fs.existsSync('data/accounts/' + name + '_transactions/')) {
 			let date = new Date(startDate);
 			const end = new Date(endDate);
-			while (date <= end) {
+			while (date.getTime() <= end.getTime()) {
 				const filePath = this.getTransactionsFilePath(name, date);
 				if (fs.existsSync(filePath)) {
 					transactions = transactions.concat(JSON.parse(fs.readFileSync(filePath)));

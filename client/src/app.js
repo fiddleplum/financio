@@ -1,6 +1,6 @@
 /** @typedef {import('./components/messages').default} ElemMessages */
 import Util from './util';
-import Router from './router';
+import { Router } from 'app-js';
 import './components/messages';
 
 /**

@@ -1,11 +1,11 @@
-import WS from './ws';
-import Router from './router';
+import { WS, Router } from 'app-js';
 import Title from './components/title';
 import MainMenu from './components/main_menu';
 import Messages from './components/messages';
 import AccountList from './components/account_list';
 import AccountAddForm from './components/account_add_form';
 import TransactionList from './components/transaction_list';
+import TransactionToolbar from './components/transaction_toolbar';
 
 /**
  * The main Financio application.
@@ -31,6 +31,7 @@ class Financio {
 		this._router = new Router();
 
 		this._title = new Title('header', 'FINANCIO');
+		this._toolbar = null;
 		this._main = null;
 		this._messages = new Messages('footer');
 
@@ -54,6 +55,25 @@ class Financio {
 		});
 		this._router.registerRoute('account/.*', async (route) => {
 			let name = route[1];
+			let endDate = new Date();
+			let startDate = new Date();
+			startDate.setMonth(endDate.getMonth() - 3);
+			let searchTerm = '';
+			for (let i = 2; i < route.length - 1; i++) {
+				if (route[i] === 'from') {
+					let year = route[i + 1].substr(0, 4);
+					let month = route[i + 1].substr(5, 2);
+					startDate = new Date(year, month - 1);
+				}
+				else if (route[i] === 'to') {
+					let year = route[i + 1].substr(0, 4);
+					let month = route[i + 1].substr(5, 2);
+					endDate = new Date(year, month - 1);
+				}
+				if (route[i] === 'search') {
+					searchTerm = route[i + 1];
+				}
+			}
 
 			// Send the command to the server to get the account info.
 			const accountInfo = await this.ws.send({
@@ -65,7 +85,8 @@ class Financio {
 				if (this._main) {
 					this._main.destroy();
 				}
-				this._main = new TransactionList('main', name, this._ws);
+				this._main = new TransactionList('main', name, startDate, endDate, searchTerm);
+				this._toolbar = new TransactionToolbar('rtoolbar', name, startDate, endDate, searchTerm);
 			}
 		});
 	}

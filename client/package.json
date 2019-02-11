@@ -19,6 +19,7 @@
 	},
 	"homepage": "https://github.com/fiddleplum/financio",
 	"dependencies": {
+		"app-js": "../../app-js",
 		"@fiddleplum/s3-fs": "github:fiddleplum/s3-fs"
 	},
 	"devDependencies": {

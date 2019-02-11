@@ -17,18 +17,15 @@ body {
 	height: 100%;
 	overflow-y: hidden;
 	display: grid;
+	grid-template-columns: 20em auto 20em;
 	grid-template-rows: 2em calc(100% - 4em) 2em;
 	grid-template-areas:
-		"header"
-		"main"
-		"footer";
+		"header header header"
+		"ltoolbar main rtoolbar"
+		"footer footer footer";
 	background: var(--bg-light);
 	color: var(--fg-light);
 	font-family: Muli, sans-serif;
-}
-
-.component {
-	width: 100%;
 }
 
 .page_title {
@@ -47,18 +44,19 @@ form {
 
 form label {
 	display: block;
-	margin-bottom: .25em;
+	line-height: 2em;
+	height: 2em;
+	margin-bottom: .5em;
 }
 
 form input[type=text], select {
 	display: block;
 	width: 100%;
-	margin-bottom: 1em;
 }
 
 .button, input[type=submit] {
 	display: block;
-	margin: .5em auto;
+	margin: 0 auto 1em auto;
 	width: 100%;
 	max-width: 20em;
 	border: 0;
@@ -81,10 +79,11 @@ input, select {
 	font-size: 1em;
 	font-family: inherit;
 	line-height: 1.5em;
+	height: 2em;
 	padding: .25em;
 	border: 0;
 	border-radius: .125em;
-	margin-bottom: .5em;	
+	margin-bottom: 1em;	
 }
 
 .hidden {
