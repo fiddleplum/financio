@@ -17,7 +17,7 @@ body {
 	height: 100%;
 	overflow-y: hidden;
 	display: grid;
-	grid-template-columns: 20em auto 20em;
+	grid-template-columns: 15em auto 15em;
 	grid-template-rows: 2em calc(100% - 4em) 2em;
 	grid-template-areas:
 		"header header header"
@@ -28,6 +28,12 @@ body {
 	font-family: Muli, sans-serif;
 }
 
+@media (max-width: 60em) {
+	body {
+		grid-template-columns: 0em 100% 0em;
+	}
+}
+
 .page_title {
 	text-align: center;
 	margin-top: .5em;
@@ -36,6 +42,12 @@ body {
 }
 
 /* Forms and Buttons */
+
+.vertical-align {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+}
 
 form {
 	margin: 0 auto;

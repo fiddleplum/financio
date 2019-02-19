@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs');
 const WebSocket = require('ws');
 const Accounts = require('./accounts.js');
 
@@ -61,6 +62,10 @@ function startServer() {
 	const wss = new WebSocket.Server({
 		port: 8080
 	});
+
+	if (!fs.existsSync('data/')) {
+		fs.mkdirSync('data/');
+	}
 
 	Accounts.initialize();
 

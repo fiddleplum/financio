@@ -3,9 +3,6 @@ const fs = require('fs');
 
 class Accounts {
 	static initialize() {
-		if (!fs.existsSync('data/')) {
-			fs.mkdirSync('data/');
-		}
 		if (!fs.existsSync('data/accounts/')) {
 			fs.mkdirSync('data/accounts/');
 		}
@@ -154,6 +151,7 @@ class Accounts {
 	/**
 	 * Validates the account name.
 	 * @param {string} name
+	 * @returns {boolean}
 	 */
 	static _validateName(name) {
 		if (name !== name.replace(/[^\w- ']/, '') || name.length === 0) {

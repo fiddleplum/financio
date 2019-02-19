@@ -1,5 +1,6 @@
-import { WS, Router } from 'app-js';
+import { WS, Router } from '@fiddleplum/app-js';
 import Title from './components/title';
+import Notice from './components/notice';
 import MainMenu from './components/main_menu';
 import Messages from './components/messages';
 import AccountList from './components/account_list';
@@ -34,6 +35,7 @@ class Financio {
 		this._toolbar = null;
 		this._main = null;
 		this._messages = new Messages('footer');
+		this._notice = new Notice('main');
 
 		this._router.registerRoute('', (route) => {
 			if (this._main) {
@@ -135,6 +137,7 @@ class Financio {
 	 * @param {string} message
 	 */
 	showMessage(message) {
+		this._notice.showMessage(message);
 		this._messages.addMessage(message);
 	}
 }

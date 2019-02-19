@@ -1,5 +1,5 @@
 import Transaction from '../../../src/transaction';
-import { Component } from 'app-js';
+import { Component } from '@fiddleplum/app-js'
 
 class TransactionList extends Component {
 	constructor(gridArea, accountName, startDate, endDate, searchTerm) {

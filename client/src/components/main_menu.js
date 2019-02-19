@@ -1,4 +1,4 @@
-import { Component } from 'app-js';
+import { Component } from '@fiddleplum/app-js'
 
 class MainMenu extends Component {
 	constructor(gridArea) {
