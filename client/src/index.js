@@ -1,10 +1,14 @@
 import Financio from './financio';
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
 	/**
 	 * @type {Financio}
 	 * @global
 	 */
-	let financio = new Financio();
-	await financio.initialize();
+	try {
+		let financio = new Financio();
+		financio.initialize();
+	}
+	catch (e) {
+	}
 });

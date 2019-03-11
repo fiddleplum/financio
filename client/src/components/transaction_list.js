@@ -2,8 +2,8 @@ import Transaction from '../../../src/transaction';
 import { Component } from '@fiddleplum/app-js'
 
 class TransactionList extends Component {
-	constructor(gridArea, accountName, startDate, endDate, searchTerm) {
-		super(gridArea);
+	constructor(elem, accountName, startDate, endDate, searchTerm) {
+		super(elem);
 
 		/**
 		 * The name of the account.
@@ -34,59 +34,84 @@ class TransactionList extends Component {
 		this._searchTerm = searchTerm;
 
 		this.__style = `
-			#transaction-list {
+			.TransactionList {
 				padding: 1em;
 				overflow-y: auto;
 				text-align: center;
 			}
-			#transaction-list #import {
+			.TransactionList #import {
 				margin-top: 1em;
 				margin-bottom: 1em;
 			}
-			#transaction-list table {
-				display: inline-block;
-				border-collapse: collapse;
+			.TransactionList #transactions {
+				width: 100%;
+				max-width: 48em;
 			}
-			#transaction-list table td.date.heading{
-				width: 10em;
+			.TransactionList .transaction {
+				display: grid;
+				grid-template-columns: 6em 1fr 6em 12em;
+				grid-template-rows: 1.5em;
+				grid-template-areas:
+					"date description amount category";
 			}
-			#transaction-list table td.description.heading{
-				width: 30em;
-				overflow-x: none;
-			}
-			#transaction-list table td.amount.heading{
-				width: 6em;
-			}
-			#transaction-list table td.category.heading{
-				width: 12em;
-			}
-			#transaction-list td {
-				padding: .25em;
-			}
-			#transaction-list td.amount {
+			.TransactionList .date {
+				grid-area: date;
 				text-align: right;
+				line-height: 1.5em;
 			}
-			#transaction-list tr:first-child td:first-child {
-				border-top-left-radius: .25em;
+			.TransactionList .description {
+				grid-area: description;
+				text-align: left;
+				line-height: 1.5em;
+				padding-left: 1em;
 			}
-			#transaction-list tr:first-child td:last-child {
-				border-top-right-radius: .25em;
+			.TransactionList .amount {
+				grid-area: amount;
+				text-align: right;
+				line-height: 1.5em;
 			}
-			#transaction-list .odd td {
+			.TransactionList .category {
+				grid-area: category;
+				text-align: right;
+				line-height: 1.5em;
+				padding-left: 1em;
+			}
+			.TransactionList .transaction {
+				border-bottom: 1px solid black;
+			}
+			.TransactionList .odd td {
 				background: var(--bg-dark);
 				color: var(--fg-dark);
 			}
+			@media (max-width: 60em) {
+				.TransactionList .heading {
+					display: none;
+				}
+				.TransactionList .transaction {
+					grid-template-columns: 6em 1fr 6em;
+					grid-template-rows: 1.5em 1.5em 1.5em;
+					grid-template-areas:
+						"date . amount"
+						"description description description"
+						"category category category";
+				}
+				.TransactionList .date {
+					text-align: left;
+				}
+				.TransactionList .category {
+					text-align: left;
+				}
+			}
 			`;
-		this.__div.id = 'transaction-list';
-		this.__div.innerHTML = `
+		this.__html = `
 			<div class="page_title">Transactions</div>
 			<div id="import">(Drag a file here to import it)</div>
-			<table id="transactions">
-			</table>
+			<div id="transactions">
+			</div>
 			`;
 
 		// Setup the drag-and-drop import capability.
-		let importElem = this.__div.querySelector('#import');
+		let importElem = this.__query('#import');
 		importElem.addEventListener('dragover', (e) => {
 			e.stopPropagation();
 			e.preventDefault();
@@ -142,23 +167,29 @@ class TransactionList extends Component {
 			'startDate': this._startDate,
 			'endDate': this._endDate
 		});
-		let html = `<tr class="odd"><td class="date heading">Date</td><td class="description heading">Description</td><td class="amount heading">Amount</td><td class="category heading">Category</td></tr>`;
+		let html = `
+			<div class="transaction heading">
+				<div class="date">Date</div>
+				<div class="description">Description</div>
+				<div class="amount">Amount</div>
+				<div class="category">Category</div>
+			</div>`;
 		if (transactions.length > 0) {
 			for (let i = 0, l = transactions.length; i < l; i++) {
 				let transaction = transactions[i];
 				html += `
-					<tr class="` + (i % 2 === 0 ? `even` : `odd`) + `">
-						<td class="date">` + transaction.date.substr(0, 10) + `</td>
-						<td class="description">` + transaction.description + `</td>
-						<td class="amount">` + Number.parseFloat(transaction.amount).toFixed(2) + `</td>
-						<td class="category">` + transaction.category + `</td>
-					</tr>`;
+					<div class="transaction ` + (i % 2 === 0 ? `even` : `odd`) + `">
+						<div class="date">` + transaction.date.substr(0, 10) + `</div>
+						<div class="description">` + transaction.description + `</div>
+						<div class="amount">` + Number.parseFloat(transaction.amount).toFixed(2) + `</div>
+						<div class="category">` + transaction.category + `</div>
+					</div>`;
 			}
 		}
 		else {
 			html = `<tr><td colspan=4>There are no transactions.</td></tr>`;
 		}
-		this.__div.querySelector('#transactions').innerHTML = html;
+		this.__query('#transactions').innerHTML = html;
 	}
 
 	/**

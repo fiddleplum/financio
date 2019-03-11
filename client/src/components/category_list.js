@@ -3,11 +3,11 @@ import { Component } from '@fiddleplum/app-js'
 class CategoryList extends Component {
 	/**
 	 * Constructor.
-	 * @param {string} gridArea
+	 * @param {HTMLElement} elem
 	 */
-	constructor(gridArea) {
-		super(gridArea);
-		this._div.innerHTML = `
+	constructor(elem) {
+		super(elem);
+		this.__html = `
 			<div class="page_title">Categories</div>
 			<div id="categories"></div>
 			`;
@@ -25,7 +25,7 @@ class CategoryList extends Component {
 			html += `<div onclick="window.financio.router.pushRoute('category/` + name + `');" class="button">` + name + `</div>`;
 		}
 		html += `<div onclick="window.financio.router.pushRoute('categoryAdd');" class="button">+</div>`;
-		this.__div.querySelector('#accounts').innerHTML = html;
+		this.__query('#accounts').innerHTML = html;
 	}
 }
 

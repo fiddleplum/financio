@@ -1,9 +1,9 @@
 import { Component } from '@fiddleplum/app-js'
 
 class MainMenu extends Component {
-	constructor(gridArea) {
-		super(gridArea);
-		this.__div.innerHTML = `
+	constructor(elem) {
+		super(elem);
+		this.__html = `
 			<div class="page_title">Main Menu</div>
 			<div class="button" onclick="window.financio.router.pushRoute('accounts');">Accounts</div>
 			<div class="button">Categories</div>

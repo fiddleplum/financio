@@ -29,31 +29,36 @@ class Financio {
 		*/
 		this._ws = null;
 
+		/**
+		 * The router for hash tag routing.
+		 * @type {Router}
+		 * @private
+		 */
 		this._router = new Router();
 
-		this._title = new Title('header', 'FINANCIO');
-		this._toolbar = null;
-		this._main = null;
-		this._messages = new Messages('footer');
-		this._notice = new Notice('main');
+		/**
+		 * The main header.
+		 * @type {Title}
+		 * @private
+		 */
+		this._header = new Title(document.body.querySelector('#header'), 'FINANCIO');
 
+		/**
+		 * The page.
+		 * @type {Component}
+		 * @private
+		 */
+		this._page = null;
+
+		// Setup the routes.
 		this._router.registerRoute('', (route) => {
-			if (this._main) {
-				this._main.destroy();
-			}
-			this._main = new MainMenu('main');
+			this.showPage('MainMenu');
 		});
 		this._router.registerRoute('accounts', (route) => {
-			if (this._main) {
-				this._main.destroy();
-			}
-			this._main = new AccountList('main');
+			this.showPage('AccountList');
 		});
 		this._router.registerRoute('accountAdd', (route) => {
-			if (this._main) {
-				this._main.destroy();
-			}
-			this._main = new AccountAddForm('main');
+			this.showPage('AccountAddForm');
 		});
 		this._router.registerRoute('account/.*', async (route) => {
 			let name = route[1];
@@ -84,11 +89,10 @@ class Financio {
 			});
 
 			if (accountInfo.type === 'credit' || accountInfo.type === 'debit') {
-				if (this._main) {
-					this._main.destroy();
-				}
-				this._main = new TransactionList('main', name, startDate, endDate, searchTerm);
-				this._toolbar = new TransactionToolbar('rtoolbar', name, startDate, endDate, searchTerm);
+				this.showPage('TransactionList', name, startDate, endDate, searchTerm);
+
+				// this._page = new TransactionList(document.body.querySelector('#main'), name, startDate, endDate, searchTerm);
+				// this._toolbar = new TransactionToolbar(document.body.querySelector('#rtoolbar'), name, startDate, endDate, searchTerm);
 			}
 		});
 	}
@@ -111,7 +115,7 @@ class Financio {
 
 	async initialize() {
 		// Notify the user that Financio is connecting.
-		this.showMessage('Financio is connecting...');
+		this.showPage('Notice', 'Financio is connecting...');
 
 		// Create the web socket and connect to the host.
 		this._ws = new WS(this._serverHost);
@@ -121,25 +125,38 @@ class Financio {
 			await this._ws.getReadyPromise();
 		}
 		catch (e) {
-			this.showMessage('Financio could not connect.');
+			this.showPage('Notice', 'Financio could not connect.');
 			return;
 		}
 
 		// Notify the user that Financio is connected.
-		this.showMessage('Financio is connected.');
+		this.showPage('Notice', 'Financio is connected.');
 
 		// Once we're loaded up, process the route.
 		this._router.processDocumentLocation();
 	}
 
-	/**
-	 * Add a message to show to the user.
-	 * @param {string} message
-	 */
-	showMessage(message) {
-		this._notice.showMessage(message);
-		this._messages.addMessage(message);
+	showPage(type, ...params) {
+		if (this._page !== null) {
+			this._page.destroy();
+		}
+		let pageType = Financio.pages[type];
+		if (pageType !== null) {
+			try {
+				this._page = new pageType(document.body.querySelector('#page'), ...params);
+			} catch(error) {
+				console.log(error);
+			}
+		}
 	}
 }
+
+Financio.pages = {
+	'Notice' : Notice,
+	'MainMenu' : MainMenu,
+	'AccountList' : AccountList,
+	'AccountAddForm' : AccountAddForm,
+	'TransactionList' : TransactionList
+};
 
 export default Financio;

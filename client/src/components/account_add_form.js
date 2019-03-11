@@ -1,9 +1,13 @@
 import { Component } from '@fiddleplum/app-js'
 
 class AccountAddForm extends Component {
-	constructor(gridArea) {
-		super(gridArea);
-		this.__div.innerHTML = `
+	/**
+	 * Constructor.
+	 * @param {HTMLElement} elem
+	 */
+	constructor(elem) {
+		super(elem);
+		this.__html = `
 			<div class="page_title">Create an Account</div>
 			<form id="createAccountForm" action="javascript:void(null);">
 					<label for="name">Name:</label>
@@ -16,13 +20,13 @@ class AccountAddForm extends Component {
 					<input type="submit" id="submit" class="button" value="Add Account" />
 			</form>
 			`;
-		this.__div.querySelector('#createAccountForm #submit').addEventListener('click', this._createAccount.bind(this));
+		this.__query('#createAccountForm #submit').addEventListener('click', this._createAccount.bind(this));
 	}
 
 	async _createAccount() {
 		// Get data from the form.
-		let name = this.__div.querySelector('#createAccountForm #name').value;
-		let type = this.__div.querySelector('#createAccountForm #type').value;
+		let name = this.__query('#createAccountForm #name').value;
+		let type = this.__query('#createAccountForm #type').value;
 
 		// Send the command to the server.
 		try {

@@ -3,10 +3,10 @@ import { Component } from '@fiddleplum/app-js'
 class Messages extends Component {
 	/**
 	 * Constructs a component at the location of the grid-area.
-	 * @param {string} gridArea
+	 * @param {HTMLElement} elem
 	 */
-	constructor(gridArea) {
-		super(gridArea);
+	constructor(elem) {
+		super(elem);
 
 		/**
 		 * The number of messages visible at once.
@@ -22,14 +22,21 @@ class Messages extends Component {
 		 */
 		this._messages = [];
 
+		/**
+		 * The root div container of the messages.
+		 * @type {HTMLDivElement}
+		 * @private
+		 */
+		this._div = null;
+
 		this.__style = `
-			#messages {
+			.Messages {
 				background: var(--bg-dark);
 				color: var(--fg-dark);
 				overflow-y: hidden;
 			}
 
-			#messages p {
+			.Messages p {
 				margin: 0;
 				padding-left: .5em;
 				line-height: 2em;
@@ -44,23 +51,26 @@ class Messages extends Component {
 				}
 			}
 
-			#messages .movingdown {
+			.Messages .movingdown {
 				animation-duration: .25s;
 				animation-name: movedown;
 			}
 
-			#messages .invisible {
+			.Messages .invisible {
 				display: none;
 			}
 			`;
+		this.__html = `
+			<div></div>
+			`;
+		
+		this._div = this.__query('div');
 
-		this.__div.id = 'messages';
-
-		this.__div.addEventListener('animationend', (event) => {
+		this._div.addEventListener('animationend', (event) => {
 			this._pruneEndMessages();
-			this.__div.children[0].classList.remove('invisible');
-			if (this.__div.children.length > 1) {
-				this.__div.children[1].classList.remove('movingdown');
+			this._div.children[0].classList.remove('invisible');
+			if (this._div.children.length > 1) {
+				this._div.children[1].classList.remove('movingdown');
 			}
 		});
 	}
@@ -79,7 +89,7 @@ class Messages extends Component {
 	 */
 	set numVisibleMessages(numVisibleMessages) {
 		this._numVisibleMessages = numVisibleMessages;
-		this.__div.style.height = (this._numVisibleMessages * 2) + 'em';
+		this._div.style.height = (this._numVisibleMessages * 2) + 'em';
 		this._pruneEndMessages();
 	}
 
@@ -101,7 +111,7 @@ class Messages extends Component {
 		else {
 			html += `<p>` + this._messages[0] + `</p>`;
 		}
-		this.__div.innerHTML = html;
+		this._div.innerHTML = html;
 	}
 
 	/**
@@ -111,7 +121,7 @@ class Messages extends Component {
 	_pruneEndMessages() {
 		while (this._messages.length > this._numVisibleMessages + 1) {
 			this._messages.pop();
-			this.__div.removeChild(this.__div.lastChild);
+			this._div.removeChild(this._div.lastChild);
 		}
 	}
 }

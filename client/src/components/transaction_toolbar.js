@@ -3,30 +3,30 @@ import { Component } from '@fiddleplum/app-js'
 class TransactionToolbar extends Component {
 	/**
 	 * Constructor.
-	 * @param {string} gridArea
+	 * @param {HTMLElement} elem
 	 * @param {string} accountName
 	 */
-	constructor(gridArea, accountName, startDate, endDate, searchTerm) {
-		super(gridArea);
+	constructor(elem, accountName, startDate, endDate, searchTerm) {
+		super(elem);
 
 		this.__style = `
-			#transaction-toolbar {
+			.TransactionToolbar {
 				padding: 1em;
 			}
 
-			#transaction-toolbar form {
+			.TransactionToolbar form {
 				display: grid;
 				grid-template-columns: 6em auto;
 			}
 
-			#transaction-toolbar label {
+			.TransactionToolbar label {
 				display: block;
 				width: 6em;
 			}
-			#transaction-toolbar input[type=text], select {
+			.TransactionToolbar input[type=text], select {
 				display: block;
 			}
-			#transaction-toolbar input[type=submit] {
+			.TransactionToolbar input[type=submit] {
 				grid-column-start: 1;
 				grid-column-end: 3;
 				display: block;
@@ -34,8 +34,7 @@ class TransactionToolbar extends Component {
 			}
 			`;
 
-		this.__div.id = 'transaction-toolbar';
-		this.__div.innerHTML = `
+		this.__html = `
 			<form id="showTransactions" action="javascript:void(null);">
 				<label for="start_year">Start Year:</label>
 				<input type="text" id="start_year" />
@@ -73,19 +72,20 @@ class TransactionToolbar extends Component {
 				</select>
 				<input type="submit" id="submit" value="List Transactions" />
 			</form>
-			<div class="button">Import Transaction File</div>`;
+			<div class="button">Import Transaction File</div>
+			`;
 
-		this.__div.querySelector('#showTransactions #start_year').value = startDate.getFullYear();
-		this.__div.querySelector('#showTransactions #start_month').value = ('' + (startDate.getMonth() + 1)).padStart(2, '0');
-		this.__div.querySelector('#showTransactions #end_year').value = endDate.getFullYear();
-		this.__div.querySelector('#showTransactions #end_month').value = ('' + (endDate.getMonth() + 1)).padStart(2, '0');
+		this.__query('#showTransactions #start_year').value = startDate.getFullYear();
+		this.__query('#showTransactions #start_month').value = ('' + (startDate.getMonth() + 1)).padStart(2, '0');
+		this.__query('#showTransactions #end_year').value = endDate.getFullYear();
+		this.__query('#showTransactions #end_month').value = ('' + (endDate.getMonth() + 1)).padStart(2, '0');
 
-		this.__div.querySelector('#showTransactions #submit').addEventListener('click', () => {
-			let startYear = this.__div.querySelector('#showTransactions #start_year').value;
-			let startMonth = this.__div.querySelector('#showTransactions #start_month').value;
+		this.__query('#showTransactions #submit').addEventListener('click', () => {
+			let startYear = this.__query('#showTransactions #start_year').value;
+			let startMonth = this.__query('#showTransactions #start_month').value;
 			let startDate = startYear + '-' + startMonth + '-01';
-			let endYear = this.__div.querySelector('#showTransactions #end_year').value;
-			let endMonth = this.__div.querySelector('#showTransactions #end_month').value;
+			let endYear = this.__query('#showTransactions #end_year').value;
+			let endMonth = this.__query('#showTransactions #end_month').value;
 			let daysInEndMonth = new Date(endYear, endMonth, 0).getDate();
 			let endDate = endYear.padStart(4, '0') + '-' + endMonth.padStart(2, '0') + '-' + daysInEndMonth.toString().padStart(2, '0');
 			window.financio.router.pushRoute('account/' + accountName + '/from/' + startYear + '-' + startMonth + '/to/' + endYear + '-' + endMonth);

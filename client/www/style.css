@@ -17,12 +17,11 @@ body {
 	height: 100%;
 	overflow-y: hidden;
 	display: grid;
-	grid-template-columns: 15em auto 15em;
-	grid-template-rows: 2em calc(100% - 4em) 2em;
+	grid-template-columns: 1fr;
+	grid-template-rows: 2em 1fr;
 	grid-template-areas:
-		"header header header"
-		"ltoolbar main rtoolbar"
-		"footer footer footer";
+		"header"
+		"page";
 	background: var(--bg-light);
 	color: var(--fg-light);
 	font-family: Muli, sans-serif;
@@ -30,8 +29,20 @@ body {
 
 @media (max-width: 60em) {
 	body {
-		grid-template-columns: 0em 100% 0em;
+		grid-template-columns: 1fr;
+		grid-template-rows: 2em 1fr;
+		grid-template-areas:
+			"header"
+			"page";
 	}
+}
+
+#header {
+	grid-area: header;
+}
+
+#page {
+	grid-area: page;
 }
 
 .page_title {

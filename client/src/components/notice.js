@@ -1,21 +1,21 @@
 import { Component } from '@fiddleplum/app-js';
 
 class Notice extends Component {
-	constructor(gridArea) {
-		super(gridArea);
+	constructor(elem, message) {
+		super(elem);
 		this.__style = `
 			#notice {
 				height: 100%;
 				text-align: center;
 			}
 			`;
-		this.__div.innerHTML = `
-			<div id="notice" class="vertical-align"></div>
+		this.__html = `
+			<div id="notice" class="vertical-align">` + message + `</div>
 			`;
 	}
 
 	showMessage(message) {
-		this.__div.querySelector('#notice').innerHTML = message;
+		this.__query('#notice').innerHTML = message;
 	}
 }
 

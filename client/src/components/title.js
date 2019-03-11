@@ -3,13 +3,21 @@ import { Component } from '@fiddleplum/app-js'
 class Title extends Component {
 	/**
 	 * Constructs the title.
-	 * @param {string} gridArea
+	 * @param {HTMLElement} element
 	 * @param {string} title
 	 */
-	constructor(gridArea, title) {
-		super(gridArea);
+	constructor(element, title) {
+		super(element);
+
+		/**
+		 * The title text.
+		 * @type {string}
+		 * @private
+		 */
+		this._title = title;
+
 		this.__style = `
-			#title {
+			.Title {
 				text-align: center;
 				font-size: 1em;
 				line-height: 2em;
@@ -17,8 +25,7 @@ class Title extends Component {
 				color: var(--fg-dark);
 			}
 			`;
-		this.__div.innerHTML = title;
-		this.__div.id = 'title';
+		this.__html = title;
 	}
 
 	/**
@@ -35,7 +42,7 @@ class Title extends Component {
 	 */
 	set title(title) {
 		this._title = title;
-		this.__div.innerHTML = '<h1>' + title + '</h1>';
+		this.__html = title;
 	}
 }
 
