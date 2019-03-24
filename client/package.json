@@ -5,8 +5,9 @@
 	"private": true,
 	"main": "index.html",
 	"scripts": {
-		"build": "webpack --mode development --devtool inline-cheap-source-map --output-filename index.js && cp dist/* www/ && rm -rf dist",
-		"build-production": "webpack --mode production --output-filename index.js && cp dist/* www/ && rm -rf dist"
+		"rsync_www": "mkdir -p dist; rsync -r --delete --exclude=\"config.js\" www/ dist/",
+		"build": "npm run rsync_www; webpack --mode development --devtool inline-cheap-source-map --output-filename index.js",
+		"build-production": "npm run rsync_www; webpack --mode production --output-filename index.js"
 	},
 	"repository": {
 		"type": "git",
