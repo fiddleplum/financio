@@ -1,22 +1,33 @@
-import { Component } from '@fiddleplum/app-js';
+import { Component, ShowHide } from '../../../../app-js/src/index';
 
 class Notice extends Component {
-	constructor(elem, message) {
+	constructor(elem) {
 		super(elem);
-		this.__style = `
-			#notice {
-				height: 100%;
-				text-align: center;
-			}
-			`;
-		this.__html = `
-			<div id="notice" class="vertical-align">` + message + `</div>
-			`;
+
+		this._message = '';
 	}
 
-	showMessage(message) {
-		this.__query('#notice').innerHTML = message;
+	async showMessage(message) {
+		this.__html = message;
+
+		this.__addStyleClass('visible');
+	}
+
+	clearMessage() {
+		this.__removeStyleClass('visible');
 	}
 }
+
+Notice.__style =  `
+	.Notice {
+		opacity: 0;
+		text-align: center;
+		pointer-events: none;
+	}
+
+	.Notice.visible {
+		opacity: 1;
+	}
+	`;
 
 export default Notice;

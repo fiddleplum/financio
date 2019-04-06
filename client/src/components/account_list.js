@@ -1,4 +1,4 @@
-import { Component } from '@fiddleplum/app-js'
+import { Component } from '../../../../app-js/src/index'
 
 class AccountList extends Component {
 	/**
@@ -16,15 +16,15 @@ class AccountList extends Component {
 
 	async refresh() {
 		/** @type string[]} */
-		let accountNames = await window.financio.ws.send({
+		let accountNames = await window.app.ws.send({
 			'command': 'list accounts'
 		});
 
 		let html = ``;
 		for (let name of accountNames) {
-			html += `<div onclick="window.financio.router.pushRoute('account/` + name + `');" class="button">` + name + `</div>`;
+			html += `<div onclick="window.app.router.pushRoute('account/` + name + `');" class="button">` + name + `</div>`;
 		}
-		html += `<div onclick="window.financio.router.pushRoute('accountAdd');" class="button">+</div>`;
+		html += `<div onclick="window.app.router.pushRoute('accountAdd');" class="button">+</div>`;
 		this.__query('#accounts').innerHTML = html;
 	}
 }

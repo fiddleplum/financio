@@ -45,6 +45,10 @@ body {
 	grid-area: page;
 }
 
+#message {
+	grid-area: page;
+}
+
 .page_title {
 	text-align: center;
 	margin-top: .5em;

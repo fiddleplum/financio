@@ -1,4 +1,4 @@
-import { Component } from '@fiddleplum/app-js'
+import { Component } from '../../../../app-js/src/index'
 
 class TransactionToolbar extends Component {
 	/**
@@ -88,7 +88,7 @@ class TransactionToolbar extends Component {
 			let endMonth = this.__query('#showTransactions #end_month').value;
 			let daysInEndMonth = new Date(endYear, endMonth, 0).getDate();
 			let endDate = endYear.padStart(4, '0') + '-' + endMonth.padStart(2, '0') + '-' + daysInEndMonth.toString().padStart(2, '0');
-			window.financio.router.pushRoute('account/' + accountName + '/from/' + startYear + '-' + startMonth + '/to/' + endYear + '-' + endMonth);
+			window.app.router.pushRoute('account/' + accountName + '/from/' + startYear + '-' + startMonth + '/to/' + endYear + '-' + endMonth);
 		});
 	}
 }

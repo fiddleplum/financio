@@ -1,4 +1,4 @@
-import { Component } from '@fiddleplum/app-js'
+import { Component } from '../../../../app-js/src/index'
 
 class Messages extends Component {
 	/**
@@ -29,37 +29,6 @@ class Messages extends Component {
 		 */
 		this._div = null;
 
-		this.__style = `
-			.Messages {
-				background: var(--bg-dark);
-				color: var(--fg-dark);
-				overflow-y: hidden;
-			}
-
-			.Messages p {
-				margin: 0;
-				padding-left: .5em;
-				line-height: 2em;
-			}
-
-			@keyframes movedown {
-				from {
-					margin-top: 0;
-				}
-				to {
-					margin-top: 2.0em;
-				}
-			}
-
-			.Messages .movingdown {
-				animation-duration: .25s;
-				animation-name: movedown;
-			}
-
-			.Messages .invisible {
-				display: none;
-			}
-			`;
 		this.__html = `
 			<div></div>
 			`;
@@ -125,5 +94,37 @@ class Messages extends Component {
 		}
 	}
 }
+
+Messages.__style = `
+	.Messages {
+		background: var(--bg-dark);
+		color: var(--fg-dark);
+		overflow-y: hidden;
+	}
+
+	.Messages p {
+		margin: 0;
+		padding-left: .5em;
+		line-height: 2em;
+	}
+
+	@keyframes movedown {
+		from {
+			margin-top: 0;
+		}
+		to {
+			margin-top: 2.0em;
+		}
+	}
+
+	.Messages .movingdown {
+		animation-duration: .25s;
+		animation-name: movedown;
+	}
+
+	.Messages .invisible {
+		display: none;
+	}
+	`;
 
 export default Messages;

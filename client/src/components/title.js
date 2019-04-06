@@ -1,4 +1,4 @@
-import { Component } from '@fiddleplum/app-js'
+import { Component } from '../../../../app-js/src/index'
 
 class Title extends Component {
 	/**
@@ -16,15 +16,7 @@ class Title extends Component {
 		 */
 		this._title = title;
 
-		this.__style = `
-			.Title {
-				text-align: center;
-				font-size: 1em;
-				line-height: 2em;
-				background: var(--bg-dark);
-				color: var(--fg-dark);
-			}
-			`;
+		// Set the html to the title.
 		this.__html = title;
 	}
 
@@ -45,5 +37,15 @@ class Title extends Component {
 		this.__html = title;
 	}
 }
+
+Title.__style = `
+	.Title {
+		text-align: center;
+		font-size: 1em;
+		line-height: 2em;
+		background: var(--bg-dark);
+		color: var(--fg-dark);
+	}
+	`;
 
 export default Title;

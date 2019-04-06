@@ -1,6 +1,6 @@
-import { Component } from '@fiddleplum/app-js'
+import { Component } from '../../../../app-js/src/index';
 
-class CategoryList extends Component {
+class Categories extends Component {
 	/**
 	 * Constructor.
 	 * @param {HTMLElement} elem
@@ -16,17 +16,17 @@ class CategoryList extends Component {
 
 	async refresh() {
 		/** @type string[]} */
-		let categoryNames = await window.financio.ws.send({
+		let categoryNames = await window.app.ws.send({
 			'command': 'list categories'
 		});
 
 		let html = ``;
 		for (let name of categoryNames) {
-			html += `<div onclick="window.financio.router.pushRoute('category/` + name + `');" class="button">` + name + `</div>`;
+			html += `<div onclick="window.app.router.pushRoute('category/` + name + `');" class="button">` + name + `</div>`;
 		}
-		html += `<div onclick="window.financio.router.pushRoute('categoryAdd');" class="button">+</div>`;
+		html += `<div onclick="window.app.router.pushRoute('categoryAdd');" class="button">+</div>`;
 		this.__query('#accounts').innerHTML = html;
 	}
 }
 
-export default CategoryList;
+export default Categories;

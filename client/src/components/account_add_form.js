@@ -1,4 +1,4 @@
-import { Component } from '@fiddleplum/app-js'
+import { Component } from '../../../../app-js/src/index'
 
 class AccountAddForm extends Component {
 	/**
@@ -30,22 +30,22 @@ class AccountAddForm extends Component {
 
 		// Send the command to the server.
 		try {
-			await window.financio.ws.send({
+			await window.app.ws.send({
 				'command': 'create account',
 				'name': name,
 				'type': type
 			});
 		}
 		catch (errorMessage) {
-			window.financio.showMessage(errorMessage);
+			window.app.showMessage(errorMessage);
 			return;
 		}
 
 		// Notify the user of success.
-		window.financio.showMessage('The account "' + name + '" was created.');
+		window.app.showMessage('The account "' + name + '" was created.');
 
 		// Show the newly created account in the account list.
-		window.financio.router.pushRoute('accounts');
+		window.app.router.pushRoute('accounts');
 	}
 }
 

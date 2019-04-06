@@ -1,108 +1,60 @@
 import Transaction from '../../../src/transaction';
-import { Component } from '@fiddleplum/app-js'
+import { Component } from '../../../../app-js/src/index'
 
 class TransactionList extends Component {
-	constructor(elem, accountName, startDate, endDate, searchTerm) {
+	/**
+	 * @param {HTMLElement} elem
+	 * @param {Map<string, string>} options
+	 */
+	constructor(elem, options) {
 		super(elem);
+
+		// Use today for default values.
+		const today = new Date();
 
 		/**
 		 * The name of the account.
 		 * @type {string}
 		 * @private
 		 */
-		this._accountName = accountName;
+		this._accountName = '';
 
 		/**
 		 * The starting date for the list.
 		 * @type {Date}
 		 * @private
 		 */
-		this._startDate = startDate;
+		this._startDate = new Date(today.getFullYear(), today.getMonth() - 3, today.getDate());
 
 		/**
 		 * The ending date for the list.
 		 * @type {Date}
 		 * @private
 		 */
-		this._endDate = endDate;
+		this._endDate = new Date(today);
 
 		/**
 		 * The search term for the list.
 		 * @type {string}
 		 * @private
 		 */
-		this._searchTerm = searchTerm;
+		this._searchTerm = '';
 
-		this.__style = `
-			.TransactionList {
-				padding: 1em;
-				overflow-y: auto;
-				text-align: center;
-			}
-			.TransactionList #import {
-				margin-top: 1em;
-				margin-bottom: 1em;
-			}
-			.TransactionList #transactions {
-				width: 100%;
-				max-width: 48em;
-			}
-			.TransactionList .transaction {
-				display: grid;
-				grid-template-columns: 6em 1fr 6em 12em;
-				grid-template-rows: 1.5em;
-				grid-template-areas:
-					"date description amount category";
-			}
-			.TransactionList .date {
-				grid-area: date;
-				text-align: right;
-				line-height: 1.5em;
-			}
-			.TransactionList .description {
-				grid-area: description;
-				text-align: left;
-				line-height: 1.5em;
-				padding-left: 1em;
-			}
-			.TransactionList .amount {
-				grid-area: amount;
-				text-align: right;
-				line-height: 1.5em;
-			}
-			.TransactionList .category {
-				grid-area: category;
-				text-align: right;
-				line-height: 1.5em;
-				padding-left: 1em;
-			}
-			.TransactionList .transaction {
-				border-bottom: 1px solid black;
-			}
-			.TransactionList .odd td {
-				background: var(--bg-dark);
-				color: var(--fg-dark);
-			}
-			@media (max-width: 60em) {
-				.TransactionList .heading {
-					display: none;
-				}
-				.TransactionList .transaction {
-					grid-template-columns: 6em 1fr 6em;
-					grid-template-rows: 1.5em 1.5em 1.5em;
-					grid-template-areas:
-						"date . amount"
-						"description description description"
-						"category category category";
-				}
-				.TransactionList .date {
-					text-align: left;
-				}
-				.TransactionList .category {
-					text-align: left;
-				}
-			}
-			`;
+		// Fill in the options.
+		const start = options.get('start');
+		const end = options.get('end');
+		const search = options.get('search');
+		if (start) {
+			this._startDate.setFullYear(start.substr(0, 4), start-substr(5, 2));
+		}
+		if (end) {
+			this._endDate.setFullYear(end.substr(0, 4), end.substr(5, 2));
+		}
+		if (search) {
+			this._searchTerm = search;
+		}
+
+		// Setup the HTML.
 		this.__html = `
 			<div class="page_title">Transactions</div>
 			<div id="import">(Drag a file here to import it)</div>
@@ -129,7 +81,7 @@ class TransactionList extends Component {
 				if (extension === 'qfx' || extension === 'ofx') {
 					reader.onload = async (e2) => {
 						let transactions = await TransactionList._getTransactionsFromOFX(e2.target.result);
-						await window.financio.ws.send({
+						await window.app.ws.send({
 							'command': 'add transactions',
 							'name': this._accountName,
 							'transactions': transactions
@@ -161,7 +113,7 @@ class TransactionList extends Component {
 	 */
 	async _update() {
 		/** @type {Transaction[]} */
-		let transactions = await window.financio.ws.send({
+		let transactions = await window.app.ws.send({
 			'command': 'list transactions',
 			'name': this._accountName,
 			'startDate': this._startDate,
@@ -227,5 +179,76 @@ class TransactionList extends Component {
 		return transactions;
 	}
 }
+
+TransactionList.__style = `
+	.TransactionList {
+		padding: 1em;
+		overflow-y: auto;
+		text-align: center;
+	}
+	.TransactionList #import {
+		margin-top: 1em;
+		margin-bottom: 1em;
+	}
+	.TransactionList #transactions {
+		width: 100%;
+		max-width: 48em;
+	}
+	.TransactionList .transaction {
+		display: grid;
+		grid-template-columns: 6em 1fr 6em 12em;
+		grid-template-rows: 1.5em;
+		grid-template-areas:
+			"date description amount category";
+	}
+	.TransactionList .date {
+		grid-area: date;
+		text-align: right;
+		line-height: 1.5em;
+	}
+	.TransactionList .description {
+		grid-area: description;
+		text-align: left;
+		line-height: 1.5em;
+		padding-left: 1em;
+	}
+	.TransactionList .amount {
+		grid-area: amount;
+		text-align: right;
+		line-height: 1.5em;
+	}
+	.TransactionList .category {
+		grid-area: category;
+		text-align: right;
+		line-height: 1.5em;
+		padding-left: 1em;
+	}
+	.TransactionList .transaction {
+		border-bottom: 1px solid black;
+	}
+	.TransactionList .odd td {
+		background: var(--bg-dark);
+		color: var(--fg-dark);
+	}
+	@media (max-width: 60em) {
+		.TransactionList .heading {
+			display: none;
+		}
+		.TransactionList .transaction {
+			grid-template-columns: 6em 1fr 6em;
+			grid-template-rows: 1.5em 1.5em 1.5em;
+			grid-template-areas:
+				"date . amount"
+				"description description description"
+				"category category category";
+		}
+		.TransactionList .date {
+			text-align: left;
+		}
+		.TransactionList .category {
+			text-align: left;
+		}
+	}
+	`;
 
 export default TransactionList;
