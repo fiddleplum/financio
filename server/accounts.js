@@ -88,7 +88,13 @@ class Accounts {
 			while (date.getTime() <= end.getTime()) {
 				const filePath = this.getTransactionsFilePath(name, date);
 				if (fs.existsSync(filePath)) {
-					transactions = transactions.concat(JSON.parse(fs.readFileSync(filePath)));
+					/** @type {Transaction[]} */
+					const newTransactions = JSON.parse(fs.readFileSync(filePath));
+					for (let i = 0, l = newTransactions.length; i < l; i++) {
+						if (startDate <= newTransactions[i].date && newTransactions[i].date <= endDate) {
+							transactions.push(newTransactions[i]);
+						}
+					}
 				}
 				date.setMonth(date.getMonth() + 1);
 			}

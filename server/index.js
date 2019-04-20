@@ -3,6 +3,7 @@
 const fs = require('fs');
 const WebSocket = require('ws');
 const Accounts = require('./accounts.js');
+const Categories = require('./categories.js');
 
 /**
  * @param {WebSocket} ws
@@ -37,12 +38,21 @@ async function processMessage(ws, message) {
 			let name = requestData.name;
 			let startDate = requestData.startDate;
 			let endDate = requestData.endDate;
+			console.log('started');
 			responseData = await Accounts.listTransactions(name, startDate, endDate);
+			console.log('done');
 		}
 		else if (requestData.command === 'add transactions') {
 			let name = requestData.name;
 			let transactions = requestData.transactions;
 			responseData = await Accounts.addTransactions(name, transactions);
+		}
+		else if (requestData.command === 'get categories') {
+			responseData = await Categories.get();
+		}
+		else if (requestData.command === 'set categories') {
+			let categories = requestData.categories;
+			responseData = await Categories.set(categories);
 		}
 		success = true;
 	}

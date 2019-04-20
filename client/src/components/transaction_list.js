@@ -1,7 +1,7 @@
 import Transaction from '../../../src/transaction';
-import { Component } from '../../../../app-js/src/index'
+import { Component } from '../../../../app-js/src/index';
 
-class TransactionList extends Component {
+export default class TransactionList extends Component {
 	/**
 	 * @param {HTMLElement} elem
 	 * @param {Map<string, string>} options
@@ -17,7 +17,7 @@ class TransactionList extends Component {
 		 * @type {string}
 		 * @private
 		 */
-		this._accountName = '';
+		this._accountName = options.get('name');
 
 		/**
 		 * The starting date for the list.
@@ -45,7 +45,7 @@ class TransactionList extends Component {
 		const end = options.get('end');
 		const search = options.get('search');
 		if (start) {
-			this._startDate.setFullYear(start.substr(0, 4), start-substr(5, 2));
+			this._startDate.setFullYear(start.substr(0, 4), start.substr(5, 2));
 		}
 		if (end) {
 			this._endDate.setFullYear(end.substr(0, 4), end.substr(5, 2));
@@ -54,16 +54,8 @@ class TransactionList extends Component {
 			this._searchTerm = search;
 		}
 
-		// Setup the HTML.
-		this.__html = `
-			<div class="page_title">Transactions</div>
-			<div id="import">(Drag a file here to import it)</div>
-			<div id="transactions">
-			</div>
-			`;
-
 		// Setup the drag-and-drop import capability.
-		let importElem = this.__query('#import');
+		let importElem = this.elem.querySelector('#import');
 		importElem.addEventListener('dragover', (e) => {
 			e.stopPropagation();
 			e.preventDefault();
@@ -116,8 +108,8 @@ class TransactionList extends Component {
 		let transactions = await window.app.ws.send({
 			'command': 'list transactions',
 			'name': this._accountName,
-			'startDate': this._startDate,
-			'endDate': this._endDate
+			'startDate': this._startDate.toISOString(),
+			'endDate': this._endDate.toISOString()
 		});
 		let html = `
 			<div class="transaction heading">
@@ -141,7 +133,7 @@ class TransactionList extends Component {
 		else {
 			html = `<tr><td colspan=4>There are no transactions.</td></tr>`;
 		}
-		this.__query('#transactions').innerHTML = html;
+		this.elem.querySelector('#transactions').innerHTML = html;
 	}
 
 	/**
@@ -168,7 +160,7 @@ class TransactionList extends Component {
 				let transaction = new Transaction();
 				transaction.id = content.substr(idI, content.indexOf('<', idI) - idI).trim();
 				transaction.date = content.substr(dateI, content.indexOf('<', dateI) - dateI).trim();
-				transaction.date = transaction.date.substr(0, 4) + '-' + transaction.date.substr(4, 2) + '-' + transaction.date.substr(6, 2) + ' 00:00:00.000';
+				transaction.date = transaction.date.substr(0, 4) + '-' + transaction.date.substr(4, 2) + '-' + transaction.date.substr(6, 2) + 'T00:00:00.000Z';
 				transaction.amount = content.substr(amountI, content.indexOf('<', amountI) - amountI).trim();
 				if (nameI < endI) {
 					transaction.description = content.substr(nameI, content.indexOf('<', nameI) - nameI).trim();
@@ -180,7 +172,14 @@ class TransactionList extends Component {
 	}
 }
 
-TransactionList.__style = `
+TransactionList.html = `
+	<div class="page_title">Transactions</div>
+	<div id="import">(Drag a file here to import it)</div>
+	<div id="transactions">
+	</div>
+	`;
+
+TransactionList.style = `
 	.TransactionList {
 		padding: 1em;
 		overflow-y: auto;
@@ -250,5 +249,3 @@ TransactionList.__style = `
 		}
 	}
 	`;
-
-export default TransactionList;

@@ -47,7 +47,7 @@ class Financio extends App {
 
 		this.registerPage('accounts/view', TransactionList);
 
-		this.registerPage('categories', Categories);
+		this.registerPage('categories/view', Categories);
 
 		// Notify the user that Financio is connecting.
 		this.showPage('Notice', 'Financio is connecting...');
@@ -59,8 +59,6 @@ class Financio extends App {
 		this._ws.getReadyPromise().then(() => {
 			// Notify the user that Financio is connected.
 			this.showPage('Notice', 'Financio is connected.');
-
-			this.goToPage('');
 			this._router.processDocumentLocation();
 		}).catch((error) => {
 			this.showPage('Notice', 'Financio could not connect.');

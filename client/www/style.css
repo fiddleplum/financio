@@ -43,6 +43,10 @@ body {
 
 #page {
 	grid-area: page;
+	width: 100%;
+	max-width: 50em;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 #message {
@@ -54,6 +58,16 @@ body {
 	margin-top: .5em;
 	margin-bottom: .5em;
 	font-size: 2em;
+}
+
+/* Text Formatting */
+
+.heading {
+	font-size: 1em;
+	line-height: 1em;
+	margin-top: .5em;
+	margin-bottom: .5em;
+	font-weight: bold;
 }
 
 /* Forms and Buttons */

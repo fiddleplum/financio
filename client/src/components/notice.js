@@ -1,6 +1,6 @@
-import { Component, ShowHide } from '../../../../app-js/src/index';
+import { Component } from '../../../../app-js/src/index';
 
-class Notice extends Component {
+export default class Notice extends Component {
 	constructor(elem) {
 		super(elem);
 
@@ -8,7 +8,7 @@ class Notice extends Component {
 	}
 
 	async showMessage(message) {
-		this.__html = message;
+		this.elem.innerHTML = message;
 
 		this.__addStyleClass('visible');
 	}
@@ -18,7 +18,7 @@ class Notice extends Component {
 	}
 }
 
-Notice.__style =  `
+Notice.style = `
 	.Notice {
 		opacity: 0;
 		text-align: center;
@@ -29,5 +29,3 @@ Notice.__style =  `
 		opacity: 1;
 	}
 	`;
-
-export default Notice;

@@ -1,16 +1,12 @@
-import { Component } from '../../../../app-js/src/index'
+import { Component } from '../../../../app-js/src/index';
 
-class AccountList extends Component {
+export default class AccountList extends Component {
 	/**
 	 * Constructor.
 	 * @param {HTMLElement} elem
 	 */
 	constructor(elem) {
 		super(elem);
-		this.__html = `
-			<div class="page_title">Accounts</div>
-			<div id="accounts"></div>
-			`;
 		this.refresh();
 	}
 
@@ -22,11 +18,14 @@ class AccountList extends Component {
 
 		let html = ``;
 		for (let name of accountNames) {
-			html += `<div onclick="window.app.router.pushRoute('account/` + name + `');" class="button">` + name + `</div>`;
+			html += `<div onclick="window.app.router.pushRoute('accounts/view/name/` + name + `');" class="button">` + name + `</div>`;
 		}
-		html += `<div onclick="window.app.router.pushRoute('accountAdd');" class="button">+</div>`;
-		this.__query('#accounts').innerHTML = html;
+		html += `<div onclick="window.app.router.pushRoute('accounts/add');" class="button">+</div>`;
+		this.elem.querySelector('#accounts').innerHTML = html;
 	}
 }
 
-export default AccountList;
+AccountList.html = `
+	<div class="page_title">Accounts</div>
+	<div id="accounts"></div>
+	`;

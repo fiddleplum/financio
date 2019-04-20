@@ -1,6 +1,6 @@
-import { Component } from '../../../../app-js/src/index'
+import { Component } from '../../../../app-js/src/index';
 
-class Messages extends Component {
+export default class Messages extends Component {
 	/**
 	 * Constructs a component at the location of the grid-area.
 	 * @param {HTMLElement} elem
@@ -23,25 +23,18 @@ class Messages extends Component {
 		this._messages = [];
 
 		/**
-		 * The root div container of the messages.
-		 * @type {HTMLDivElement}
+		 * The this-bound animation end event listener.
+		 * @type {function(AnimationEvent):void}
 		 * @private
 		 */
-		this._div = null;
+		this._animationEndEventListenerBound = Messages._animationEndEventListener.bind(this);
 
-		this.__html = `
-			<div></div>
-			`;
-		
-		this._div = this.__query('div');
+		// Add the animation end event listener.
+		this.elem.addEventListener('animationend', this._animationEndEventListenerBound);
+	}
 
-		this._div.addEventListener('animationend', (event) => {
-			this._pruneEndMessages();
-			this._div.children[0].classList.remove('invisible');
-			if (this._div.children.length > 1) {
-				this._div.children[1].classList.remove('movingdown');
-			}
-		});
+	destroy() {
+		this.elem.removeEventListener(this._animationEndEventListenerBound);
 	}
 
 	/**
@@ -93,9 +86,22 @@ class Messages extends Component {
 			this._div.removeChild(this._div.lastChild);
 		}
 	}
+
+	/**
+	 * The animation end event listener.
+	 * @param {AnimationEvent} event
+	 * @private
+	 */
+	_animationEndEventListener(event) {
+		this._pruneEndMessages();
+		this._div.children[0].classList.remove('invisible');
+		if (this._div.children.length > 1) {
+			this._div.children[1].classList.remove('movingdown');
+		}
+	}
 }
 
-Messages.__style = `
+Messages.style = `
 	.Messages {
 		background: var(--bg-dark);
 		color: var(--fg-dark);
@@ -127,4 +133,6 @@ Messages.__style = `
 	}
 	`;
 
-export default Messages;
+Messages.html = `
+	<div></div>
+	`;

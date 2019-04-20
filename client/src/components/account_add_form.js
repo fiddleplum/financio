@@ -1,32 +1,19 @@
-import { Component } from '../../../../app-js/src/index'
+import { Component } from '../../../../app-js/src/index';
 
-class AccountAddForm extends Component {
+export default class AccountAddForm extends Component {
 	/**
 	 * Constructor.
 	 * @param {HTMLElement} elem
 	 */
 	constructor(elem) {
 		super(elem);
-		this.__html = `
-			<div class="page_title">Create an Account</div>
-			<form id="createAccountForm" action="javascript:void(null);">
-					<label for="name">Name:</label>
-					<input type="text" id="name" />
-					<label for="type">Type:</label>
-					<select id="type">
-						<option value="credit">Credit</option>
-						<option value="debit">Debit</option>
-					</select>
-					<input type="submit" id="submit" class="button" value="Add Account" />
-			</form>
-			`;
-		this.__query('#createAccountForm #submit').addEventListener('click', this._createAccount.bind(this));
+		this.elem.querySelector('#createAccountForm #submit').addEventListener('click', this._createAccount.bind(this));
 	}
 
 	async _createAccount() {
 		// Get data from the form.
-		let name = this.__query('#createAccountForm #name').value;
-		let type = this.__query('#createAccountForm #type').value;
+		let name = this.elem.querySelector('#createAccountForm #name').value;
+		let type = this.elem.querySelector('#createAccountForm #type').value;
 
 		// Send the command to the server.
 		try {
@@ -49,4 +36,16 @@ class AccountAddForm extends Component {
 	}
 }
 
-export default AccountAddForm;
+AccountAddForm.html = `
+	<div class="page_title">Create an Account</div>
+	<form id="createAccountForm" action="javascript:void(null);">
+			<label for="name">Name:</label>
+			<input type="text" id="name" />
+			<label for="type">Type:</label>
+			<select id="type">
+				<option value="credit">Credit</option>
+				<option value="debit">Debit</option>
+			</select>
+			<input type="submit" id="submit" class="button" value="Add Account" />
+	</form>
+	`;

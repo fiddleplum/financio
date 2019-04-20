@@ -1,6 +1,6 @@
-import { Component } from '../../../../app-js/src/index'
+import { Component } from '../../../../app-js/src/index';
 
-class Title extends Component {
+export default class Title extends Component {
 	/**
 	 * Constructs the title.
 	 * @param {HTMLElement} element
@@ -14,10 +14,7 @@ class Title extends Component {
 		 * @type {string}
 		 * @private
 		 */
-		this._title = title;
-
-		// Set the html to the title.
-		this.__html = title;
+		this.title = title;
 	}
 
 	/**
@@ -34,11 +31,11 @@ class Title extends Component {
 	 */
 	set title(title) {
 		this._title = title;
-		this.__html = title;
+		this.elem.innerHTML = '<a href="">' + title + '</a>';
 	}
 }
 
-Title.__style = `
+Title.style = `
 	.Title {
 		text-align: center;
 		font-size: 1em;
@@ -46,6 +43,7 @@ Title.__style = `
 		background: var(--bg-dark);
 		color: var(--fg-dark);
 	}
-	`;
 
-export default Title;
+	.Title a {
+		color: var(--fg-dark);
+	`;
