@@ -12,62 +12,30 @@
 }
 
 body {
-	margin: 0;
-	width: 100vw;
-	height: 100%;
-	overflow-y: hidden;
-	display: grid;
-	grid-template-columns: 1fr;
-	grid-template-rows: 2em 1fr;
-	grid-template-areas:
-		"header"
-		"page";
 	background: var(--bg-light);
 	color: var(--fg-light);
 	font-family: Muli, sans-serif;
 }
 
 @media (max-width: 60em) {
-	body {
-		grid-template-columns: 1fr;
-		grid-template-rows: 2em 1fr;
-		grid-template-areas:
-			"header"
-			"page";
-	}
-}
-
-#header {
-	grid-area: header;
-}
-
-#page {
-	grid-area: page;
-	width: 100%;
-	max-width: 50em;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-#message {
-	grid-area: page;
-}
-
-.page_title {
-	text-align: center;
-	margin-top: .5em;
-	margin-bottom: .5em;
-	font-size: 2em;
 }
 
 /* Text Formatting */
 
-.heading {
+h1 {
+	text-align: center;
 	font-size: 1em;
 	line-height: 1em;
 	margin-top: .5em;
 	margin-bottom: .5em;
 	font-weight: bold;
+}
+
+h2 {
+	font-size: 1em;
+	line-height: 1em;
+	margin-top: .25em;
+	margin-bottom: .25em;
 }
 
 /* Forms and Buttons */

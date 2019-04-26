@@ -1,10 +1,10 @@
-import { Component } from '../../../../app-js/src/index';
+import { UIComponent } from '../../../../app-js/src/index';
 
-export default class MainMenu extends Component {
+export default class MainMenu extends UIComponent {
 }
 
 MainMenu.html = `
-	<div class="page_title">Main Menu</div>
+	<h1>Main Menu</h1>
 	<div class="button" onclick="window.app.router.pushRoute('accounts/list');">Accounts</div>
 	<div class="button" onclick="window.app.router.pushRoute('categories/view');">Categories</div>
 	<div class="button" onclick="window.app.router.pushRoute('rules/view');">Rules</div>

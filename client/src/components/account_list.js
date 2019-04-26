@@ -1,6 +1,6 @@
-import { Component } from '../../../../app-js/src/index';
+import { UIComponent } from '../../../../app-js/src/index';
 
-export default class AccountList extends Component {
+export default class AccountList extends UIComponent {
 	/**
 	 * Constructor.
 	 * @param {HTMLElement} elem
@@ -26,6 +26,6 @@ export default class AccountList extends Component {
 }
 
 AccountList.html = `
-	<div class="page_title">Accounts</div>
+	<h1>Accounts</h1>
 	<div id="accounts"></div>
 	`;

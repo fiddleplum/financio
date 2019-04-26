@@ -1,7 +1,7 @@
 import Transaction from '../../../src/transaction';
-import { Component } from '../../../../app-js/src/index';
+import { UIComponent } from '../../../../app-js/src/index';
 
-export default class TransactionList extends Component {
+export default class TransactionList extends UIComponent {
 	/**
 	 * @param {HTMLElement} elem
 	 * @param {Map<string, string>} options
@@ -173,7 +173,7 @@ export default class TransactionList extends Component {
 }
 
 TransactionList.html = `
-	<div class="page_title">Transactions</div>
+	<h1>Transactions</h1>
 	<div id="import">(Drag a file here to import it)</div>
 	<div id="transactions">
 	</div>
@@ -190,6 +190,7 @@ TransactionList.style = `
 		margin-bottom: 1em;
 	}
 	.TransactionList #transactions {
+		margin: auto;
 		width: 100%;
 		max-width: 48em;
 	}

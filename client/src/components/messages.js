@@ -1,6 +1,6 @@
-import { Component } from '../../../../app-js/src/index';
+import { UIComponent } from '../../../../app-js/src/index';
 
-export default class Messages extends Component {
+export default class Messages extends UIComponent {
 	/**
 	 * Constructs a component at the location of the grid-area.
 	 * @param {HTMLElement} elem

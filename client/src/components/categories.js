@@ -1,6 +1,6 @@
-import { Component } from '../../../../app-js/src/index';
+import { UIComponent } from '../../../../app-js/src/index';
 
-export default class Categories extends Component {
+export default class Categories extends UIComponent {
 	/**
 	 * Constructor.
 	 * @param {HTMLElement} elem
@@ -32,7 +32,7 @@ Categories.style = `
 	`;
 
 Categories.html = `
-	<div class="page_title">Categories</div>
+	<h1>Categories</h1>
 	<div id="list"></div>
 	<div id="toolbar"></div>
 	`;

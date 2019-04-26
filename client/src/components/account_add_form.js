@@ -1,6 +1,6 @@
-import { Component } from '../../../../app-js/src/index';
+import { UIComponent } from '../../../../app-js/src/index';
 
-export default class AccountAddForm extends Component {
+export default class AccountAddForm extends UIComponent {
 	/**
 	 * Constructor.
 	 * @param {HTMLElement} elem
@@ -37,7 +37,7 @@ export default class AccountAddForm extends Component {
 }
 
 AccountAddForm.html = `
-	<div class="page_title">Create an Account</div>
+	<h1>Create an Account</h1>
 	<form id="createAccountForm" action="javascript:void(null);">
 			<label for="name">Name:</label>
 			<input type="text" id="name" />

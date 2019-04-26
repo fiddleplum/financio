@@ -1,6 +1,6 @@
-import { Component } from '../../../../app-js/src/index';
+import { UIComponent } from '../../../../app-js/src/index';
 
-export default class Title extends Component {
+export default class Title extends UIComponent {
 	/**
 	 * Constructs the title.
 	 * @param {HTMLElement} element

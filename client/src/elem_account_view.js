@@ -30,7 +30,7 @@ class ElemAccountView extends HTMLElement {
 					margin-bottom: .5em;
 				}
 			</style>
-			<div class="page_title">` + this._name + `</div>
+			<h1>%1</h1>
 			<elem-transaction-list></elem-transaction-list>
 			`;
 	}

@@ -5,6 +5,8 @@
 	"private": true,
 	"main": "index.html",
 	"scripts": {
+		"setup": "yarn install --pure-lockfile",
+		"update": "yarn install",
 		"start": "node ."
 	},
 	"repository": {
