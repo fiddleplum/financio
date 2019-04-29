@@ -18,14 +18,22 @@ export default class AccountList extends UIComponent {
 
 		let html = ``;
 		for (let name of accountNames) {
-			html += `<div onclick="window.app.router.pushRoute('accounts/view/name/` + name + `');" class="button">` + name + `</div>`;
+			html += `<button class="menuItem" onclick="window.app.router.pushRoute('accounts/view/name/` + name + `');">` + name + `</button>`;
 		}
-		html += `<div onclick="window.app.router.pushRoute('accounts/add');" class="button">+</div>`;
-		this.elem.querySelector('#accounts').innerHTML = html;
+		html += ``;
+		this.elem.querySelector('#list').innerHTML = html;
 	}
 }
 
 AccountList.html = `
 	<h1>Accounts</h1>
-	<div id="accounts"></div>
+	<div id="list" class="menu"></div>
+	<button id="add" onclick="window.app.router.pushRoute('accounts/add');" class="button">+</button>
+	`;
+
+AccountList.style = `
+	.AccountList #add {
+		background: var(--bg-medium);
+		color: var(--fg-medium);
+	}
 	`;

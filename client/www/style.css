@@ -7,6 +7,8 @@
 :root {
 	--bg-light: rgb(255, 255, 255);
 	--fg-light: rgb(42, 69, 151);
+	--bg-medium: rgb(101, 130, 214);
+	--fg-medium: rgb(197, 203, 221);
 	--bg-dark: rgb(42, 69, 151);
 	--fg-dark: rgb(197, 203, 221);
 }
@@ -55,7 +57,6 @@ form label {
 	display: block;
 	line-height: 2em;
 	height: 2em;
-	margin-bottom: .5em;
 }
 
 form input[type=text], select {
@@ -63,15 +64,10 @@ form input[type=text], select {
 	width: 100%;
 }
 
-.button, input[type=submit] {
-	display: block;
-	margin: 0 auto 1em auto;
-	width: 100%;
-	max-width: 20em;
+button, input[type=submit] {
 	border: 0;
 	border-radius: .125em;
 	padding: .25em;
-	cursor: pointer;
 	background: var(--bg-dark);
 	color: var(--fg-dark);
 	text-align: center;
@@ -79,6 +75,26 @@ form input[type=text], select {
 	font-size: inherit;
 	font-family: inherit;
 	line-height: 1.5em;
+	cursor: pointer;
+}
+
+.toolbar {
+	border-top: 1px solid var(--fg-light);
+}
+
+.toolbar button {
+	display: inline-block;
+	margin: 0 .25em;
+	width: 2em;
+	height: 2em;
+	text-align: center;
+}
+
+.menu button, input[type=submit] {
+	display: block;
+	margin: 0 auto 1em auto;
+	width: 100%;
+	max-width: 20em;
 }
 
 input, select {

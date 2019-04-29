@@ -20,19 +20,28 @@ export default class Categories extends UIComponent {
 		for (let category of categories) {
 			html += `<div>` + category + `</div>`;
 		}
-		html += `<div onclick="window.app.router.pushRoute('categories/add');" class="button">+</div>`;
-		this.elem.querySelector('#categories').innerHTML = html;
+		this.elem.querySelector('#list').innerHTML = html;
 	}
 }
-
-Categories.style = `
-	.Categories #list {
-		height: calc(100% - 2em);
-	}
-	`;
 
 Categories.html = `
 	<h1>Categories</h1>
 	<div id="list"></div>
-	<div id="toolbar"></div>
+	<div class="toolbar"><!--
+		--><button>+</button><!--
+		--><button>→</button><!--
+		--><button>←</button><!--
+		--><button>↑</button><!--
+		--><button>↓</button><!--
+		--></div>
 	`;
+
+Categories.style = `
+	.Categories #list {
+		height: calc(100% - 4em - 1px);
+	}
+	.Categories #toolbar {
+		height: calc(2em + 1px);
+	}
+	`;
+
