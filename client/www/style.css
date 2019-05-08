@@ -19,6 +19,13 @@ body {
 	font-family: Muli, sans-serif;
 }
 
+#page {
+	width: 100%;
+	max-width: 60em;
+	margin: 0 auto;
+	padding: 0 .5em;
+}
+
 @media (max-width: 60em) {
 }
 
@@ -28,8 +35,8 @@ h1 {
 	text-align: center;
 	font-size: 1em;
 	line-height: 1em;
-	margin-top: .5em;
-	margin-bottom: .5em;
+	margin-top: 1em;
+	margin-bottom: 1em;
 	font-weight: bold;
 }
 

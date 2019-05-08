@@ -4,13 +4,13 @@ const fs = require('fs');
 // with the first being a name and the second being a similar JSON array.
 
 /**
- * @typedef {(string|[string, Categories])[]} Categories
+ * @typedef {string|[string, Category[]]} Category
  */
 
 class Categories {
 	/**
 	 * Gets the categories from the categories file.
-	 * @returns {Categories}
+	 * @returns {Category[]}
 	 */
 	static get() {
 		if (fs.existsSync('data/categories.json')) {
@@ -21,7 +21,7 @@ class Categories {
 
 	/**
 	 * Sets the categories to the categories file.
-	 * @param {Categories} categories
+	 * @param {Category[]} categories
 	 */
 	static set(categories) {
 		// Create the .json file.

@@ -181,8 +181,6 @@ TransactionList.html = `
 
 TransactionList.style = `
 	.TransactionList {
-		padding: 1em;
-		overflow-y: auto;
 		text-align: center;
 	}
 	.TransactionList #import {
@@ -191,26 +189,24 @@ TransactionList.style = `
 	}
 	.TransactionList #transactions {
 		margin: auto;
-		width: 100%;
-		max-width: 48em;
 	}
 	.TransactionList .transaction {
 		display: grid;
-		grid-template-columns: 6em 1fr 6em 12em;
+		grid-template-columns: 8em 1fr 6em 10em;
 		grid-template-rows: 1.5em;
 		grid-template-areas:
 			"date description amount category";
 	}
 	.TransactionList .date {
 		grid-area: date;
-		text-align: right;
+		text-align: left;
 		line-height: 1.5em;
 	}
 	.TransactionList .description {
 		grid-area: description;
 		text-align: left;
 		line-height: 1.5em;
-		padding-left: 1em;
+		overflow: hidden;
 	}
 	.TransactionList .amount {
 		grid-area: amount;
@@ -236,14 +232,20 @@ TransactionList.style = `
 		}
 		.TransactionList .transaction {
 			grid-template-columns: 6em 1fr 6em;
+			grid-template-rows: 1.5em 1.5em;
+			grid-template-areas:
+				"date category category"
+				"description description amount";
+		}
+	}
+	@media (max-width: 30em) {
+		.TransactionList .transaction {
+			grid-template-columns: 6em 1fr 6em;
 			grid-template-rows: 1.5em 1.5em 1.5em;
 			grid-template-areas:
 				"date . amount"
 				"description description description"
-				"category category category";
-		}
-		.TransactionList .date {
-			text-align: left;
+				"category category .";
 		}
 		.TransactionList .category {
 			text-align: left;

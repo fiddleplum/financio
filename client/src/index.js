@@ -5,7 +5,6 @@ import MainMenu from './components/main_menu';
 import AccountList from './components/account_list';
 import AccountAddForm from './components/account_add_form';
 import TransactionList from './components/transaction_list';
-import TransactionToolbar from './components/transaction_toolbar';
 import Categories from './components/categories';
 
 /**

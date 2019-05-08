@@ -16,24 +16,32 @@ export default class AccountList extends UIComponent {
 			'command': 'list accounts'
 		});
 
-		let html = ``;
+		const list = this.elem.querySelector('#list');
 		for (let name of accountNames) {
-			html += `<button class="menuItem" onclick="window.app.router.pushRoute('accounts/view/name/` + name + `');">` + name + `</button>`;
+			const aElem = document.createElement('a');
+			aElem.setAttribute('href', 'javascript:;');
+			aElem.classList.add('menuItem');
+			aElem.innerHTML = name;
+			aElem.addEventListener('click', (event) => {
+				window.app.router.pushRoute('accounts/view/name/' + name);
+			});
+			list.appendChild(aElem);
 		}
-		html += ``;
-		this.elem.querySelector('#list').innerHTML = html;
 	}
 }
 
 AccountList.html = `
 	<h1>Accounts</h1>
-	<div id="list" class="menu"></div>
-	<button id="add" onclick="window.app.router.pushRoute('accounts/add');" class="button">+</button>
+	<div id="list"></div>
+	<a href="javascript:;" id="add" onclick="window.app.router.pushRoute('accounts/add');" class="button">+</button>
 	`;
 
 AccountList.style = `
-	.AccountList #add {
-		background: var(--bg-medium);
-		color: var(--fg-medium);
+	.AccountList a {
+		display:block;
+		margin: 1em 0;
+		text-align: center;
+		text-decoration: none;
+		color: var(--fg-light);
 	}
 	`;
