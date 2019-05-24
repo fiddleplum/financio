@@ -12,7 +12,7 @@ export default class Categories extends UIComponent {
 	constructor(elem) {
 		super(elem);
 
-		this._list = this.elem.querySelector('#list');
+		this._listElem = this.elem.querySelector('#list');
 
 		this.refresh();
 	}
@@ -23,28 +23,42 @@ export default class Categories extends UIComponent {
 			'command': 'get categories'
 		});
 
-		this._list.innerHTML = '';
-		this._list.appendChild(this._createCategoriesElem(categories, 0));
+		this._listElem.innerHTML = '';
+		this._createCategoriesElem(this._listElem, categories, 0);
 	}
 
 	/**
+	 * @param {HTMLDivElement} categoriesElem
 	 * @param {Category[]} categories
 	 * @param {number} level
 	 */
-	_createCategoriesElem(categories, level) {
-		const categoriesElem = document.createElement('div');
+	_createCategoriesElem(categoriesElem, categories, level) {
 		for (let i = 0; i < categories.length; i++) {
 			const category = categories[i];
 			const categoryElem = document.createElement('div');
-			categoryElem.id = category;
-			categoryElem.innerHTML = category;
-			categoriesElem.appendChild(categoryElem);
+			categoryElem.id = 'category_' + category;
+			categoryElem.classList.add('category');
+			const dragElem = document.createElement('span');
+			dragElem.id = 'drag_' + category;
+			dragElem.classList.add('drag');
+			dragElem.innerHTML = '<svg viewBox="0 0 32 32"><use xlink:href="#3-vert-dots"></use></svg>';
+			const nameElem = document.createElement('span');
+			nameElem.id = 'name_' + category;
+			nameElem.classList.add('name');
+			nameElem.innerHTML = category;
+			categoryElem.appendChild(dragElem);
+			categoryElem.appendChild(nameElem);
+			categoryElem.addEventListener('click', (event) => {
+			});
 			if (i < categories.length - 1 && Array.isArray(categories[i + 1])) {
-				const childrenElem = this._createCategoriesElem(categories[i + 1], level + 1);
+				const childrenElem = document.createElement('div');
+				childrenElem.id = 'children_' + category;
 				childrenElem.classList.add('children');
-				categoriesElem.appendChild(childrenElem);
+				this._createCategoriesElem(childrenElem, categories[i + 1], level + 1);
+				categoryElem.appendChild(childrenElem);
 				i += 1;
 			}
+			categoriesElem.appendChild(categoryElem);
 		}
 		return categoriesElem;
 	}
@@ -52,6 +66,13 @@ export default class Categories extends UIComponent {
 
 Categories.html = `
 	<h1>Categories</h1>
+	<svg style="display: block;" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+		<g id="3-vert-dots">
+			<circle stroke="black" fill="black" cx="16" cy="1.5" r="1"/>
+			<circle stroke="black" fill="black" cx="16" cy="16" r="1"/>
+			<circle stroke="black" fill="black" cx="16" cy="30.5" r="1"/>
+		</g>
+	</svg>
 	<div id="list"></div>
 	<div class="toolbar"><!--
 		--><button>+</button><!--
@@ -74,5 +95,8 @@ Categories.style = `
 	}
 	.Categories #toolbar {
 		height: calc(2em + 1px);
+	}
+	.Categories svg {
+		height: calc(1em * var(--font-cap-height));
 	}
 	`;

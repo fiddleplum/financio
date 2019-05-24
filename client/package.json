@@ -8,6 +8,7 @@
 		"setup": "yarn install --pure-lockfile",
 		"update": "yarn install",
 		"rsync_www": "mkdir -p dist; rsync -r --delete --exclude=\"config.js\" www/ dist/",
+		"wp": "webpack --mode development --devtool inline-cheap-source-map --output-filename index.js",
 		"build": "yarn rsync_www; webpack --mode development --devtool inline-cheap-source-map --output-filename index.js",
 		"build-production": "yarn rsync_www; webpack --mode production --output-filename index.js"
 	},
@@ -22,6 +23,7 @@
 	},
 	"homepage": "https://github.com/fiddleplum/financio",
 	"dependencies": {
+		"fontmetrics": "^1.0.0"
 	},
 	"devDependencies": {
 		"eslint": "latest",

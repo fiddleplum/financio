@@ -1640,6 +1640,11 @@ follow-redirects@^1.0.0:
   dependencies:
     debug "^3.2.6"
 
+fontmetrics@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/fontmetrics/-/fontmetrics-1.0.0.tgz#38b205a1eb2e331a77f93fda4028c7037a2869a7"
+  integrity sha1-OLIFoesuMxp3+T/aQCjHA3ooaac=
+
 for-in@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"

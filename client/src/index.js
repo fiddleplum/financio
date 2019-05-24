@@ -1,6 +1,7 @@
 import { App, SimpleApp, WS } from '../../../app-js/src/index';
 // import Page from './components/page';
 // import Notice from './components/notice';
+import './font_metrics';
 import MainMenu from './components/main_menu';
 import AccountList from './components/account_list';
 import AccountAddForm from './components/account_add_form';

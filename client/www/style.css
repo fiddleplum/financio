@@ -1,4 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Muli');
+@font-face {
+	font-family: 'Muli';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url('fonts/muli.woff2') format('woff2');
+}
 
 * {
 	box-sizing: border-box;
@@ -16,7 +22,7 @@
 body {
 	background: var(--bg-light);
 	color: var(--fg-light);
-	font-family: Muli, sans-serif;
+	font-family: 'Muli', sans-serif;
 }
 
 #page {
