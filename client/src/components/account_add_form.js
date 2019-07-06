@@ -1,12 +1,22 @@
-import { UIComponent } from '../../../../app-js/src/index';
+import { Component } from '../../../../app-js/src/index';
+/** @typedef {import('../index').default} FinancioApp */
 
-export default class AccountAddForm extends UIComponent {
+export default class AccountAddForm extends Component {
 	/**
 	 * Constructor.
 	 * @param {HTMLElement} elem
+	 * @param {FinancioApp} app
 	 */
-	constructor(elem) {
+	constructor(elem, app) {
 		super(elem);
+
+		/**
+		 * A reference to the app.
+		 * @type {FinancioApp}
+		 * @private
+		 */
+		this._app = app;
+
 		this.elem.querySelector('#createAccountForm #submit').addEventListener('click', this._createAccount.bind(this));
 	}
 
@@ -17,22 +27,22 @@ export default class AccountAddForm extends UIComponent {
 
 		// Send the command to the server.
 		try {
-			await window.app.ws.send({
+			await this._app.ws.send({
 				'command': 'create account',
 				'name': name,
 				'type': type
 			});
 		}
 		catch (errorMessage) {
-			window.app.showMessage(errorMessage);
+			this._app.showMessage(errorMessage);
 			return;
 		}
 
 		// Notify the user of success.
-		window.app.showMessage('The account "' + name + '" was created.');
+		this._app.showMessage('The account "' + name + '" was created.');
 
 		// Show the newly created account in the account list.
-		window.app.router.pushRoute('accounts');
+		this._app.query.push({ section: 'accounts' });
 	}
 }
 

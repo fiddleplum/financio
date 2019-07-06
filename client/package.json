@@ -23,7 +23,7 @@
 	},
 	"homepage": "https://github.com/fiddleplum/financio",
 	"dependencies": {
-		"fontmetrics": "^1.0.0"
+		"fontmetrics": "latest"
 	},
 	"devDependencies": {
 		"eslint": "latest",

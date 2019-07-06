@@ -1,6 +1,6 @@
-import { UIComponent } from '../../../../app-js/src/index';
+import { Component } from '../../../../app-js/src/index';
 
-export default class TransactionToolbar extends UIComponent {
+export default class TransactionToolbar extends Component {
 	/**
 	 * Constructor.
 	 * @param {HTMLElement} elem

@@ -1,6 +1,6 @@
-import { UIComponent } from '../../../../app-js/src/index';
+import { Component } from '../../../../app-js/src/index';
 
-export default class Page extends UIComponent {
+export default class Page extends Component {
 	/**
 	 * Constructs a component inside the parent element.
 	 * @param {HTMLElement} elem
@@ -10,21 +10,21 @@ export default class Page extends UIComponent {
 
 		/**
 		 * The left panel.
-		 * @type {UIComponent}
+		 * @type {Component}
 		 * @private
 		 */
 		this._leftPanel = null;
 
 		/**
 		 * The main panel.
-		 * @type {UIComponent}
+		 * @type {Component}
 		 * @private
 		 */
 		this._mainPanel = null;
 
 		/**
 		 * The right panel.
-		 * @type {UIComponent}
+		 * @type {Component}
 		 * @private
 		 */
 		this._rightPanel = null;
@@ -32,7 +32,7 @@ export default class Page extends UIComponent {
 
 	/**
 	 * Gets the left panel.
-	 * @returns {UIComponent}
+	 * @returns {Component}
 	 */
 	getLeftPanel() {
 		return this._leftPanel;
@@ -40,22 +40,22 @@ export default class Page extends UIComponent {
 
 	/**
 	 * Sets the left panel.
-	 * @param {function():UIComponent} UIComponentType
+	 * @param {function():Component} ComponentType
 	 * @param {...object} options
 	 */
-	setLeftPanel(UIComponentType, ...options) {
+	setLeftPanel(ComponentType, ...options) {
 		if (this._leftPanel !== null) {
 			this._leftPanel.destroy();
 			this._leftPanel = null;
 		}
-		if (UIComponentType !== null) {
-			this._leftPanel = new UIComponentType(this.elem.querySelector('#leftPanel'), ...options);
+		if (ComponentType !== null) {
+			this._leftPanel = new ComponentType(this.elem.querySelector('#leftPanel'), ...options);
 		}
 	}
 
 	/**
 	 * Gets the main panel.
-	 * @returns {UIComponent}
+	 * @returns {Component}
 	 */
 	getMainPanel() {
 		return this._mainPanel;
@@ -63,22 +63,22 @@ export default class Page extends UIComponent {
 
 	/**
 	 * Sets the main panel.
-	 * @param {function():UIComponent} UIComponentType
+	 * @param {function():Component} ComponentType
 	 * @param {...object} options
 	 */
-	setMainPanel(UIComponentType, ...options) {
+	setMainPanel(ComponentType, ...options) {
 		if (this._mainPanel !== null) {
 			this._mainPanel.destroy();
 			this._mainPanel = null;
 		}
-		if (UIComponentType !== null) {
-			this._mainPanel = new UIComponentType(this.elem.querySelector('#mainPanel'), ...options);
+		if (ComponentType !== null) {
+			this._mainPanel = new ComponentType(this.elem.querySelector('#mainPanel'), ...options);
 		}
 	}
 
 	/**
 	 * Gets the right panel.
-	 * @returns {UIComponent}
+	 * @returns {Component}
 	 */
 	getRightPanel() {
 		return this._rightPanel;
@@ -86,22 +86,22 @@ export default class Page extends UIComponent {
 
 	/**
 	 * Sets the right panel.
-	 * @param {function():UIComponent} UIComponentType
+	 * @param {function():Component} ComponentType
 	 * @param {...object} options
 	 */
-	setRightPanel(UIComponentType, ...options) {
+	setRightPanel(ComponentType, ...options) {
 		if (this._rightPanel !== null) {
 			this._rightPanel.destroy();
 			this._rightPanel = null;
 		}
-		if (UIComponentType !== null) {
-			this._rightPanel = new UIComponentType(this.elem.querySelector('#rightPanel'), ...options);
+		if (ComponentType !== null) {
+			this._rightPanel = new ComponentType(this.elem.querySelector('#rightPanel'), ...options);
 		}
 	}
 
 	/**
 	 * Gets the right panel.
-	 * @returns {UIComponent}
+	 * @returns {Component}
 	 */
 	getFooter() {
 		return this._footer;
@@ -109,16 +109,16 @@ export default class Page extends UIComponent {
 
 	/**
 	 * Sets the right panel.
-	 * @param {function():UIComponent} UIComponentType
+	 * @param {function():Component} ComponentType
 	 * @param {...object} options
 	 */
-	setFooter(UIComponentType, ...options) {
+	setFooter(ComponentType, ...options) {
 		if (this._footer !== null) {
 			this._footer.destroy();
 			this._footer = null;
 		}
-		if (UIComponentType !== null) {
-			this._footer = new UIComponentType(this.elem.querySelector('#footer'), ...options);
+		if (ComponentType !== null) {
+			this._footer = new ComponentType(this.elem.querySelector('#footer'), ...options);
 		}
 	}
 }

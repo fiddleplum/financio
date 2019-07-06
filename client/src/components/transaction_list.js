@@ -1,23 +1,32 @@
 import Transaction from '../../../src/transaction';
-import { UIComponent } from '../../../../app-js/src/index';
+import { Component } from '../../../../app-js/src/index';
+/** @typedef {import('../index').default} FinancioApp */
 
-export default class TransactionList extends UIComponent {
+export default class TransactionList extends Component {
 	/**
+	 * Constructor.
 	 * @param {HTMLElement} elem
-	 * @param {Map<string, string>} options
+	 * @param {FinancioApp} app
 	 */
-	constructor(elem, options) {
+	constructor(elem, app) {
 		super(elem);
 
-		// Use today for default values.
-		const today = new Date();
+		/**
+		 * A reference to the app.
+		 * @type {FinancioApp}
+		 * @private
+		 */
+		this._app = app;
 
 		/**
 		 * The name of the account.
 		 * @type {string}
 		 * @private
 		 */
-		this._accountName = options.get('name');
+		this._accountName = this._app.query.get('name');
+
+		// Use today for default values.
+		const today = new Date();
 
 		/**
 		 * The starting date for the list.
@@ -41,18 +50,40 @@ export default class TransactionList extends UIComponent {
 		this._searchTerm = '';
 
 		// Fill in the options.
-		const start = options.get('start');
-		const end = options.get('end');
-		const search = options.get('search');
+		console.log(this._app.query.get('start'), this._app.query.get('end'), this._app.query.get('search'));
+		const start = this._app.query.get('start');
+		const end = this._app.query.get('end');
+		const search = this._app.query.get('search');
 		if (start) {
-			this._startDate.setFullYear(start.substr(0, 4), start.substr(5, 2));
+			this._startDate.setFullYear(Number.parseInt(start.substr(0, 4)), Number.parseInt(start.substr(5, 2)) - 1, 1);
 		}
 		if (end) {
-			this._endDate.setFullYear(end.substr(0, 4), end.substr(5, 2));
+			this._endDate.setFullYear(Number.parseInt(end.substr(0, 4)), Number.parseInt(end.substr(5, 2)) - 1, 1);
 		}
 		if (search) {
 			this._searchTerm = search;
 		}
+
+		// Setup initial values for the inputs.
+		this.elem.querySelector('#showTransactions #start_year').value = this._startDate.getFullYear();
+		this.elem.querySelector('#showTransactions #start_month').value = ('' + (this._startDate.getMonth() + 1)).padStart(2, '0');
+		this.elem.querySelector('#showTransactions #end_year').value = this._endDate.getFullYear();
+		this.elem.querySelector('#showTransactions #end_month').value = ('' + (this._endDate.getMonth() + 1)).padStart(2, '0');
+
+		// Set the action for the submit button.
+		this.elem.querySelector('#showTransactions #submit').addEventListener('click', () => {
+			const startYear = this.elem.querySelector('#showTransactions #start_year').value;
+			const startMonth = this.elem.querySelector('#showTransactions #start_month').value;
+			const endYear = this.elem.querySelector('#showTransactions #end_year').value;
+			const endMonth = this.elem.querySelector('#showTransactions #end_month').value;
+			this._app.query.push({
+				section: 'accounts',
+				action: 'view',
+				name: this._accountName,
+				start: startYear + '-' + startMonth,
+				end: endYear + '-' + endMonth
+			});
+		});
 
 		// Setup the drag-and-drop import capability.
 		let importElem = this.elem.querySelector('#import');
@@ -105,7 +136,7 @@ export default class TransactionList extends UIComponent {
 	 */
 	async _update() {
 		/** @type {Transaction[]} */
-		let transactions = await window.app.ws.send({
+		let transactions = await this._app.ws.send({
 			'command': 'list transactions',
 			'name': this._accountName,
 			'startDate': this._startDate.toISOString(),
@@ -174,6 +205,43 @@ export default class TransactionList extends UIComponent {
 
 TransactionList.html = `
 	<h1>Transactions</h1>
+	<form id="showTransactions" action="javascript:void(null);">
+		<label for="start_year">Start Year:</label>
+		<input type="text" id="start_year" />
+		<label for="start_month">Start Month:</label>
+		<select id="start_month">
+			<option value="01">January</option>
+			<option value="02">February</option>
+			<option value="03">March</option>
+			<option value="04">April</option>
+			<option value="05">May</option>
+			<option value="06">June</option>
+			<option value="07">July</option>
+			<option value="08">August</option>
+			<option value="09">September</option>
+			<option value="10">October</option>
+			<option value="11">November</option>
+			<option value="12">December</option>
+		</select>
+		<label for="end_year">End Year:</label>
+		<input type="text" id="end_year" />
+		<label for="end_month">End Month:</label>
+		<select id="end_month">
+			<option value="01">January</option>
+			<option value="02">February</option>
+			<option value="03">March</option>
+			<option value="04">April</option>
+			<option value="05">May</option>
+			<option value="06">June</option>
+			<option value="07">July</option>
+			<option value="08">August</option>
+			<option value="09">September</option>
+			<option value="10">October</option>
+			<option value="11">November</option>
+			<option value="12">December</option>
+		</select>
+		<input type="submit" id="submit" value="List Transactions" />
+	</form>
 	<div id="import">(Drag a file here to import it)</div>
 	<div id="transactions">
 	</div>

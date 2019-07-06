@@ -1,6 +1,6 @@
-import { UIComponent } from '../../../../app-js/src/index';
+import { Component } from '../../../../app-js/src/index';
 
-export default class Notice extends UIComponent {
+export default class Notice extends Component {
 	constructor(elem) {
 		super(elem);
 

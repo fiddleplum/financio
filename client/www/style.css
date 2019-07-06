@@ -61,6 +61,14 @@ h2 {
 	flex-direction: column;
 }
 
+.button {
+	display:block;
+	margin: 1em 0;
+	text-align: center;
+	color: var(--fg-light);
+	cursor: pointer;
+}
+
 form {
 	margin: 0 auto;
 	max-width: 20em;

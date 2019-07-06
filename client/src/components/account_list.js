@@ -1,29 +1,42 @@
-import { UIComponent } from '../../../../app-js/src/index';
+import { Component } from '../../../../app-js/src/index';
+/** @typedef {import('../index').default} FinancioApp */
 
-export default class AccountList extends UIComponent {
+export default class AccountList extends Component {
 	/**
 	 * Constructor.
 	 * @param {HTMLElement} elem
+	 * @param {FinancioApp} app
 	 */
-	constructor(elem) {
+	constructor(elem, app) {
 		super(elem);
+
+		/**
+		 * A reference to the app.
+		 * @type {FinancioApp}
+		 * @private
+		 */
+		this._app = app;
+
+		this.elem.querySelector('#add').addEventListener('click', () => {
+			this._app.query.push({ section: 'accounts', action: 'new' });
+		});
+
 		this.refresh();
 	}
 
 	async refresh() {
 		/** @type string[]} */
-		let accountNames = await window.app.ws.send({
+		let accountNames = await this._app.ws.send({
 			'command': 'list accounts'
 		});
 
 		const list = this.elem.querySelector('#list');
 		for (let name of accountNames) {
-			const aElem = document.createElement('a');
-			aElem.setAttribute('href', 'javascript:;');
-			aElem.classList.add('menuItem');
+			const aElem = document.createElement('div');
+			aElem.classList.add('button');
 			aElem.innerHTML = name;
 			aElem.addEventListener('click', (event) => {
-				window.app.router.pushRoute('accounts/view/name/' + name);
+				this._app.query.push({ section: 'accounts', action: 'view', name: name });
 			});
 			list.appendChild(aElem);
 		}
@@ -33,15 +46,5 @@ export default class AccountList extends UIComponent {
 AccountList.html = `
 	<h1>Accounts</h1>
 	<div id="list"></div>
-	<a href="javascript:;" id="add" onclick="window.app.router.pushRoute('accounts/add');" class="button">+</button>
-	`;
-
-AccountList.style = `
-	.AccountList a {
-		display:block;
-		margin: 1em 0;
-		text-align: center;
-		text-decoration: none;
-		color: var(--fg-light);
-	}
+	<div id="add" class="button">Create a New Account</div>
 	`;

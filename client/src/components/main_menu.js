@@ -1,25 +1,45 @@
-import { UIComponent } from '../../../../app-js/src/index';
+import { Component } from '../../../../app-js/src/index';
+/** @typedef {import('../index').default} FinancioApp */
 
-export default class MainMenu extends UIComponent {
+export default class MainMenu extends Component {
+	/**
+	 * Constructor.
+	 * @param {HTMLElement} elem
+	 * @param {FinancioApp} app
+	 */
+	constructor(elem, app) {
+		super(elem);
+
+		/**
+		 * A reference to the app.
+		 * @type {FinancioApp}
+		 * @private
+		 */
+		this._app = app;
+
+		this.elem.querySelector('#accounts').addEventListener('click', () => {
+			this._app.query.push({ section: 'accounts' });
+		});
+		this.elem.querySelector('#categories').addEventListener('click', () => {
+			this._app.query.push({ section: 'categories' });
+		});
+		this.elem.querySelector('#rules').addEventListener('click', () => {
+			this._app.query.push({ section: 'rules' });
+		});
+		this.elem.querySelector('#budgets').addEventListener('click', () => {
+			this._app.query.push({ section: 'budgets' });
+		});
+		this.elem.querySelector('#reports').addEventListener('click', () => {
+			this._app.query.push({ section: 'reports' });
+		});
+	}
 }
 
 MainMenu.html = `
 	<h1>Main Menu</h1>
-	<div class="menu">
-		<a href="javascript:;" onclick="window.app.router.pushRoute('accounts/list');">Accounts</a>
-		<a href="javascript:;" onclick="window.app.router.pushRoute('categories/view');">Categories</a>
-		<a href="javascript:;" onclick="window.app.router.pushRoute('rules/view');">Rules</a>
-		<a href="javascript:;" onclick="window.app.router.pushRoute('budget/view');">Budget</a>
-		<a href="javascript:;" onclick="window.app.router.pushRoute('reports/list');">Reports</a>
-	</div>
-	`;
-
-MainMenu.style = `
-	.MainMenu a {
-		display:block;
-		margin: 1em 0;
-		text-align: center;
-		text-decoration: none;
-		color: var(--fg-light);
-	}
+	<div class="button" id="accounts">Accounts</div>
+	<div class="button" id="categories">Categories</div>
+	<div class="button" id="rules">Rules</div>
+	<div class="button" id="budgets">Budgets</div>
+	<div class="button" id="reports">Reports</div>
 	`;

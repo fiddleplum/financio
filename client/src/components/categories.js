@@ -1,10 +1,10 @@
-import { UIComponent } from '../../../../app-js/src/index';
+import { Component } from '../../../../app-js/src/index';
 
 /**
  * @typedef {string|[string, Category[]]} Category
  */
 
-export default class Categories extends UIComponent {
+export default class Categories extends Component {
 	/**
 	 * Constructor.
 	 * @param {HTMLElement} elem

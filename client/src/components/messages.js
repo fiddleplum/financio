@@ -1,12 +1,13 @@
-import { UIComponent } from '../../../../app-js/src/index';
+import { Component } from '../../../../app-js/src/index';
 
-export default class Messages extends UIComponent {
+export default class Messages extends Component {
 	/**
 	 * Constructs a component at the location of the grid-area.
 	 * @param {HTMLElement} elem
+	 * @param {State} state
 	 */
-	constructor(elem) {
-		super(elem);
+	constructor(elem, state) {
+		super(elem, state);
 
 		/**
 		 * The number of messages visible at once.
@@ -23,6 +24,15 @@ export default class Messages extends UIComponent {
 		this._messages = [];
 
 		/**
+		 * The message listener.
+		 * @type {Listener}
+		 * @private
+		 */
+		this._messageListener = this.state.addListener('message', (name, oldValue, newValue) => {
+
+		});
+
+		/**
 		 * The this-bound animation end event listener.
 		 * @type {function(AnimationEvent):void}
 		 * @private
@@ -35,6 +45,8 @@ export default class Messages extends UIComponent {
 
 	destroy() {
 		this.elem.removeEventListener(this._animationEndEventListenerBound);
+
+		this.state.removeListener('message', this._messageListener);
 	}
 
 	/**
