@@ -8,9 +8,8 @@
 		"setup": "yarn install --pure-lockfile",
 		"update": "yarn install",
 		"rsync_www": "mkdir -p dist; rsync -r --delete --exclude=\"config.js\" www/ dist/",
-		"wp": "webpack --mode development --devtool inline-cheap-source-map --output-filename index.js",
-		"build": "yarn rsync_www; webpack --mode development --devtool inline-cheap-source-map --output-filename index.js",
-		"build-production": "yarn rsync_www; webpack --mode production --output-filename index.js"
+		"build": "yarn rsync_www; webpack --config webpack.dev.js",
+		"build-production": "yarn rsync_www; webpack --config webpack.prod.js"
 	},
 	"repository": {
 		"type": "git",
@@ -34,6 +33,7 @@
 		"eslint-plugin-standard": "latest",
 		"webpack": "latest",
 		"webpack-cli": "latest",
-		"webpack-dev-server": "latest"
+		"webpack-dev-server": "latest",
+		"webpack-merge": "latest"
 	}
 }
