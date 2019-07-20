@@ -1,5 +1,6 @@
 import Transaction from '../../../src/transaction';
 import { Component } from '../../../../app-js/src/index';
+import DateChooser from './date_chooser';
 /** @typedef {import('../index').default} FinancioApp */
 
 export default class TransactionList extends Component {
@@ -49,8 +50,21 @@ export default class TransactionList extends Component {
 		 */
 		this._searchTerm = '';
 
+		/**
+		 * The start date chooser.
+		 * @type {DateChooser}
+		 * @private
+		 */
+		this._stateDateChooser = new DateChooser(this.elem.querySelector('#startDateChooser'));
+
+		/**
+		 * The end date chooser.
+		 * @type {DateChooser}
+		 * @private
+		 */
+		this._endDateChooser = new DateChooser(this.elem.querySelector('#endDateChooser'));
+
 		// Fill in the options.
-		console.log(this._app.query.get('start'), this._app.query.get('end'), this._app.query.get('search'));
 		const start = this._app.query.get('start');
 		const end = this._app.query.get('end');
 		const search = this._app.query.get('search');
@@ -65,10 +79,10 @@ export default class TransactionList extends Component {
 		}
 
 		// Setup initial values for the inputs.
-		this.elem.querySelector('#showTransactions #start_year').value = this._startDate.getFullYear();
-		this.elem.querySelector('#showTransactions #start_month').value = ('' + (this._startDate.getMonth() + 1)).padStart(2, '0');
-		this.elem.querySelector('#showTransactions #end_year').value = this._endDate.getFullYear();
-		this.elem.querySelector('#showTransactions #end_month').value = ('' + (this._endDate.getMonth() + 1)).padStart(2, '0');
+		// this.elem.querySelector('#showTransactions #start_year').value = this._startDate.getFullYear();
+		// this.elem.querySelector('#showTransactions #start_month').value = ('' + (this._startDate.getMonth() + 1)).padStart(2, '0');
+		// this.elem.querySelector('#showTransactions #end_year').value = this._endDate.getFullYear();
+		// this.elem.querySelector('#showTransactions #end_month').value = ('' + (this._endDate.getMonth() + 1)).padStart(2, '0');
 
 		// Set the action for the submit button.
 		this.elem.querySelector('#showTransactions #submit').addEventListener('click', () => {
@@ -205,43 +219,9 @@ export default class TransactionList extends Component {
 
 TransactionList.html = `
 	<h1>Transactions</h1>
-	<form id="showTransactions" action="javascript:void(null);">
-		<label for="start_year">Start Year:</label>
-		<input type="text" id="start_year" />
-		<label for="start_month">Start Month:</label>
-		<select id="start_month">
-			<option value="01">January</option>
-			<option value="02">February</option>
-			<option value="03">March</option>
-			<option value="04">April</option>
-			<option value="05">May</option>
-			<option value="06">June</option>
-			<option value="07">July</option>
-			<option value="08">August</option>
-			<option value="09">September</option>
-			<option value="10">October</option>
-			<option value="11">November</option>
-			<option value="12">December</option>
-		</select>
-		<label for="end_year">End Year:</label>
-		<input type="text" id="end_year" />
-		<label for="end_month">End Month:</label>
-		<select id="end_month">
-			<option value="01">January</option>
-			<option value="02">February</option>
-			<option value="03">March</option>
-			<option value="04">April</option>
-			<option value="05">May</option>
-			<option value="06">June</option>
-			<option value="07">July</option>
-			<option value="08">August</option>
-			<option value="09">September</option>
-			<option value="10">October</option>
-			<option value="11">November</option>
-			<option value="12">December</option>
-		</select>
-		<input type="submit" id="submit" value="List Transactions" />
-	</form>
+	<div>Start: <div id="startDateChooser"></div></div>
+	<div>End: <div id="endDateChooser"></div></div>
+	<div id="submit" class="button">List Transactions</div>
 	<div id="import">(Drag a file here to import it)</div>
 	<div id="transactions">
 	</div>
@@ -250,6 +230,10 @@ TransactionList.html = `
 TransactionList.style = `
 	.TransactionList {
 		text-align: center;
+	}
+	.TransactionList #startDateChooser,
+	.TransactionList #endDateChooser {
+		display: inline-block;
 	}
 	.TransactionList #import {
 		margin-top: 1em;

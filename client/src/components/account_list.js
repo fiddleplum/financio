@@ -48,3 +48,11 @@ AccountList.html = `
 	<div id="list"></div>
 	<div id="add" class="button">Create a New Account</div>
 	`;
+
+AccountList.style = `
+	.AccountList .button {
+		max-width: 16em;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	`;

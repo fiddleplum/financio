@@ -17,19 +17,19 @@ export default class MainMenu extends Component {
 		 */
 		this._app = app;
 
-		this.elem.querySelector('#accounts').addEventListener('click', () => {
+		this.on('accounts', 'click', () => {
 			this._app.query.push({ section: 'accounts' });
 		});
-		this.elem.querySelector('#categories').addEventListener('click', () => {
+		this.on('categories', 'click', () => {
 			this._app.query.push({ section: 'categories' });
 		});
-		this.elem.querySelector('#rules').addEventListener('click', () => {
+		this.on('rules', 'click', () => {
 			this._app.query.push({ section: 'rules' });
 		});
-		this.elem.querySelector('#budgets').addEventListener('click', () => {
+		this.on('budgets', 'click', () => {
 			this._app.query.push({ section: 'budgets' });
 		});
-		this.elem.querySelector('#reports').addEventListener('click', () => {
+		this.on('reports', 'click', () => {
 			this._app.query.push({ section: 'reports' });
 		});
 	}
@@ -42,4 +42,12 @@ MainMenu.html = `
 	<div class="button" id="rules">Rules</div>
 	<div class="button" id="budgets">Budgets</div>
 	<div class="button" id="reports">Reports</div>
+	`;
+
+MainMenu.style = `
+	.MainMenu .button {
+		max-width: 16em;
+		margin-left: auto;
+		margin-right: auto;
+	}
 	`;

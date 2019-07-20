@@ -6,13 +6,10 @@
 	src: url('fonts/muli.woff2') format('woff2');
 }
 
-* {
-	box-sizing: border-box;
-}
-
 :root {
 	--bg-light: rgb(255, 255, 255);
 	--fg-light: rgb(42, 69, 151);
+	--fg-light-disabled: rgb(163, 171, 195);
 	--bg-medium: rgb(101, 130, 214);
 	--fg-medium: rgb(197, 203, 221);
 	--bg-dark: rgb(42, 69, 151);
@@ -55,20 +52,6 @@ h2 {
 
 /* Forms and Buttons */
 
-.vertical-align {
-	display: flex;
-	justify-content: center;
-	flex-direction: column;
-}
-
-.button {
-	display:block;
-	margin: 1em 0;
-	text-align: center;
-	color: var(--fg-light);
-	cursor: pointer;
-}
-
 form {
 	margin: 0 auto;
 	max-width: 20em;
@@ -85,10 +68,11 @@ form input[type=text], select {
 	width: 100%;
 }
 
-button, input[type=submit] {
+button, .button, input[type=submit] {
 	border: 0;
 	border-radius: .125em;
 	padding: .25em;
+	margin: .5em 0;
 	background: var(--bg-dark);
 	color: var(--fg-dark);
 	text-align: center;
