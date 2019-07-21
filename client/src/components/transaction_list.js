@@ -1,9 +1,9 @@
 import Transaction from '../../../src/transaction';
-import { Component } from '../../../../app-js/src/index';
+import { Container } from '../../../../app-js/src/index';
 import DateChooser from './date_chooser';
 /** @typedef {import('../index').default} FinancioApp */
 
-export default class TransactionList extends Component {
+export default class TransactionList extends Container {
 	/**
 	 * Constructor.
 	 * @param {HTMLElement} elem
@@ -55,14 +55,14 @@ export default class TransactionList extends Component {
 		 * @type {DateChooser}
 		 * @private
 		 */
-		this._stateDateChooser = new DateChooser(this.elem.querySelector('#startDateChooser'));
+		this._stateDateChooser = this.__addComponent('startDateChooser', DateChooser);
 
 		/**
 		 * The end date chooser.
 		 * @type {DateChooser}
 		 * @private
 		 */
-		this._endDateChooser = new DateChooser(this.elem.querySelector('#endDateChooser'));
+		this._endDateChooser = this.__addComponent('endDateChooser', DateChooser);
 
 		// Fill in the options.
 		const start = this._app.query.get('start');
@@ -219,8 +219,12 @@ export default class TransactionList extends Component {
 
 TransactionList.html = `
 	<h1>Transactions</h1>
-	<div>Start: <div id="startDateChooser"></div></div>
-	<div>End: <div id="endDateChooser"></div></div>
+	<div id="dates">
+		<div>Start: <input id="startYear" type="text"/> / <input id="startMonth" type="text"/> / <input id="startDay" type="text"/> <box-icon name="calendar" color="var(--fg-light)"></box-icon></div>
+		<div id="startDateChooser"></div>
+		<div>End: <input id="endYear" type="text"/> / <input id="endMonth" type="text"/> / <input id="endDay" type="text"/> <box-icon name="calendar" color="var(--fg-light)"></box-icon></div>
+		<div id="endDateChooser"></div>
+	</div>
 	<div id="submit" class="button">List Transactions</div>
 	<div id="import">(Drag a file here to import it)</div>
 	<div id="transactions">
@@ -231,8 +235,20 @@ TransactionList.style = `
 	.TransactionList {
 		text-align: center;
 	}
+	.TransactionList #dates #startYear,
+	.TransactionList #dates #endYear {
+		width: 6rem;
+	}
+	.TransactionList #dates #startMonth,
+	.TransactionList #dates #endMonth {
+		width: 6rem;
+	}
+	.TransactionList box-icon {
+		height: 1.5rem;
+	}
 	.TransactionList #startDateChooser,
 	.TransactionList #endDateChooser {
+		display: none;
 	}
 	.TransactionList #import {
 		margin-top: 1em;
@@ -247,31 +263,29 @@ TransactionList.style = `
 		grid-template-rows: 1.5em;
 		grid-template-areas:
 			"date description amount category";
+		border-bottom: 1px solid black;
 	}
-	.TransactionList .date {
+	.TransactionList .transaction .date {
 		grid-area: date;
 		text-align: left;
 		line-height: 1.5em;
 	}
-	.TransactionList .description {
+	.TransactionList .transaction .description {
 		grid-area: description;
 		text-align: left;
 		line-height: 1.5em;
 		overflow: hidden;
 	}
-	.TransactionList .amount {
+	.TransactionList .transaction .amount {
 		grid-area: amount;
 		text-align: right;
 		line-height: 1.5em;
 	}
-	.TransactionList .category {
+	.TransactionList .transaction .category {
 		grid-area: category;
 		text-align: right;
 		line-height: 1.5em;
 		padding-left: 1em;
-	}
-	.TransactionList .transaction {
-		border-bottom: 1px solid black;
 	}
 	.TransactionList .odd td {
 		background: var(--bg-dark);
