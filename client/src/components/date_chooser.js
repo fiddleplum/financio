@@ -97,43 +97,129 @@ export default class DateChooser extends Component {
 }
 
 DateChooser.html = `
-	<div class="row no-select"><div id="decade_dec">&lt;&lt;</div><div id="year_dec">&lt;</div><div id="year_current">{{year}}</div><div id="year_inc">&gt;</div><div id="decade_inc">&gt;&gt;</div></div>
-	<div class="row no-select"><div id="month_dec">&lt;</div><div id="month_current">{{month}}</div><div id="month_inc">&gt;</div></div>
-	<div class="row no-select"><div id="Sunday">S</div><div id="Monday">M</div><div id="Tuesday">T</div><div id="Wednesday">W</div><div id="Thursday">T</div><div id="Friday">F</div><div id="Saturday">S</div></div>
-	<div class="row no-select day"><div id="day_0"></div><div id="day_1"></div><div id="day_2"></div><div id="day_3"></div><div id="day_4"></div><div id="day_5"></div><div id="day_6"></div></div>
-	<div class="row no-select day"><div id="day_7"></div><div id="day_8"></div><div id="day_9"></div><div id="day_10"></div><div id="day_11"></div><div id="day_12"></div><div id="day_13"></div></div>
-	<div class="row no-select day"><div id="day_14"></div><div id="day_15"></div><div id="day_16"></div><div id="day_17"></div><div id="day_18"></div><div id="day_19"></div><div id="day_20"></div></div>
-	<div class="row no-select day"><div id="day_21"></div><div id="day_22"></div><div id="day_23"></div><div id="day_24"></div><div id="day_25"></div><div id="day_26"></div><div id="day_27"></div></div>
-	<div class="row no-select day"><div id="day_28"></div><div id="day_29"></div><div id="day_30"></div><div id="day_31"></div><div id="day_32"></div><div id="day_33"></div><div id="day_34"></div></div>
-	<div class="row no-select day"><div id="day_35"></div><div id="day_36"></div><div id="day_37"></div><div id="day_38"></div><div id="day_39"></div><div id="day_40"></div><div id="day_41"></div></div>
-`;
+	<div id="decade_dec" class="clickable inline-vertical-align">
+		<svg viewBox="0 0 32 32">
+			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="20,4 4,16 20,27" />
+			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="28,4 12,16 28,27" />
+		</svg>
+	</div>
+	<div id="year_dec" class="clickable inline-vertical-align">
+		<svg viewBox="0 0 32 32">
+			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="24,4 8,16 24,27" />
+		</svg>
+	</div>
+	<div id="year_current" class="inline-vertical-align">{{year}}</div>
+	<div id="year_inc" class="clickable inline-vertical-align">
+		<svg viewBox="0 0 32 32">
+			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="8,4 24,16 8,27" />
+		</svg>
+	</div>
+	<div id="decade_inc" class="clickable inline-vertical-align">
+		<svg viewBox="0 0 32 32">
+			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="12,4 28,16 12,27" />
+			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="4,4 20,16 4,27" />
+		</svg>
+	</div>
+	<div id="month_dec" class="clickable inline-vertical-align">
+		<svg viewBox="0 0 32 32">
+			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="24,4 8,16 24,27" />
+		</svg>
+	</div>
+	<div id="month_current" class="inline-vertical-align">{{month}}</div>
+	<div id="month_inc" class="clickable inline-vertical-align">
+		<svg viewBox="0 0 32 32">
+			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="8,4 24,16 8,27" />
+		</svg>
+	</div>
+	<div class="inline-vertical-align week">S</div>
+	<div class="inline-vertical-align week">M</div>
+	<div class="inline-vertical-align week">T</div>
+	<div class="inline-vertical-align week">W</div>
+	<div class="inline-vertical-align week">T</div>
+	<div class="inline-vertical-align week">F</div>
+	<div class="inline-vertical-align week">S</div>
+	<div id="day_0" class="clickable inline-vertical-align"></div>
+	<div id="day_1" class="clickable inline-vertical-align"></div>
+	<div id="day_2" class="clickable inline-vertical-align"></div>
+	<div id="day_3" class="clickable inline-vertical-align"></div>
+	<div id="day_4" class="clickable inline-vertical-align"></div>
+	<div id="day_5" class="clickable inline-vertical-align"></div>
+	<div id="day_6" class="clickable inline-vertical-align"></div>
+	<div id="day_7" class="clickable inline-vertical-align"></div>
+	<div id="day_8" class="clickable inline-vertical-align"></div>
+	<div id="day_9" class="clickable inline-vertical-align"></div>
+	<div id="day_10" class="clickable inline-vertical-align"></div>
+	<div id="day_11" class="clickable inline-vertical-align"></div>
+	<div id="day_12" class="clickable inline-vertical-align"></div>
+	<div id="day_13" class="clickable inline-vertical-align"></div>
+	<div id="day_14" class="clickable inline-vertical-align"></div>
+	<div id="day_15" class="clickable inline-vertical-align"></div>
+	<div id="day_16" class="clickable inline-vertical-align"></div>
+	<div id="day_17" class="clickable inline-vertical-align"></div>
+	<div id="day_18" class="clickable inline-vertical-align"></div>
+	<div id="day_19" class="clickable inline-vertical-align"></div>
+	<div id="day_20" class="clickable inline-vertical-align"></div>
+	<div id="day_21" class="clickable inline-vertical-align"></div>
+	<div id="day_22" class="clickable inline-vertical-align"></div>
+	<div id="day_23" class="clickable inline-vertical-align"></div>
+	<div id="day_24" class="clickable inline-vertical-align"></div>
+	<div id="day_25" class="clickable inline-vertical-align"></div>
+	<div id="day_26" class="clickable inline-vertical-align"></div>
+	<div id="day_27" class="clickable inline-vertical-align"></div>
+	<div id="day_28" class="clickable inline-vertical-align"></div>
+	<div id="day_29" class="clickable inline-vertical-align"></div>
+	<div id="day_30" class="clickable inline-vertical-align"></div>
+	<div id="day_31" class="clickable inline-vertical-align"></div>
+	<div id="day_32" class="clickable inline-vertical-align"></div>
+	<div id="day_33" class="clickable inline-vertical-align"></div>
+	<div id="day_34" class="clickable inline-vertical-align"></div>
+	<div id="day_35" class="clickable inline-vertical-align"></div>
+	<div id="day_36" class="clickable inline-vertical-align"></div>
+	<div id="day_37" class="clickable inline-vertical-align"></div>
+	<div id="day_38" class="clickable inline-vertical-align"></div>
+	<div id="day_39" class="clickable inline-vertical-align"></div>
+	<div id="day_40" class="clickable inline-vertical-align"></div>
+	<div id="day_41" class="clickable inline-vertical-align"></div>
+	`;
 
 DateChooser.style = `
-	.DateChooser .row {
-		width: 14em;
-		cursor: default;
-	}
-	.DateChooser .row div {
-		display: inline-block;
-		height: 1.5em;
+	.DateChooser {
+		width: 14rem;
+		height: 13.5rem;
 		border: 1px solid var(--fg-light);
-		width: 2em;
+		border-radius: .5rem;
+		display: grid;
+		grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 		cursor: default;
 	}
 	.DateChooser #year_current {
-		width: 6em;
+		grid-column-start: 3;
+		grid-column-end: 6;
 	}
 	.DateChooser #month_current {
-		width: 10em;
+		grid-column-start: 2;
+		grid-column-end: 7;
 	}
-	.DateChooser #decade_dec,
-	.DateChooser #year_dec,
-	.DateChooser #year_inc,
-	.DateChooser #decade_inc,
-	.DateChooser #month_dec,
-	.DateChooser #month_inc,
-	.DateChooser .day div {
+	.DateChooser svg {
+		height: 1rem;
+	}
+	.DateChooser .clickable {
 		cursor: pointer;
+	}
+	.DateChooser .clickable:hover {
+		font-weight: bold;
+		font-size: 1.25rem;
+		line-height: 1rem;
+	}
+	.DateChooser .clickable:hover svg {
+		height: 1.25rem;
+	}
+	.DateChooser .clickable:hover svg polyline {
+		stroke-width: 4;
+	}
+	.DateChooser .week {
+		border-bottom: 1px solid var(--fg-light);
 	}
 	.DateChooser .unday {
 		color: var(--fg-light-disabled);

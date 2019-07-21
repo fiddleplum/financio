@@ -233,7 +233,6 @@ TransactionList.style = `
 	}
 	.TransactionList #startDateChooser,
 	.TransactionList #endDateChooser {
-		display: inline-block;
 	}
 	.TransactionList #import {
 		margin-top: 1em;
