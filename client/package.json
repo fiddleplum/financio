@@ -34,6 +34,7 @@
 		"webpack": "latest",
 		"webpack-cli": "latest",
 		"webpack-dev-server": "latest",
-		"webpack-merge": "latest"
+		"webpack-merge": "latest",
+		"svg-inline-loader": "latest"
 	}
 }

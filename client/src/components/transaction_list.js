@@ -55,14 +55,14 @@ export default class TransactionList extends Container {
 		 * @type {DateChooser}
 		 * @private
 		 */
-		this._stateDateChooser = this.__addComponent('startDateChooser', DateChooser);
+		this._stateDateChooser = this.__setComponent(DateChooser, 'startDateChooser');
 
 		/**
 		 * The end date chooser.
 		 * @type {DateChooser}
 		 * @private
 		 */
-		this._endDateChooser = this.__addComponent('endDateChooser', DateChooser);
+		this._endDateChooser = this.__setComponent(DateChooser, 'endDateChooser');
 
 		// Fill in the options.
 		const start = this._app.query.get('start');
@@ -219,14 +219,12 @@ export default class TransactionList extends Container {
 
 TransactionList.html = `
 	<h1>Transactions</h1>
-	<div id="dates">
-		<div>Start: <input id="startYear" type="text"/> / <input id="startMonth" type="text"/> / <input id="startDay" type="text"/> <box-icon name="calendar" color="var(--fg-light)"></box-icon></div>
-		<div id="startDateChooser"></div>
-		<div>End: <input id="endYear" type="text"/> / <input id="endMonth" type="text"/> / <input id="endDay" type="text"/> <box-icon name="calendar" color="var(--fg-light)"></box-icon></div>
-		<div id="endDateChooser"></div>
-	</div>
-	<div id="submit" class="button">List Transactions</div>
-	<div id="import">(Drag a file here to import it)</div>
+	<form id="options" action="javascript:void(null);">
+		<div class="left">Start:</div><div id="startDateChooser" class="right"></div>
+		<div class="left">End:</div><div id="endDateChooser" class="right"></div>
+		<input id="submit" type="submit" class="right" value="List Transactions"></input>
+	</form>
+	<p id="import">(Drag a file here to import it)</p>
 	<div id="transactions">
 	</div>
 	`;
@@ -235,32 +233,26 @@ TransactionList.style = `
 	.TransactionList {
 		text-align: center;
 	}
-	.TransactionList #dates #startYear,
-	.TransactionList #dates #endYear {
-		width: 6rem;
+	.TransactionList #options {
+		display: grid;
+		width: 15rem;
+		grid-template-columns: 1fr 1fr;
 	}
-	.TransactionList #dates #startMonth,
-	.TransactionList #dates #endMonth {
-		width: 6rem;
-	}
-	.TransactionList box-icon {
-		height: 1.5rem;
-	}
-	.TransactionList #startDateChooser,
-	.TransactionList #endDateChooser {
-		display: none;
+	.TransactionList #options #submit {
+		grid-column-start: 2;
+		grid-column-end: 3;
 	}
 	.TransactionList #import {
-		margin-top: 1em;
-		margin-bottom: 1em;
+		margin-top: 1rem;
+		margin-bottom: 1rem;
 	}
 	.TransactionList #transactions {
 		margin: auto;
 	}
 	.TransactionList .transaction {
 		display: grid;
-		grid-template-columns: 8em 1fr 6em 10em;
-		grid-template-rows: 1.5em;
+		grid-template-columns: 8rem 1fr 6rem 10rem;
+		grid-template-rows: 1.5rem;
 		grid-template-areas:
 			"date description amount category";
 		border-bottom: 1px solid black;
@@ -268,45 +260,45 @@ TransactionList.style = `
 	.TransactionList .transaction .date {
 		grid-area: date;
 		text-align: left;
-		line-height: 1.5em;
+		line-height: 1.5rem;
 	}
 	.TransactionList .transaction .description {
 		grid-area: description;
 		text-align: left;
-		line-height: 1.5em;
+		line-height: 1.5rem;
 		overflow: hidden;
 	}
 	.TransactionList .transaction .amount {
 		grid-area: amount;
 		text-align: right;
-		line-height: 1.5em;
+		line-height: 1.5rem;
 	}
 	.TransactionList .transaction .category {
 		grid-area: category;
 		text-align: right;
-		line-height: 1.5em;
-		padding-left: 1em;
+		line-height: 1.5rem;
+		padding-left: 1rem;
 	}
 	.TransactionList .odd td {
 		background: var(--bg-dark);
 		color: var(--fg-dark);
 	}
-	@media (max-width: 60em) {
+	@media (max-width: 60rem) {
 		.TransactionList .heading {
 			display: none;
 		}
 		.TransactionList .transaction {
-			grid-template-columns: 6em 1fr 6em;
-			grid-template-rows: 1.5em 1.5em;
+			grid-template-columns: 6rem 1fr 6rem;
+			grid-template-rows: 1.5rem 1.5rem;
 			grid-template-areas:
 				"date category category"
 				"description description amount";
 		}
 	}
-	@media (max-width: 30em) {
+	@media (max-width: 30rem) {
 		.TransactionList .transaction {
-			grid-template-columns: 6em 1fr 6em;
-			grid-template-rows: 1.5em 1.5em 1.5em;
+			grid-template-columns: 6rem 1fr 6rem;
+			grid-template-rows: 1.5rem 1.5rem 1.5rem;
 			grid-template-areas:
 				"date . amount"
 				"description description description"
