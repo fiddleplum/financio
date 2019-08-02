@@ -13,24 +13,33 @@ export default class DateChooser extends Container {
 		this._date = new Date(date);
 
 		this._calendar = this.__setComponent(Calendar, 'calendar', this._date);
+
+		this.on('calendar', 'click', (event) => {
+			this.elem.querySelector('.calenderButton')
+		});
+	}
+
+	get date() {
+
 	}
 }
 
 DateChooser.html = `
-	<input id="input" type="text"/> ${dateChooserButtonSVG}
-	<div id="calendar"></div>
+	<input class="input" type="text"/> <span class="calenderButton">${dateChooserButtonSVG}</span>
+	<div class="calendar"></div>
 	`;
 
 DateChooser.style = `
-	.DateChooser #input {
-		width: 10rem;
+	.DateChooser .input {
+		width: 6rem;
+		max-width: calc(100% - 2.0rem);
 	}
 	.DateChooser svg {
 		height: 1.5rem;
 		vertical-align: bottom;
 		fill: var(--fg-light);
 	}
-	.DateChooser #calendar {
+	.DateChooser .calendar {
 		display: none;
 	}
 	`;
