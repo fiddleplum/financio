@@ -1,0 +1,55 @@
+@font-face {
+	font-family: 'Muli';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url('fonts/muli.woff2') format('woff2');
+}
+
+:root {
+	--bg-light: rgb(255, 255, 255);
+	--fg-light: rgb(42, 69, 151);
+	--fg-light-disabled: rgb(163, 171, 195);
+	--bg-medium: rgb(101, 130, 214);
+	--fg-medium: rgb(197, 203, 221);
+	--bg-dark: rgb(42, 69, 151);
+	--fg-dark: rgb(197, 203, 221);
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	min-height: 100vh;
+	background: var(--bg-light);
+	color: var(--fg-light);
+	font-family: 'Muli', sans-serif;
+}
+
+#app {
+	display: grid;
+	grid-template-rows: 2rem 1fr;
+	height: 100%;
+}
+
+#app #title {
+	font-size: 1.5rem;
+	text-align: center;
+	background: var(--bg-dark);
+	color: var(--fg-dark);
+}
+
+h1 {
+	text-align: center;
+}
+
+.button {
+	margin: .25rem;
+	border-radius: .25rem;
+	padding: .25rem;
+	background: var(--bg-dark);
+	color: var(--fg-dark);
+	text-align: center;
+}

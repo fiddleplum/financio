@@ -1,0 +1,8 @@
+.Menu {
+}
+
+.Menu .button {
+	margin-left: auto;
+	margin-right: auto;
+	width: 10rem;
+}

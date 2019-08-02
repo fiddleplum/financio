@@ -1,17 +1,20 @@
 {
-	"extends": "standard",
+	"extends": [
+		"standard",
+		"plugin:react/recommended"
+	],
 	"rules": {
 		"indent": ["error", "tab"],
 		"no-tabs": "off",
 		"semi": ["error", "always"],
 		"space-before-function-paren": ["error", {
 			"anonymous": "always",
-			"named": "never",
-			"asyncArrow": "always"
+			"asyncArrow": "always",
+			"named": "never"
 		}],
 		"brace-style": ["error", "stroustrup"],
 		"yoda": "off",
-		"no-new": "off"
+		"react/prop-types": [0]
 	},
 	"env" : {
 		"browser": true
