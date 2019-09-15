@@ -34,6 +34,11 @@ async function processMessage(ws, message) {
 			let name = requestData.name;
 			responseData = await Accounts.view(name);
 		}
+		else if (requestData.command === 'rename account') {
+			let name = requestData.name;
+			let newName = requestData.newName;
+			responseData = await Accounts.rename(name, newName);
+		}
 		else if (requestData.command === 'list transactions') {
 			let name = requestData.name;
 			let startDate = requestData.startDate;
@@ -41,6 +46,11 @@ async function processMessage(ws, message) {
 			console.log('started');
 			responseData = await Accounts.listTransactions(name, startDate, endDate);
 			console.log('done');
+		}
+		else if (requestData.command === 'check duplicate transactions') {
+			let name = requestData.name;
+			let transactions = requestData.transactions;
+			responseData = await Accounts.checkDuplicateTransactions(name, transactions);
 		}
 		else if (requestData.command === 'add transactions') {
 			let name = requestData.name;
@@ -53,6 +63,9 @@ async function processMessage(ws, message) {
 		else if (requestData.command === 'set categories') {
 			let categories = requestData.categories;
 			responseData = await Categories.set(categories);
+		}
+		else {
+			throw new Error('Unknown command.');
 		}
 		success = true;
 	}
@@ -70,7 +83,7 @@ async function processMessage(ws, message) {
 
 function startServer() {
 	const wss = new WebSocket.Server({
-		port: 8080
+		port: 8081
 	});
 
 	if (!fs.existsSync('data/')) {

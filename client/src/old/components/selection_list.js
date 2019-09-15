@@ -24,7 +24,7 @@ export default class SelectionList extends Component {
 
 		/**
 		 * The callback called when an item is selected.
-		 * @type {(index: number, item: string) => {}}
+		 * @type {(index: number, item: string) => void}
 		 * @private
 		 */
 		this._selectedCallback = undefined;
@@ -84,7 +84,7 @@ export default class SelectionList extends Component {
 
 	/**
 	 * Set the selected callback.
-	 * @param {(index: number, item: string) => {}} selectedCallback
+	 * @param {(index: number, item: string) => void} selectedCallback
 	 */
 	set selectedCallback(selectedCallback) {
 		this._selectedCallback = selectedCallback;

@@ -31,25 +31,141 @@ body {
 #app {
 	display: grid;
 	grid-template-rows: 2rem 1fr;
+	grid-template-areas: "header" "page";
 	height: 100%;
 }
 
+#app #header {
+	grid-area: header;
+	background: var(--bg-dark);
+	color: var(--fg-dark);
+}
+
 #app #title {
+	padding-left: 0.25rem;
+	font-size: 1.5rem;
+	cursor: pointer;
+}
+
+#app #message {
+	position: absolute;
+	right: 0;
+	padding-right: 0.25rem;
 	font-size: 1.5rem;
 	text-align: center;
 	background: var(--bg-dark);
 	color: var(--fg-dark);
+	overflow: hidden;
+}
+
+#app #message:empty {
+	height: 0rem;
+}
+
+#app #notice {
+	font-size: 1.5rem;
+	text-align: center;
+	margin: 2rem;
+}
+
+#app #page {
+	position: relative;
+	grid-area: page;
+	width: calc(100% - 2rem);
+	max-width: 50rem;
+	margin: 1rem auto 0 auto;
+}
+
+#app #page.fadeOut {
+	opacity: 0;
+	transition: opacity .125s;
+}
+
+#app #page.fadeIn {
+	opacity: 1;
+	transition: opacity .125s;
 }
 
 h1 {
-	text-align: center;
+	margin-top: 0;
+	margin-bottom: 1rem;
+	font-size: 1.5rem;
+	height: 2rem;
+	line-height: 2rem;
 }
 
-.button {
-	margin: .25rem;
+p {
+	margin-top: 0;
+	margin-bottom: 1rem;
+}
+
+button {
+	border: 0;
 	border-radius: .25rem;
 	padding: .25rem;
 	background: var(--bg-dark);
 	color: var(--fg-dark);
+	font-size: inherit;
+	font-family: inherit;
 	text-align: center;
+	cursor: pointer;
+}
+
+button svg {
+	width: 1rem;
+	height: 1rem;
+	fill: var(--fg-dark);
+}
+
+form {
+	margin: 0 auto;
+}
+
+form .left, form .right {
+	display: inline-block;
+	margin-top: 0;
+	margin-bottom: 1rem;
+}
+
+form .left {
+	text-align: right;
+	margin-right: .5rem;
+	width: calc(50% - .5rem);
+}
+
+form .right {
+	text-align: left;
+	margin-left: .5rem;
+}
+
+@media (max-width: 30rem) {
+	form .left {
+		display: block;
+		text-align: left;
+		margin-right: 0;
+		width: 100%;
+		margin-bottom: .25rem;
+	}
+	form .right {
+		display: block;
+		text-align: left;
+		margin-left: 0;
+		width: 100%;
+	}
+}
+
+form .submit {
+	width: 100%;
+	margin-bottom: 1rem;
+}
+
+form input[type="text"], form input[type="password"], form select {
+	font-size: inherit;
+	font-family: inherit;
+	background: var(--bg-light);
+	color: var(--fg-light);
+	border: 1px solid var(--fg-light);
+	height: 1.5rem;
+	padding: 0 .125rem;
+	max-width: 100%;
 }

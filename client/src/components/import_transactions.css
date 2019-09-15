@@ -1,0 +1,8 @@
+.ImportTransactions .importBox {
+	width: 16rem;
+	max-width: 100%;
+	height: 8rem;
+	border: 1px dashed var(--fg-light);
+	text-align: center;
+	line-height: 8rem;
+}
