@@ -22,15 +22,13 @@ export default class Accounts extends React.Component {
 		super(props);
 
 		this.state = {
+			/**
+			 * The list of account names.
+			 * @type {string[]}
+			 * @private
+			 */
 			accountNames: []
 		};
-
-		/**
-		 * The list of account names.
-		 * @type {string[]}
-		 * @privae
-		 */
-		this._accountNames = [];
 
 		this.goToViewAccount = this.goToViewAccount.bind(this);
 

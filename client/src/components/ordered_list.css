@@ -1,0 +1,26 @@
+.OrderedList {
+	position: relative;
+}
+
+.OrderedList .item.dragging {
+	user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-webkit-user-select: none;
+}
+
+.OrderedList .item {
+	transition: opacity .25s, height .25s;
+	height: 1.5rem;
+	opacity: 1;
+}
+
+.OrderedList .item.placeholder {
+	height: 0rem;
+	opacity: 0;
+}
+
+.OrderedList .item.dragged {
+	position: absolute;
+}
+

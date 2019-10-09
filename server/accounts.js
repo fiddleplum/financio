@@ -137,7 +137,6 @@ class Accounts {
 					/** @type {Transaction[]} */
 					const newTransactions = JSON.parse(fs.readFileSync(filePath));
 					for (let i = 0, l = newTransactions.length; i < l; i++) {
-						console.log(newTransactions[i].date + ' ' + endDate);
 						if (startDate <= newTransactions[i].date && newTransactions[i].date < end.toISOString()) {
 							transactions.push(newTransactions[i]);
 						}

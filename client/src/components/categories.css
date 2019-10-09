@@ -1,0 +1,11 @@
+.Categories .category {
+	user-select: none;
+	-ms-user-select: none;
+	-moz-user-select: none;
+}
+
+.Categories .grabber {
+	width: 1.75rem;
+	margin-right: .5rem;
+}
+

@@ -10,6 +10,7 @@ import ViewAccount from './components/view_account';
 import DeleteAccount from './components/delete_account';
 import RenameAccount from './components/rename_account';
 import ImportTransactions from './components/import_transactions';
+import Categories from './components/categories';
 
 /**
  * @typedef Props
@@ -60,7 +61,8 @@ export default class App extends React.Component {
 			viewAccount: ViewAccount,
 			deleteAccount: DeleteAccount,
 			renameAccount: RenameAccount,
-			importTransactions: ImportTransactions
+			importTransactions: ImportTransactions,
+			categories: Categories
 		};
 
 		/**

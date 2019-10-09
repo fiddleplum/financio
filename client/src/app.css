@@ -109,6 +109,7 @@ button {
 	font-family: inherit;
 	text-align: center;
 	cursor: pointer;
+	height: 1.75rem;
 }
 
 button svg {
@@ -159,7 +160,7 @@ form .submit {
 	margin-bottom: 1rem;
 }
 
-form input[type="text"], form input[type="password"], form select {
+input[type="text"], input[type="password"], select {
 	font-size: inherit;
 	font-family: inherit;
 	background: var(--bg-light);
