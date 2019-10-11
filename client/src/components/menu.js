@@ -1,9 +1,9 @@
 import { Component } from '../../../../app-js/src/index';
 import './menu.css';
-/** @typedef {import('../index').default} Financio */
+/** @typedef {import('../financio').default} Financio */
 
 /**
- * The menu.
+ * The menu page.
  */
 export default class Menu extends Component {
 	/**

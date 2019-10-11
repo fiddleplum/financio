@@ -1,6 +1,6 @@
 import { Component } from '../../../../app-js/src/index';
 import './accounts.css';
-/** @typedef {import('../index').default} Financio */
+/** @typedef {import('../financio').default} Financio */
 
 /**
  * The accounts page.
