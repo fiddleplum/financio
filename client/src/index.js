@@ -1,10 +1,46 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './app';
+import { SimpleApp, Router, WS } from '../../../app-js/src/index';
+import Menu from './components/menu';
+import Accounts from './components/accounts';
+import './app.css';
 
-document.addEventListener('DOMContentLoaded', () => {
-	ReactDOM.render(
-		<App />,
-		document.querySelector('#app')
-	);
-});
+export default class Financio extends SimpleApp {
+	constructor() {
+		super();
+
+		/**
+		 * The WebSocket host url.
+		 * @type {string}
+		 * @private
+		 */
+		this._serverHost = '//localhost:8081';
+
+		/**
+		 * The web socket that connects to the host.
+		 * @type {WS}
+		 * @private
+		*/
+		this._server = new WS(this._serverHost);
+
+		// Set the title.
+		this.title = 'Financio';
+
+		// Register the pages.
+		this.registerPage('', Menu);
+		this.registerPage('accounts', Accounts);
+
+		// Wait until the web socket is connected.
+		this._server.getReadyPromise().then(() => {
+			this.router.processURL();
+			document.querySelector('#message').innerHTML = '';
+		}).catch(() => {
+			document.querySelector('#message').innerHTML = 'No connection could be made.';
+		});
+	}
+
+	get server() {
+		return this._server;
+	}
+}
+
+Financio.setAppClass(Financio);
+

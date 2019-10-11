@@ -1,72 +1,61 @@
-import React from 'react';
+import { Component } from '../../../../app-js/src/index';
 import './accounts.css';
-/** @typedef {import('../../../../app-js/src/router').default} Router */
-/** @typedef {import('../../../../app-js/src/ws').default} WS */
-
-/**
- * @typedef Props
- * @property {Router} router
- * @property {WS} server
- */
+/** @typedef {import('../index').default} Financio */
 
 /**
  * The accounts page.
- * @extends {React.Component<Props>}
  */
-export default class Accounts extends React.Component {
+export default class Accounts extends Component {
 	/**
 	 * Constructs the app.
-	 * @param {Props} props
+	 * @param {HTMLElement} elem - The element inside which thee the component will reside.
+	 * @param {Financio} financio - The app.
 	 */
-	constructor(props) {
-		super(props);
+	constructor(elem, financio) {
+		super(elem);
 
-		this.state = {
-			/**
-			 * The list of account names.
-			 * @type {string[]}
-			 * @private
-			 */
-			accountNames: []
-		};
+		/**
+		 * The app.
+		 * @type {Financio}
+		 * @private
+		 */
+		this._financio = financio;
 
-		this.goToViewAccount = this.goToViewAccount.bind(this);
+		this.on('addAccount', 'click', this._goToAddAccount);
 
-		this.goToAddAccount = this.goToAddAccount.bind(this);
+		this._populateAccountNames();
 	}
 
-	async componentDidMount() {
+	async _populateAccountNames() {
 		/** @type string[]} */
-		const accountNames = await this.props.server.send({
+		const accountNames = await this._financio.server.send({
 			command: 'list accounts'
 		});
-		this.setState({
-			accountNames: accountNames
-		});
+
+		const listElem = this.elem.querySelector('#list');
+		for (let i = 0, l = accountNames.length; i < l; i++) {
+			const button = this.createElement('button', accountNames[i], '', { click: this._goToViewAccount });
+			button.innerHTML = accountNames[i];
+			listElem.appendChild(button);
+		}
 	}
 
-	render() {
-		return <>
-			<h1>Accounts</h1>
-			<div className="list">
-				{this.state.accountNames.map((name) => {
-					return <button key={name} onClick={this.goToViewAccount}>{name}</button>;
-				})}
-			</div>
-			<button onClick={this.goToAddAccount}>+ New Account +</button>
-			</>;
-	}
-
-	goToViewAccount(event) {
-		this.props.router.push({
+	_goToViewAccount(event) {
+		this._financio.router.push({
 			page: 'viewAccount',
-			name: event.target.innerHTML
+			name: event.target.id
 		});
 	}
 
-	goToAddAccount(event) {
-		this.props.router.push({
+	_goToAddAccount(event) {
+		this._financio.router.push({
 			page: 'addAccount'
 		});
 	}
 }
+
+Accounts.html = `
+	<h1>Accounts</h1>
+	<div id="list"></div>
+	<button id="addAccount">+ New Account +</button>
+	`;

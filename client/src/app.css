@@ -16,10 +16,6 @@
 	--fg-dark: rgb(197, 203, 221);
 }
 
-* {
-	box-sizing: border-box;
-}
-
 body {
 	margin: 0;
 	min-height: 100vh;
@@ -28,26 +24,26 @@ body {
 	font-family: 'Muli', sans-serif;
 }
 
-#app {
+.App {
 	display: grid;
 	grid-template-rows: 2rem 1fr;
 	grid-template-areas: "header" "page";
 	height: 100%;
 }
 
-#app #header {
+.App #header {
 	grid-area: header;
 	background: var(--bg-dark);
 	color: var(--fg-dark);
 }
 
-#app #title {
+.App #title {
 	padding-left: 0.25rem;
 	font-size: 1.5rem;
 	cursor: pointer;
 }
 
-#app #message {
+.App #message {
 	position: absolute;
 	right: 0;
 	padding-right: 0.25rem;
@@ -58,17 +54,17 @@ body {
 	overflow: hidden;
 }
 
-#app #message:empty {
+.App #message:empty {
 	height: 0rem;
 }
 
-#app #notice {
+.App #notice {
 	font-size: 1.5rem;
 	text-align: center;
 	margin: 2rem;
 }
 
-#app #page {
+.App #page {
 	position: relative;
 	grid-area: page;
 	width: calc(100% - 2rem);
@@ -76,12 +72,12 @@ body {
 	margin: 1rem auto 0 auto;
 }
 
-#app #page.fadeOut {
+.App #page.fadeOut {
 	opacity: 0;
 	transition: opacity .125s;
 }
 
-#app #page.fadeIn {
+.App #page.fadeIn {
 	opacity: 1;
 	transition: opacity .125s;
 }

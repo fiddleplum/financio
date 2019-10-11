@@ -1,47 +1,52 @@
-import React from 'react';
+import { Component } from '../../../../app-js/src/index';
 import './menu.css';
-/** @typedef {import('../../../../app-js/src/router').default} Router */
-
-/**
- * @typedef Props
- * @property {Router} router
- */
+/** @typedef {import('../index').default} Financio */
 
 /**
  * The menu.
- * @extends {React.Component<Props>}
  */
-export default class Menu extends React.Component {
+export default class Menu extends Component {
 	/**
 	 * Constructs the app.
-	 * @param {Props} props
+	 * @param {HTMLElement} elem - The element inside which thee the component will reside.
+	 * @param {Financio} financio - The app.
 	 */
-	constructor(props) {
-		super(props);
+	constructor(elem, financio) {
+		super(elem);
 
-		this.state = {
-		};
+		/**
+		 * The app.
+		 * @type {Financio}
+		 * @private
+		 */
+		this._financio = financio;
 
-		this.onClick = this.onClick.bind(this);
+		// Register event handlers.
+		this.on('accounts', 'click', this._goToPage);
+		this.on('categories', 'click', this._goToPage);
+		this.on('rules', 'click', this._goToPage);
+		this.on('budgets', 'click', this._goToPage);
+		this.on('reports', 'click', this._goToPage);
 	}
 
-	componentDidMount() {
-	}
-
-	render() {
-		return <>
-			<h1>Main Menu</h1>
-			<button id="accounts" onClick={this.onClick}>Accounts</button>
-			<button id="categories" onClick={this.onClick}>Categories</button>
-			<button id="rules" onClick={this.onClick}>Rules</button>
-			<button id="budgets" onClick={this.onClick}>Budgets</button>
-			<button id="reports" onClick={this.onClick}>Reports</button>
-			</>;
-	}
-
-	onClick(event) {
-		this.props.router.push({
+	/**
+	 * The click event handler for the menu buttons.
+	 * @param {UIEvent} event
+	 * @private
+	 */
+	_goToPage(event) {
+		this._financio.router.push({
 			page: event.target.id
 		});
 	}
 }
+
+Menu.html = `
+	<h1>Main Menu</h1>
+	<button id="accounts">Accounts</button>
+	<button id="categories">Categories</button>
+	<button id="rules">Rules</button>
+	<button id="budgets">Budgets</button>
+	<button id="reports">Reports</button>
+	`;
+
