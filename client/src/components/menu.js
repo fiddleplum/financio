@@ -1,5 +1,5 @@
 import { Component } from '../../../../app-js/src/index';
-import './menu.css';
+import style from './menu.css';
 /** @typedef {import('../financio').default} Financio */
 
 /**
@@ -50,3 +50,4 @@ Menu.html = `
 	<button id="reports">Reports</button>
 	`;
 
+Menu.style = style;

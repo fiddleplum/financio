@@ -17,69 +17,19 @@
 }
 
 body {
-	margin: 0;
-	min-height: 100vh;
 	background: var(--bg-light);
 	color: var(--fg-light);
 	font-family: 'Muli', sans-serif;
 }
 
-.Financio {
-	display: grid;
-	grid-template-rows: 2rem 1fr;
-	grid-template-areas: "header" "page";
-	height: 100%;
-}
-
-.Financio #header {
-	grid-area: header;
+.Financio #title {
 	background: var(--bg-dark);
 	color: var(--fg-dark);
-}
-
-.Financio #title {
-	padding-left: 0.25rem;
-	font-size: 1.5rem;
-	cursor: pointer;
 }
 
 .Financio #message {
-	position: absolute;
-	right: 0;
-	padding-right: 0.25rem;
-	font-size: 1.5rem;
-	text-align: center;
 	background: var(--bg-dark);
 	color: var(--fg-dark);
-	overflow: hidden;
-}
-
-.Financio #message:empty {
-	height: 0rem;
-}
-
-.Financio #notice {
-	font-size: 1.5rem;
-	text-align: center;
-	margin: 2rem;
-}
-
-.Financio #page {
-	position: relative;
-	grid-area: page;
-	width: calc(100% - 2rem);
-	max-width: 50rem;
-	margin: 1rem auto 0 auto;
-}
-
-.Financio #page.fadeOut {
-	opacity: 0;
-	transition: opacity .125s;
-}
-
-.Financio #page.fadeIn {
-	opacity: 1;
-	transition: opacity .125s;
 }
 
 h1 {

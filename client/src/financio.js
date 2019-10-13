@@ -1,9 +1,9 @@
-import { SimpleApp, Router, WS } from '../../../app-js/src/index';
+import { SimpleApp, WS } from '../../../app-js/src/index';
 import Menu from './components/menu';
 import Accounts from './components/accounts';
 import AddAccount from './components/add_account';
 import ViewAccount from './components/view_account';
-import './financio.css';
+import style from './financio.css';
 
 export default class Financio extends SimpleApp {
 	constructor() {
@@ -35,10 +35,9 @@ export default class Financio extends SimpleApp {
 		// Wait until the web socket is connected.
 		this._server.getReadyPromise().then(() => {
 			this.router.processURL();
-			document.querySelector('#message').innerHTML = '';
 		}).catch((e) => {
 			console.log(e);
-			document.querySelector('#message').innerHTML = 'No connection could be made.';
+			this.message = 'No connection could be made.';
 		});
 	}
 
@@ -47,5 +46,6 @@ export default class Financio extends SimpleApp {
 	}
 }
 
-Financio.setAppClass(Financio);
+Financio.style = style;
 
+Financio.setAppClass(Financio);

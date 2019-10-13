@@ -1,5 +1,5 @@
 import { Component } from '../../../../app-js/src/index';
-import './add_account.css';
+import style from './add_account.css';
 /** @typedef {import('../financio').default} Financio */
 
 /**
@@ -56,3 +56,5 @@ AddAccount.html = `
 		<div id="feedback"></div>
 	</form>
 	`;
+
+AddAccount.style = style;

@@ -1,5 +1,4 @@
 import { Component } from '../../../../app-js/src/index';
-import './accounts.css';
 /** @typedef {import('../financio').default} Financio */
 
 /**
@@ -58,4 +57,12 @@ Accounts.html = `
 	<h1>Accounts</h1>
 	<div id="list"></div>
 	<button id="addAccount">+ New Account +</button>
+	`;
+
+Accounts.style = `
+	.Accounts button {
+		display: block;
+		margin: 1rem auto;
+		width: 10rem;
+	}
 	`;

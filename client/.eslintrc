@@ -1,8 +1,5 @@
 {
-	"extends": [
-		"standard",
-		"plugin:react/recommended"
-	],
+	"extends": "standard",
 	"rules": {
 		"indent": ["error", "tab"],
 		"no-tabs": "off",
@@ -13,8 +10,7 @@
 			"named": "never"
 		}],
 		"brace-style": ["error", "stroustrup"],
-		"yoda": "off",
-		"react/prop-types": [0]
+		"yoda": "off"
 	},
 	"env" : {
 		"browser": true
