@@ -61,6 +61,11 @@ class Accounts {
 			throw new Error('Error: The name "' + name + '" is not a valid account name. Please use only alphanumeric, space, underscore, and dash characters.');
 		}
 
+		// Verify that the name already exists.
+		if (!fs.existsSync('data/accounts/' + name + '.json')) {
+			throw new Error('The name "' + name + '" does not exist.');
+		}
+
 		// Delete all created folders and files for the account.
 		fs.unlinkSync('data/accounts/' + name + '.json');
 		if (fs.existsSync('data/accounts/' + name + '/')) {
@@ -84,6 +89,11 @@ class Accounts {
 		// Validate the newName.
 		if (!this._validateName(newName)) {
 			throw new Error('The name "' + newName + '" is not a valid account name. Please use only alphanumeric, space, underscore, and dash characters.');
+		}
+
+		// Verify that the name already exists.
+		if (!fs.existsSync('data/accounts/' + name + '.json')) {
+			throw new Error('The name "' + name + '" does not exist.');
 		}
 
 		// Verify that the newName doesn't already exist.

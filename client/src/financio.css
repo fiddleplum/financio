@@ -101,6 +101,10 @@ form .right {
 	}
 }
 
+form .feedback {
+	margin-bottom: 1rem;
+}
+
 form .submit {
 	width: 100%;
 	margin-bottom: 1rem;

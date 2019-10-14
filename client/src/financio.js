@@ -3,6 +3,8 @@ import Menu from './components/menu';
 import Accounts from './components/accounts';
 import AddAccount from './components/add_account';
 import ViewAccount from './components/view_account';
+import RenameAccount from './components/rename_account';
+import DeleteAccount from './components/delete_account';
 import style from './financio.css';
 
 export default class Financio extends SimpleApp {
@@ -31,6 +33,8 @@ export default class Financio extends SimpleApp {
 		this.registerPage('accounts', Accounts);
 		this.registerPage('addAccount', AddAccount);
 		this.registerPage('viewAccount', ViewAccount);
+		this.registerPage('renameAccount', RenameAccount);
+		this.registerPage('deleteAccount', DeleteAccount);
 
 		// Wait until the web socket is connected.
 		this._server.getReadyPromise().then(() => {

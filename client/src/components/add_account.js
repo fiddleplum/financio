@@ -29,15 +29,15 @@ export default class AddAccount extends Component {
 		try {
 			await this._financio.server.send({
 				command: 'create account',
-				name: this.elem.querySelector('#name').value,
-				type: this.elem.querySelector('#type').value
+				name: this.get('name').value,
+				type: this.get('type').value
 			});
 			this._financio.router.push({
 				page: 'accounts'
 			});
 		}
-		catch (errorMessage) {
-			this.elem.querySelector('#feedback').innerHTML = errorMessage;
+		catch (error) {
+			this.get('feedback').innerHTML = error.message;
 		}
 	}
 }

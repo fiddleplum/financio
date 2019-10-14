@@ -33,8 +33,7 @@ export default class Accounts extends Component {
 
 		const listElem = this.elem.querySelector('#list');
 		for (let i = 0, l = accountNames.length; i < l; i++) {
-			const button = this.createElement('button', accountNames[i], '', { click: this._goToViewAccount });
-			button.innerHTML = accountNames[i];
+			const button = this.createElement('button', accountNames[i], '', accountNames[i], { click: this._goToViewAccount });
 			listElem.appendChild(button);
 		}
 	}

@@ -114,9 +114,9 @@ export default class ImportTransactions extends React.Component {
 					page: 'viewAccount',
 					name: this.props.router.getValueOf('name')
 				});
-			}).catch((errorMessage) => {
+			}).catch((error) => {
 				this.setState({
-					feedback: errorMessage
+					feedback: error.message
 				});
 			});
 		}
