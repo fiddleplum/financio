@@ -127,12 +127,25 @@ class Accounts {
 	 * @param {string} name
 	 * @param {string} startDate - ISO format
 	 * @param {string} endDate - ISO format
+	 * @param {string} search - The search string. If it starts and ends with / or /[a-z], it is interpreted a regular expression.
 	 * @returns {Transaction[]}
 	 */
-	static listTransactions(name, startDate, endDate) {
+	static listTransactions(name, startDate, endDate, search) {
 		// Validate the name.
 		if (!this._validateName(name)) {
 			throw new Error('The name "' + name + '" is not a valid account name. Please use only alphanumeric, space, underscore, and dash characters.');
+		}
+
+		let regExp = /.*/;
+		if (search) {
+			if (/^\/[^/]*\/[a-z]*$/.test(search)) {
+				const lastSlashIndex = search.lastIndexOf('/');
+				regExp = new RegExp(search.substr(1, lastSlashIndex - 1), search.substr(lastSlashIndex + 1));
+				console.log(regExp);
+			}
+			else {
+				regExp = new RegExp(search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+			}
 		}
 
 		/** @type {Transaction[]} */
@@ -147,9 +160,14 @@ class Accounts {
 					/** @type {Transaction[]} */
 					const newTransactions = JSON.parse(fs.readFileSync(filePath));
 					for (let i = 0, l = newTransactions.length; i < l; i++) {
-						if (startDate <= newTransactions[i].date && newTransactions[i].date < end.toISOString()) {
-							transactions.push(newTransactions[i]);
+						const newTransaction = newTransactions[i];
+						if (newTransaction.date < startDate || end.toISOString() <= newTransaction.date) {
+							continue;
 						}
+						if (!regExp.test(newTransaction.description) && !regExp.test(newTransaction.notes)) {
+							continue;
+						}
+						transactions.push(newTransaction);
 					}
 				}
 				date.setUTCMonth(date.getUTCMonth() + 1);

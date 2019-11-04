@@ -7,11 +7,10 @@ import style from './transaction_list.css';
  */
 export default class TransactionList extends Component {
 	set transactions(transactions) {
-		const rowsElem = this.get('rows');
-		let rowsHtml = ``;
-		for (let i = 0, l = transactions.length; i < l; i++) {
+		let html = ``;
+		for (let i = transactions.length - 1; i >= 0; i--) {
 			const transaction = transactions[i];
-			rowsHtml += `
+			html += `
 				<div class="transaction ${i % 2 === 0 ? 'even' : 'odd'}">
 					<div class="date">${transaction.date.substr(0, 10)}</div>
 					<div class="description">${transaction.description}</div>
@@ -19,7 +18,7 @@ export default class TransactionList extends Component {
 					<div class="category">${transaction.category}</div>
 				</div>`;
 		}
-		rowsElem.innerHTML = rowsHtml;
+		this.setHtml('rows', html);
 	}
 }
 

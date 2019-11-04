@@ -1,4 +1,4 @@
-import { Component } from '../../../../app-js/src/index';
+import { Component, ShowHide } from '../../../../app-js/src/index';
 import TransactionList from './transaction_list';
 import style from './transactions.css';
 import filterSVG from './filter.svg';
@@ -25,21 +25,63 @@ export default class Transactions extends Component {
 		 */
 		this._financio = financio;
 
+		/**
+		 * The start year in YYYY format.
+		 * @type {string}
+		 * @private
+		 */
 		this._startYear = '';
+
+		/**
+		 * The start month in MM format.
+		 * @type {string}
+		 * @private
+		 */
 		this._startMonth = '';
+
+		/**
+		 * The start day in DD format.
+		 * @type {string}
+		 * @private
+		 */
 		this._startDay = '';
+
+		/**
+		 * The end year in YYYY format.
+		 * @type {string}
+		 * @private
+		 */
 		this._endYear = '';
+
+		/**
+		 * The end month in MM format.
+		 * @type {string}
+		 * @private
+		 */
 		this._endMonth = '';
+
+		/**
+		 * The end day in DD format.
+		 * @type {string}
+		 * @private
+		 */
 		this._endDay = '';
+
+		/**
+		 * A term to search for.
+		 * @type {string}
+		 * @private
+		 */
+		this._search = '';
 
 		this._transactionList = new TransactionList(this.get('transactionList'));
 
-		this._initializeInputs();
+		this._initializeFilterInputs();
 
 		this.update();
 	}
 
-	_initializeInputs() {
+	_initializeFilterInputs() {
 		// Get the start date from the query.
 		const start = this._financio.router.getValue('start');
 		const end = this._financio.router.getValue('end');
@@ -68,14 +110,20 @@ export default class Transactions extends Component {
 			this._endDay = (today.getDate() + '').padStart(2, '0');
 		}
 
+		this._search = this._financio.router.getValue('search');
+
 		// Set the values of the inputs.
 		this.get('startDate').value = this._startYear + '-' + this._startMonth + '-' + this._startDay;
 		this.get('endDate').value = this._endYear + '-' + this._endMonth + '-' + this._endDay;
+
+		if (this._search) {
+			this.get('search').value = this._search;
+		}
 	}
 
 	_toggleFilterForm() {
 		const filterForm = this.get('filterForm');
-		filterForm.classList.toggle('disabled');
+		ShowHide.toggle(filterForm);
 	}
 
 	_goToImportTransactions() {
@@ -86,10 +134,12 @@ export default class Transactions extends Component {
 	}
 
 	async _submitForm(event) {
+		const filterInputs = this.getFormInputs('filterForm');
 		// Send the command to the server.
 		try {
-			const startDate = new Date(this.get('startDate').value);
-			const endDate = new Date(this.get('endDate').value);
+			// Get the date inputs and parse them as Date objects.
+			const startDate = new Date(filterInputs.startDate);
+			const endDate = new Date(filterInputs.endDate);
 			if (isNaN(startDate)) {
 				throw new Error('Please enter a valid start date.');
 			}
@@ -99,12 +149,19 @@ export default class Transactions extends Component {
 			if (startDate > endDate) {
 				throw new Error('The start date must be equal to or prior to the end date.');
 			}
+
+			// Set the start and end dates using the Date objects.
 			this._startYear = (startDate.getUTCFullYear() + '').padStart(4, '0');
 			this._startMonth = ((startDate.getUTCMonth() + 1) + '').padStart(2, '0');
 			this._startDay = (startDate.getUTCDate() + '').padStart(2, '0');
 			this._endYear = (endDate.getUTCFullYear() + '').padStart(4, '0');
 			this._endMonth = ((endDate.getUTCMonth() + 1) + '').padStart(2, '0');
 			this._endDay = (endDate.getUTCDate() + '').padStart(2, '0');
+
+			// Set the search input.
+			this._search = filterInputs.search;
+
+			// Update the transation list.
 			await this.update();
 		}
 		catch (error) {
@@ -122,7 +179,8 @@ export default class Transactions extends Component {
 			command: 'list transactions',
 			name: this._financio.router.getValue('name'),
 			startDate: this._startYear + '-' + this._startMonth + '-' + this._startDay,
-			endDate: this._endYear + '-' + this._endMonth + '-' + this._endDay
+			endDate: this._endYear + '-' + this._endMonth + '-' + this._endDay,
+			search: this._search
 		});
 		this._transactionList.transactions = transactions;
 	}
@@ -130,13 +188,15 @@ export default class Transactions extends Component {
 
 Transactions.html = `
 	<p><button id="filterButton" onclick="_toggleFilterForm">${filterSVG}</button> <button id="importButton" onclick="_goToImportTransactions">${importSVG}</button></p>
-	<form id="filterForm" class="disabled" action="javascript:void(null);">
+	<form id="filterForm" style="display: none;" action="javascript:">
 		<label for="startDate" class="left">Start:</label>
-		<input id="startDate" name="startDate" type="text" class="right startDate" />
+		<input id="startDate" name="startDate" type="text" class="right" />
 		<label for="endDate" class="left">End:</label>
-		<input id="endDate" name="endDate" type="text" class="right endDate" />
+		<input id="endDate" name="endDate" type="text" class="right" />
+		<label for="search" class="left">Search:</label>
+		<input id="search" name="search" type="text" class="right" />
 		<div id="feedback" class="feedback">{{feedback}}</div>
-		<button id="submitButton" class="submit" onclick="_submitForm">Update</button>
+		<button class="submit" onclick="_submitForm">Update</button>
 	</form>
 	<div id="transactionList"></div>
 	`;
