@@ -20,40 +20,39 @@ export default class AddAccount extends Component {
 		 * @private
 		 */
 		this._financio = financio;
-
-		this.on('submit', 'click', this._submitForm);
 	}
 
 	async _submitForm(event) {
+		const inputs = this.getFormInputs('form');
 		// Send the command to the server.
 		try {
 			await this._financio.server.send({
 				command: 'create account',
-				name: this.get('name').value,
-				type: this.get('type').value
+				name: inputs.name,
+				type: inputs.type
 			});
-			this._financio.router.push({
+			this._financio.router.pushQuery({
 				page: 'accounts'
 			});
 		}
 		catch (error) {
-			this.get('feedback').innerHTML = error.message;
+			this.setHtmlVariable('feedback', error.message);
 		}
 	}
 }
 
 AddAccount.html = `
 	<h1>Add an Account</h1>
-	<form action="javascript:">
+	<form id="form" action="javascript:">
 		<label for="name" class="left">Name:</label>
-		<input id="name" name="name" type="text" class="right" />
+		<input name="name" type="text" class="right" />
 		<label for="type" class="left">Type:</label>
-		<select id="type" name="type" class="right">
+		<select name="type" class="right">
 			<option value="credit">Credit</option>
 			<option value="debit">Debit</option>
 		</select>
-		<button id="submit" class="submit">Add Account</button>
-		<div id="feedback"></div>
+		<button class="submit" onclick="_submitForm">Add Account</button>
+		<div id="feedback">{{feedback}}</div>
 	</form>
 	`;
 

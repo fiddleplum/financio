@@ -1,27 +1,41 @@
-import React from 'react';
-import './import_transactions.css';
-import Transaction from '../../../src/transaction';
+import { Component } from '../../../../app-js/src/index';
 import TransactionList from './transaction_list';
-/** @typedef {import('../../../../app-js/src/router').default} Router */
-/** @typedef {import('../../../../app-js/src/ws').default} WS */
+import style from './import_transactions.css';
+/** @typedef {import('../../../src/transaction').default} Transaction */
+/** @typedef {import('../financio').default} Financio */
 
 /**
- * @typedef Props
- * @property {Router} router
- * @property {WS} server
+ * The import transactions page.
  */
-
-/**
- * The transactions page.
- * @extends {React.Component<Props>}
- */
-export default class ImportTransactions extends React.Component {
+export default class ImportTransactions extends Component {
 	/**
 	 * Constructs the app.
-	 * @param {Props} props
+	 * @param {HTMLElement} elem - The element inside which thee the component will reside.
+	 * @param {Financio} financio - The app.
 	 */
-	constructor(props) {
-		super(props);
+	constructor(elem, financio) {
+		super(elem);
+
+		/**
+		 * The app.
+		 * @type {Financio}
+		 * @private
+		 */
+		this._financio = financio;
+
+		/**
+		 * The step the user is on.
+		 * @type {number}
+		 * @private
+		 */
+		this._step = 1;
+
+		/**
+		 * The list of files to be uploaded.
+		 * @type {string}
+		 * @private
+		 */
+		this._files = [];
 
 		this.state = {
 			/** @type {Transaction[]} */
@@ -36,83 +50,72 @@ export default class ImportTransactions extends React.Component {
 		this.nextStep = this.nextStep.bind(this);
 		this.onUpload = this.onUpload.bind(this);
 		this.onDrop = this.onDrop.bind(this);
-	}
 
-	render() {
 		let stepHTML = '';
-		if (this.state.step === 1) {
-			stepHTML = <>
+		if (this._step === 1) {
+			stepHTML = `
 				<h2>Step 1 - Load Data</h2>
-				</>;
-			if (this.state.files.length === 0) {
-				stepHTML = <>{stepHTML}
-					<p>If your device supports drag and drop, you can drag the files into the box below.</p>
-					<p className="importBox" onDragOver={(event) => {
-						event.stopPropagation();
-						event.preventDefault();
-						event.dataTransfer.dropEffect = 'copy';
-					}} onDrop={this.onDrop}>Drag File Here</p>
-					<p>Or you can upload files here below.</p>
-					<form>
-					<p><input type="file" ref={this.fileInput} onChange={this.onUpload} multiple /></p>
-					</form>
-					</>;
-			}
-			else {
-				for (const file of this.state.files) {
-					stepHTML = <>{stepHTML}
-						<p>{file.name}</p>
-						</>;
-				}
-			}
-			stepHTML = <>{stepHTML}
-				<p><button onClick={this.nextStep}>Next</button></p>
-				</>;
+				<p>If your device supports drag and drop, you can drag the files into the box below.</p>
+				<p className="importBox">Drag File Here</p>
+				<p>Or you can upload files here below.</p>
+				<form>
+				<p><input type="file" id="fileInput" multiple /></p>
+				</form>
+				<p><button onClick={this.nextStep}>Next</button></p>`;
 		}
-		else if (this.state.step === 2) {
+		else if (this._step === 2) {
 			stepHTML = <>
 				<h2>Step 2 - Configure It</h2>
 				<p>// Check box to automatically apply rules or not. (defaults to true)</p>
 				<p><button onClick={this.nextStep}>Next</button></p>
 				</>;
 		}
-		else if (this.state.step === 3) {
+		else if (this._step === 3) {
 			stepHTML = <>
 				<h2>Step 3 - Review the Transactions</h2>
 				<h3>New Transactions</h3>
-				<TransactionList transactions={this.state.newTransactions} />
+				<TransactionList transactions={this._newTransactions} />
 				<h3>Duplicate Transactions (will not be overwritten)</h3>
-				<TransactionList transactions={this.state.duplicateTransactions} />
+				<TransactionList transactions={this._duplicateTransactions} />
 				<p><button onClick={this.nextStep}>Finish</button></p>
 				</>;
 		}
 		return <>
 			<h1>Import Transactions</h1>
 			{stepHTML}
-			<div>{this.state.feedback}</div>
+			<div>{this._feedback}</div>
 			</>;
+
+		this.on('importBox', 'onDragOver', (event) => {
+			event.stopPropagation();
+			event.preventDefault();
+			event.dataTransfer.dropEffect = 'copy';
+		});
+		this.on('importBox', 'onDrop', this.onDrop);
+		this.on('fileInput', 'onChange', this.onUpload);
+		this.on('
 	}
 
 	nextStep() {
-		if (this.state.step === 2) {
-			this.loadTransactions(this.state.files);
+		if (this._step === 2) {
+			this.loadTransactions(this._files);
 		}
-		if (this.state.step < 3) {
+		if (this._step < 3) {
 			this.setState((state) => {
 				return {
-					step: state.step + 1
+					step: _step + 1
 				};
 			});
 		}
 		else { // Last step, so submit it all.
 			this.props.server.send({
 				command: 'add transactions',
-				name: this.props.router.getValueOf('name'),
-				transactions: this.state.newTransactions
+				name: this.props.router.getValue('name'),
+				transactions: this._newTransactions
 			}).then(() => {
-				this.props.router.push({
+				this.props.router.pushQuery({
 					page: 'viewAccount',
-					name: this.props.router.getValueOf('name')
+					name: this.props.router.getValue('name')
 				});
 			}).catch((error) => {
 				this.setState({
@@ -125,9 +128,13 @@ export default class ImportTransactions extends React.Component {
 	onUpload(event) {
 		event.stopPropagation();
 		event.preventDefault();
-		this.setState({
-			files: this.fileInput.current.files
+		this._files = this.get('fileInput').files;
 		});
+		for (const file of this._files) {
+			stepHTML = <>{stepHTML}
+				<p>{file.name}</p>
+				</>;
+		}
 	}
 
 	onDrop(event) {
@@ -159,7 +166,7 @@ export default class ImportTransactions extends React.Component {
 		await Promise.all(promises);
 		this.props.server.send({
 			command: 'check duplicate transactions',
-			name: this.props.router.getValueOf('name'),
+			name: this.props.router.getValue('name'),
 			transactions: transactions
 		}).then((result) => {
 			this.setState({
@@ -204,3 +211,36 @@ export default class ImportTransactions extends React.Component {
 		return transactions;
 	}
 }
+
+render() {
+
+ImportTransactions.html = `
+<h1>Import Transactions</h1>
+	<div id="step1">
+		<h2>Step 1 - Load Data</h2>
+		<p>If your device supports drag and drop, you can drag the files into the box below.</p>
+		<p className="importBox" onDragOver={(event) => {
+			event.stopPropagation();
+			event.preventDefault();
+			event.dataTransfer.dropEffect = 'copy';
+		}} onDrop={this.onDrop}>Drag File Here</p>
+		<p>Or you can upload files here below.</p>
+		<form>
+		<p><input type="file" ref={this.fileInput} onChange={this.onUpload} multiple /></p>
+		</form>
+		</div>
+		<div id="step2">
+			<h2>Step 2 - Configure It</h2>
+			<p>// Check box to automatically apply rules or not. (defaults to true)</p>
+			<p><button onClick={this.nextStep}>Next</button></p>
+		</div>
+		<div id="step3">
+			<h2>Step 3 - Review the Transactions</h2>
+			<h3>New Transactions</h3>
+			<TransactionList transactions={this._newTransactions} />
+			<h3>Duplicate Transactions (will not be overwritten)</h3>
+			<TransactionList transactions={this._duplicateTransactions} />
+			<p><button onClick={this.nextStep}>Finish</button></p>
+		</div>
+		<div>{this._feedback}</div>
+	`;

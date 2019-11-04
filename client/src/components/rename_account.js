@@ -26,30 +26,27 @@ export default class RenameAccount extends Component {
 		 * @type {string}
 		 * @private
 		 */
-		this._accountName = this._financio.router.getValueOf('name');
+		this._accountName = this._financio.router.getValue('name');
 
-		this.setRenderState('accountName', this._accountName);
-
-		// Register event handlers.
-		this.on('submitButton', 'click', this.submitForm);
+		this.setHtmlVariable('accountName', this._accountName);
 	}
 
-	async submitForm(event) {
-		const newName = this.get('newName').value;
+	async _submitForm(event) {
+		const inputs = this.getFormInputs('form');
 		// Send the command to the server.
 		try {
 			await this._financio.server.send({
 				command: 'rename account',
 				name: this._accountName,
-				newName: newName
+				newName: inputs.newName
 			});
-			this._financio.router.push({
+			this._financio.router.pushQuery({
 				page: 'viewAccount',
-				name: newName
+				name: inputs.newName
 			});
 		}
 		catch (error) {
-			this.setRenderState('feedback', error.message);
+			this.setHtmlVariable('feedback', error.message);
 		}
 	}
 }
@@ -57,10 +54,10 @@ export default class RenameAccount extends Component {
 RenameAccount.html = `
 	<h1>Rename Account</h1>
 	<p>The name of the account to be renamed is <b>{{accountName}}</b>.</p>
-	<form action="javascript:">
+	<form id="form" action="javascript:">
 		<label for="name" class="left">New name:</label>
-		<input id="newName" name="newName" type="text" class="right" />
-		<button id="submitButton" class="submit">Rename Account</button>
+		<input name="newName" type="text" class="right" />
+		<button class="submit" onclick="_submitForm">Rename Account</button>
 		<p>{{feedback}}</p>
 	</form>
 	`;

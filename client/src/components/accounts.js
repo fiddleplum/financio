@@ -20,8 +20,6 @@ export default class Accounts extends Component {
 		 */
 		this._financio = financio;
 
-		this.on('addAccount', 'click', this._goToAddAccount);
-
 		this._populateAccountNames();
 	}
 
@@ -31,22 +29,23 @@ export default class Accounts extends Component {
 			command: 'list accounts'
 		});
 
-		const listElem = this.elem.querySelector('#list');
+		// const listElem = this.elem.querySelector('#list');
+		let html = '';
 		for (let i = 0, l = accountNames.length; i < l; i++) {
-			const button = this.createElement('button', accountNames[i], '', accountNames[i], { click: this._goToViewAccount });
-			listElem.appendChild(button);
+			html += `<button id="${accountNames[i]}" onclick="_goToViewAccount">${accountNames[i]}</button>`;
 		}
+		this.setHtml('list', html);
 	}
 
 	_goToViewAccount(event) {
-		this._financio.router.push({
+		this._financio.router.pushQuery({
 			page: 'viewAccount',
 			name: event.target.id
 		});
 	}
 
 	_goToAddAccount(event) {
-		this._financio.router.push({
+		this._financio.router.pushQuery({
 			page: 'addAccount'
 		});
 	}
@@ -55,7 +54,7 @@ export default class Accounts extends Component {
 Accounts.html = `
 	<h1>Accounts</h1>
 	<div id="list"></div>
-	<button id="addAccount">+ New Account +</button>
+	<button onclick="_goToAddAccount">+ New Account +</button>
 	`;
 
 Accounts.style = `

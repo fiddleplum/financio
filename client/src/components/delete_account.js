@@ -25,34 +25,31 @@ export default class DeleteAccount extends Component {
 		 * @type {string}
 		 * @private
 		 */
-		this._accountName = this._financio.router.getValueOf('name');
+		this._accountName = this._financio.router.getValue('name');
 
-		this.setRenderState('accountName', this._accountName);
-
-		// Register event handlers.
-		this.on('submitButton', 'click', this.submitForm);
+		// Set the accountName in the text.
+		this.setHtmlVariable('accountName', this._accountName);
 	}
 
-	async submitForm(event) {
-		const deleteValue = this.get('delete').value;
-
-		if (deleteValue === 'DELETE') {
+	async _submitForm(event) {
+		const inputs = this.getFormInputs('form');
+		if (inputs.delete === 'DELETE') {
 			// Send the command to the server.
 			try {
 				await this._financio.server.send({
 					command: 'delete account',
 					name: this._accountName
 				});
-				this._financio.router.push({
+				this._financio.router.pushQuery({
 					page: 'accounts'
 				});
 			}
 			catch (error) {
-				this.setRenderState('feedback', error.message);
+				this.setHtmlVariable('feedback', error.message);
 			}
 		}
 		else {
-			this.setRenderState('feedback', 'Please enter DELETE to delete the account.');
+			this.setHtmlVariable('feedback', 'Please enter DELETE to delete the account.');
 		}
 	}
 }
@@ -61,10 +58,10 @@ DeleteAccount.html = `
 	<h1>Delete Account</h1>
 	<p>The name of the account to be deleted is <b>{{accountName}}</b>.</p>
 	<p>All data associated with the account will be irrecoverably deleted, with no undoing the action.</p>
-	<form action="javascript:">
+	<form id="form" action="javascript:">
 		<p>If you want to delete your account, enter the <b>DELETE</b> in all capital letters:</p>
-		<p><input id="delete" name="delete" type="text" /></p>
-		<button id="submitButton" class="submit">Delete Account</button>
+		<p><input name="delete" type="text" /></p>
+		<button class="submit" onclick="_submitForm">Delete Account</button>
 		<p>{{feedback}}</p>
 	</form>
 	`;

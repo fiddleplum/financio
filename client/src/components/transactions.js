@@ -32,11 +32,19 @@ export default class Transactions extends Component {
 		this._endMonth = '';
 		this._endDay = '';
 
-		this._transactionList = new TransactionList(this.get('transactionList'), this._financio);
+		this._transactionList = new TransactionList(this.get('transactionList'));
 
+		this._initializeInputs();
+
+		this.update();
+	}
+
+	_initializeInputs() {
 		// Get the start date from the query.
-		const start = this._financio.router.getValueOf('start');
-		const end = this._financio.router.getValueOf('end');
+		const start = this._financio.router.getValue('start');
+		const end = this._financio.router.getValue('end');
+
+		// Set the dates for the state.
 		const today = new Date();
 		if (start) {
 			this._startYear = start.substr(0, 4);
@@ -60,29 +68,24 @@ export default class Transactions extends Component {
 			this._endDay = (today.getDate() + '').padStart(2, '0');
 		}
 
+		// Set the values of the inputs.
 		this.get('startDate').value = this._startYear + '-' + this._startMonth + '-' + this._startDay;
 		this.get('endDate').value = this._endYear + '-' + this._endMonth + '-' + this._endDay;
-
-		this.on('filterButton', 'click', this.toggleFilterForm);
-		this.on('importButton', 'click', this.goToImportTransactions);
-		this.on('submitButton', 'click', this.submitForm);
-
-		this.update();
 	}
 
-	toggleFilterForm() {
+	_toggleFilterForm() {
 		const filterForm = this.get('filterForm');
 		filterForm.classList.toggle('disabled');
 	}
 
-	goToImportTransactions() {
-		this._financio.router.push({
+	_goToImportTransactions() {
+		this._financio.router.pushQuery({
 			page: 'importTransactions',
-			name: this._financio.router.getValueOf('name')
+			name: this._financio.router.get('name')
 		});
 	}
 
-	async submitForm(event) {
+	async _submitForm(event) {
 		// Send the command to the server.
 		try {
 			const startDate = new Date(this.get('startDate').value);
@@ -105,7 +108,7 @@ export default class Transactions extends Component {
 			await this.update();
 		}
 		catch (error) {
-			this.get('feedback').innerHTML = error.message;
+			this.setHtmlVariable('feedback', error.message);
 		}
 	}
 
@@ -117,7 +120,7 @@ export default class Transactions extends Component {
 		/** @type {Transaction[]} */
 		const transactions = await this._financio.server.send({
 			command: 'list transactions',
-			name: this._financio.router.getValueOf('name'),
+			name: this._financio.router.getValue('name'),
 			startDate: this._startYear + '-' + this._startMonth + '-' + this._startDay,
 			endDate: this._endYear + '-' + this._endMonth + '-' + this._endDay
 		});
@@ -126,14 +129,14 @@ export default class Transactions extends Component {
 }
 
 Transactions.html = `
-	<p><button id="filterButton">` + filterSVG + `</button> <button id="importButton">` + importSVG + `</button></p>
+	<p><button id="filterButton" onclick="_toggleFilterForm">${filterSVG}</button> <button id="importButton" onclick="_goToImportTransactions">${importSVG}</button></p>
 	<form id="filterForm" class="disabled" action="javascript:void(null);">
 		<label for="startDate" class="left">Start:</label>
 		<input id="startDate" name="startDate" type="text" class="right startDate" />
 		<label for="endDate" class="left">End:</label>
 		<input id="endDate" name="endDate" type="text" class="right endDate" />
-		<div id="feedback" class="feedback"></div>
-		<button id="submitButton" class="submit">Update</button>
+		<div id="feedback" class="feedback">{{feedback}}</div>
+		<button id="submitButton" class="submit" onclick="_submitForm">Update</button>
 	</form>
 	<div id="transactionList"></div>
 	`;

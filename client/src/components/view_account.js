@@ -29,7 +29,7 @@ export default class ViewAccount extends Component {
 		 * @type {string}
 		 * @private
 		 */
-		this._name = this._financio.router.getValueOf('name');
+		this._name = this._financio.router.getValue('name');
 
 		this.get('accountName').innerHTML = this._name;
 
@@ -40,14 +40,14 @@ export default class ViewAccount extends Component {
 	}
 
 	goToRenameAccount() {
-		this._financio.router.push({
+		this._financio.router.pushQuery({
 			page: 'renameAccount',
 			name: this._name
 		});
 	}
 
 	goToDeleteAccount() {
-		this._financio.router.push({
+		this._financio.router.pushQuery({
 			page: 'deleteAccount',
 			name: this._name
 		});

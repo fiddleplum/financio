@@ -20,13 +20,6 @@ export default class Menu extends Component {
 		 * @private
 		 */
 		this._financio = financio;
-
-		// Register event handlers.
-		this.on('accounts', 'click', this._goToPage);
-		this.on('categories', 'click', this._goToPage);
-		this.on('rules', 'click', this._goToPage);
-		this.on('budgets', 'click', this._goToPage);
-		this.on('reports', 'click', this._goToPage);
 	}
 
 	/**
@@ -35,7 +28,7 @@ export default class Menu extends Component {
 	 * @private
 	 */
 	_goToPage(event) {
-		this._financio.router.push({
+		this._financio.router.pushQuery({
 			page: event.target.id
 		});
 	}
@@ -43,11 +36,11 @@ export default class Menu extends Component {
 
 Menu.html = `
 	<h1>Main Menu</h1>
-	<button id="accounts">Accounts</button>
-	<button id="categories">Categories</button>
-	<button id="rules">Rules</button>
-	<button id="budgets">Budgets</button>
-	<button id="reports">Reports</button>
+	<button id="accounts" onclick="_goToPage">Accounts</button>
+	<button id="categories" onclick="_goToPage">Categories</button>
+	<button id="rules" onclick="_goToPage">Rules</button>
+	<button id="budgets" onclick="_goToPage">Budgets</button>
+	<button id="reports" onclick="_goToPage">Reports</button>
 	`;
 
 Menu.style = style;

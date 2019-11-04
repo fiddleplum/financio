@@ -160,7 +160,7 @@ export default class App extends React.Component {
 	}
 
 	goToHomePage() {
-		this._router.push({
+		this._router.pushQuery({
 			page: ''
 		});
 	}
