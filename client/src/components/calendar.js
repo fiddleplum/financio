@@ -1,6 +1,7 @@
 import { Component } from '../../../../app-js/src/index';
 import style from './calendar.css';
 import Interval from './interval';
+import YMD from './ymd';
 
 /**
  * A calendar component that can select a single day.
@@ -9,7 +10,7 @@ export default class Calendar extends Component {
 	/**
 	 * Constructor.
 	 * @param {HTMLElement} elem
-	 * @param {Date|Date[]|Interval<Date>|Interval<Date>[]} date
+	 * @param {YMD|Interval<YMD>|(YMD|Interval<YMD>)[]} date
 	 */
 	constructor(elem, date) {
 		super(elem);
@@ -30,17 +31,17 @@ export default class Calendar extends Component {
 
 		/**
 		 * The currently selected date ranges.
-		 * @type {Interval<Date>[]}
+		 * @type {Interval<YMD>[]}
 		 * @private
 		 */
 		this._selectedDateRanges = [];
 
 		/**
 		 * The bounds on the date selection.
-		 * @type {Interval<Date>}
+		 * @type {Interval<YMD>}
 		 * @private
 		 */
-		this._dateBounds = new Interval(new Date(1900, 0, 1), new Date(2100, 0, 1));
+		this._dateBounds = new Interval(new YMD(1900, 0, 1), new YMD(2100, 0, 1));
 
 		// Setup the event handlers.
 		this.on('decade_dec', 'click', () => {
@@ -63,7 +64,7 @@ export default class Calendar extends Component {
 		});
 
 		// Set the selected dates.
-		if (date instanceof Date) {
+		if (date instanceof YMD) {
 			this._selectedDateRanges.push(new Interval(date, date));
 		}
 		else if (date instanceof Interval) {
@@ -72,7 +73,7 @@ export default class Calendar extends Component {
 		else if (date instanceof Array) {
 			for (let i = 0; i < date.length; i++) {
 				const dateItem = date[i];
-				if (dateItem instanceof Date) {
+				if (dateItem instanceof YMD) {
 					this._selectedDateRanges.push(new Interval(dateItem, dateItem));
 				}
 				else if (dateItem instanceof Interval) {
@@ -82,7 +83,7 @@ export default class Calendar extends Component {
 		}
 
 		if (this._selectedDateRanges.length > 0) {
-			this._updateShown(this._selectedDateRanges[0].min.getFullYear(), this._selectedDateRanges[0].max.getMonth() + 1);
+			this._updateShown(this._selectedDateRanges[0].min.year, this._selectedDateRanges[0].max.month);
 		}
 	}
 
@@ -104,56 +105,68 @@ export default class Calendar extends Component {
 			daysNeedUpdate = true;
 		}
 		if (daysNeedUpdate) {
-			const date = new Date(this._shownYear, this._shownMonth - 1, 1);
-			date.setDate(1 - date.getDay());
-			for (let i = 0; i < 42; i++, date.setDate(date.getDate() + 1)) {
+			const date = new YMD(this._shownYear, this._shownMonth, 1);
+			date.day = -date.dayOfWeek;
+			for (let i = 0; i < 42; i++, date.day += 1) {
 				const dayElem = this.get('day_' + i.toString());
-				if (date.getMonth() + 1 === this._shownMonth) {
+				if (date.month === this._shownMonth) {
 					dayElem.classList.remove('anotherMonth');
 				}
 				else {
 					dayElem.classList.add('anotherMonth');
 				}
 				if (this._dateBounds.min <= date && date <= this._dateBounds.max) {
-					dayElem.innerHTML = date.getDate().toString();
+					dayElem.innerHTML = date.day.toString();
 					dayElem.classList.add('clickable');
+					// Check if the date is selected.
+					let selected = false;
+					let first = false;
+					let last = false;
+					for (let i = 0; i < this._selectedDateRanges.length; i++) {
+						if (this._selectedDateRanges[i].min <= date && date <= this._selectedDateRanges[i].max) {
+							selected = true;
+							first = this._selectedDateRanges[i].min.equals(date);
+							last = this._selectedDateRanges[i].max.equals(date);
+						}
+					}
+					if (selected) {
+						dayElem.classList.add('selected');
+					}
+					else {
+						dayElem.classList.remove('selected');
+					}
+					if (first) {
+						dayElem.classList.add('first');
+					}
+					else {
+						dayElem.classList.remove('first');
+					}
+					if (last) {
+						dayElem.classList.add('last');
+					}
+					else {
+						dayElem.classList.remove('last');
+					}
 				}
 				else {
 					dayElem.innerHTML = '';
-					dayElem.classList.remove('clickable');
+					dayElem.classList.remove(['clickable', 'selected']);
 				}
 			}
 		}
 	}
 
 	_offsetDate(years, months) {
-		let newDate = new Date(this._shownYear, this._shownMonth - 1);
-		newDate.setFullYear(newDate.getFullYear() + years);
-		newDate.setMonth(newDate.getMonth() + months);
+		const newDate = new YMD(this._shownYear, this._shownMonth, 1);
+		newDate.year += years;
+		newDate.month += months;
 		if (newDate < this._dateBounds.min) {
-			newDate = this._dateBounds.min;
+			newDate.copy(this._dateBounds.min);
 		}
 		else if (newDate > this._dateBounds.max) {
-			newDate = this._dateBounds.max;
+			newDate.copy(this._dateBounds.max);
 		}
-		this._updateShown(newDate.getFullYear(), newDate.getMonth() + 1);
-	}
-
-	_getDaysInMonth(date) {
-		const month = date.getMonth() + 1;
-		if ([1, 3, 5, 7, 8, 10, 12].includes(month)) {
-			return 31;
-		}
-		else if (month === 2) {
-			const year = date.getFullYear();
-			if (year % 4 === 0 && year % 100 !== 0) {
-				return 29;
-			}
-			else return 28;
-		}
-		else {
-			return 30;
-		}
+		this._updateShown(newDate.year, newDate.month);
 	}
 }
 

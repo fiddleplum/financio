@@ -1,6 +1,8 @@
 import { Component, ShowHide } from '../../../../app-js/src/index';
 import Calendar from './calendar';
 import style from './date_chooser.css';
+import YMD from './ymd';
+import Interval from './interval';
 
 /**
  * A generic date chooser.
@@ -9,32 +11,32 @@ export default class DateChooser extends Component {
 	/**
 	 * Constructs the app.
 	 * @param {HTMLElement} elem - The element inside which thee the component will reside.
-	 * @param {Date} date - The date to initially present.
+	 * @param {YMD} date - The date to initially present.
 	 */
 	constructor(elem, date) {
 		super(elem);
 
 		/**
 		 * The displayed date.
-		 * @type {Date}
+		 * @type {YMD}
 		 * @private
 		 */
-		this._date = new Date();
+		this._date = new YMD();
 
 		// Set the date.
 		this.date = date;
 
 		// Set the calendar.
-		this.__setComponent('calendar', Calendar, date);
+		this.__setComponent('calendar', Calendar, [new Interval(this._date, this._date), new Interval(new YMD(this._date.year, this._date.month - 1, 15), new YMD(this._date.year, this._date.month, 1))]);
 	}
 
 	/**
 	 * Sets the date.
-	 * @param {Date} date
+	 * @param {YMD} date
 	 */
 	set date(date) {
-		this._date = new Date(date);
-		this.setHtmlVariable('date', this._date.toLocaleDateString('en-US', {
+		this._date.copy(date);
+		this.setHtmlVariable('date', this._date.toString('en-US', {
 			year: 'numeric',
 			month: 'long',
 			day: 'numeric',

@@ -46,3 +46,15 @@
 .Calendar .anotherMonth {
 	color: var(--fg-light-disabled);
 }
+.Calendar .selected {
+	background: var(--bg-dark);
+	color: var(--fg-dark);
+}
+.Calendar .selected.first {
+	border-top-left-radius: 1rem;
+	border-bottom-left-radius: 1rem;
+}
+.Calendar .selected.last {
+	border-top-right-radius: 1rem;
+	border-bottom-right-radius: 1rem;
+}

@@ -4,6 +4,7 @@ import style from './transactions.css';
 import filterSVG from './filter.svg';
 import importSVG from './import.svg';
 import DateChooser from './date_chooser';
+import YMD from './ymd';
 /** @typedef {import('../../../src/transaction').default} Transaction */
 /** @typedef {import('../financio').default} Financio */
 
@@ -26,7 +27,7 @@ export default class Transactions extends Component {
 		 */
 		this._financio = financio;
 
-		this._dateChooser = new DateChooser(this.get('dateChooser'), new Date());
+		this._dateChooser = new DateChooser(this.get('dateChooser'), new YMD());
 
 		this._transactionList = new TransactionList(this.get('transactionList'));
 
@@ -46,9 +47,9 @@ export default class Transactions extends Component {
 		// Set the start and end dates from the query.
 		let startDate = this._financio.router.getValue('startDate');
 		let endDate = this._financio.router.getValue('endDate');
-		const today = new Date();
+		const today = new YMD();
 		if (!startDate) {
-			const threeMonthsBack = new Date(today.getFullYear(), today.getMonth() - 3, today.getDate());
+			const threeMonthsBack = new YMD(today.year, today.month - 3, today.day);
 			startDate = this._dateToString(threeMonthsBack);
 			console.log(startDate);
 		}
@@ -120,7 +121,7 @@ export default class Transactions extends Component {
 		// Set the end date.
 		let endDate = '';
 		if (filterInputs.endDate !== '') {
-			const endDateAsDate = new Date(filterInputs.endDate);
+			const endDateAsDate = new YMD(filterInputs.endDate);
 			if (isNaN(endDateAsDate)) {
 				this.setHtmlVariable('feedback', 'Please enter a valid end date.');
 				return;
@@ -147,13 +148,13 @@ export default class Transactions extends Component {
 
 	/**
 	 * Converts a date to a string.
-	 * @param {Date} date
+	 * @param {YMD} date
 	 * @returns {string}
 	 */
 	_dateToString(date) {
-		return (date.getFullYear() + '').padStart(4, '0')
-			+ '-' + ((date.getMonth() + 1) + '').padStart(2, '0')
-			+ '-' + (date.getDate() + '').padStart(2, '0');
+		return (date.year + '').padStart(4, '0')
+			+ '-' + (date.month + '').padStart(2, '0')
+			+ '-' + (date.day + '').padStart(2, '0');
 	}
 }
 
