@@ -1,4 +1,5 @@
 import { Component } from '../../../../app-js/src/index';
+import style from './calendar.css';
 
 /**
  * A calendar component that can select a single day.
@@ -7,6 +8,7 @@ export default class Calendar extends Component {
 	/**
 	 * Constructor.
 	 * @param {HTMLElement} elem
+	 * @param {Date} date
 	 */
 	constructor(elem, date) {
 		super(elem);
@@ -16,7 +18,9 @@ export default class Calendar extends Component {
 		 * @type {Date}
 		 * @private
 		 */
-		this._currentDate = new Date(date.getFullYear(), date.getMonth(), 1);
+		this._currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+		this._minDate = new Date(
 
 		// Setup the event handlers.
 		this.on('decade_dec', 'click', () => {
@@ -50,12 +54,12 @@ export default class Calendar extends Component {
 		let daysNeedUpdate = false;
 		if (this._currentDate.getFullYear() !== date.getFullYear()) {
 			this._currentDate.setFullYear(date.getFullYear());
-			this.elem.querySelector('#year_current').innerHTML = this._currentDate.getFullYear().toString();
+			this.setHtml('year_current', this._currentDate.getFullYear().toString());
 			daysNeedUpdate = true;
 		}
 		if (this._currentDate.getMonth() !== date.getMonth()) {
 			this._currentDate.setMonth(date.getMonth());
-			this.elem.querySelector('#month_current').innerHTML = Calendar._monthNames[this._currentDate.getMonth()];
+			this.setHtml('month_current', Calendar._monthNames[this._currentDate.getMonth()]);
 			daysNeedUpdate = true;
 		}
 		if (daysNeedUpdate) {
@@ -79,13 +83,13 @@ export default class Calendar extends Component {
 		newDate.setFullYear(newDate.getFullYear() + years);
 		newDate.setMonth(newDate.getMonth() + months);
 		if (newDate < this._startDate) {
-			this.setToDate(this._startDate);
+			this.date = this._startDate;
 		}
 		else if (newDate > this._endDate) {
-			this.setToDate(this._endDate);
+			this.date = this._endDate;
 		}
 		else {
-			this.setToDate(newDate);
+			this.date = newDate;
 		}
 	}
 
@@ -193,49 +197,7 @@ Calendar.html = `
 	<div id="day_41" class="clickable vertical-align"></div>
 	`;
 
-Calendar.style = `
-	.Calendar {
-		width: 14rem;
-		height: 13.5rem;
-		border: 1px solid var(--fg-light);
-		border-radius: .5rem;
-		display: grid;
-		grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-		grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-		cursor: default;
-	}
-	.Calendar #year_current {
-		grid-column-start: 3;
-		grid-column-end: 6;
-	}
-	.Calendar #month_current {
-		grid-column-start: 2;
-		grid-column-end: 7;
-	}
-	.Calendar svg {
-		height: 1rem;
-	}
-	.Calendar .clickable {
-		cursor: pointer;
-	}
-	.Calendar .clickable:hover {
-		font-weight: bold;
-		font-size: 1.25rem;
-		line-height: 1rem;
-	}
-	.Calendar .clickable:hover svg {
-		height: 1.25rem;
-	}
-	.Calendar .clickable:hover svg polyline {
-		stroke-width: 4;
-	}
-	.Calendar .week {
-		border-bottom: 1px solid var(--fg-light);
-	}
-	.Calendar .unday {
-		color: var(--fg-light-disabled);
-	}
-	`;
+Calendar.style = style;
 
 Calendar._monthNames = [
 	'January',

@@ -1,0 +1,46 @@
+.DateChooser > #display {
+	width: 12rem;
+	border: 1px solid var(--fg-light);
+	border-radius: .25rem;
+	padding: .25rem;
+}
+
+.DateChooser #year, .DateChooser #month, .DateChooser #day, .DateChooser .dash {
+	display: inline-block;
+}
+
+.DateChooser #year {
+	width: 2.5rem;
+}
+
+.DateChooser #month {
+	width: 1.25rem;
+}
+
+.DateChooser #day {
+	width: 1.25rem;
+}
+
+.DateChooser .dash {
+	width: .5rem;
+}
+
+.DateChooser #yearSelection, .DateChooser #monthSelection, .DateChooser #daySelection {
+	position: absolute;
+	display: none;
+	background: var(--bg-light);
+}
+
+.DateChooser #yearSelection {
+	width: 3.5rem;
+}
+
+.DateChooser #monthSelection {
+	left: 3rem;
+	width: 4.5rem;
+}
+
+.DateChooser #daySelection {
+	left: 4.75rem;
+	width: 2.5rem;
+}

@@ -1,0 +1,41 @@
+.Calendar {
+	width: 14rem;
+	height: 13.5rem;
+	border: 1px solid var(--fg-light);
+	border-radius: .5rem;
+	display: grid;
+	grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+	cursor: default;
+}
+.Calendar #year_current {
+	grid-column-start: 3;
+	grid-column-end: 6;
+}
+.Calendar #month_current {
+	grid-column-start: 2;
+	grid-column-end: 7;
+}
+.Calendar svg {
+	height: 1rem;
+}
+.Calendar .clickable {
+	cursor: pointer;
+}
+.Calendar .clickable:hover {
+	font-weight: bold;
+	font-size: 1.25rem;
+	line-height: 1rem;
+}
+.Calendar .clickable:hover svg {
+	height: 1.25rem;
+}
+.Calendar .clickable:hover svg polyline {
+	stroke-width: 4;
+}
+.Calendar .week {
+	border-bottom: 1px solid var(--fg-light);
+}
+.Calendar .unday {
+	color: var(--fg-light-disabled);
+}

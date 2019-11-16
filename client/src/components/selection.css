@@ -1,0 +1,11 @@
+.Selection {
+	border: 1px solid var(--fg-light);
+	border-radius: .25rem;
+	height: calc(1.5rem * 5);
+	overflow-y: auto;
+	padding: .25rem;
+}
+
+.Selection #items div {
+	line-height: 1.5rem;
+}

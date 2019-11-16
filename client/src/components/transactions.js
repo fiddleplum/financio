@@ -3,6 +3,7 @@ import TransactionList from './transaction_list';
 import style from './transactions.css';
 import filterSVG from './filter.svg';
 import importSVG from './import.svg';
+import DateChooser from './date_chooser';
 /** @typedef {import('../../../src/transaction').default} Transaction */
 /** @typedef {import('../financio').default} Financio */
 
@@ -25,100 +26,60 @@ export default class Transactions extends Component {
 		 */
 		this._financio = financio;
 
-		/**
-		 * The start year in YYYY format.
-		 * @type {string}
-		 * @private
-		 */
-		this._startYear = '';
-
-		/**
-		 * The start month in MM format.
-		 * @type {string}
-		 * @private
-		 */
-		this._startMonth = '';
-
-		/**
-		 * The start day in DD format.
-		 * @type {string}
-		 * @private
-		 */
-		this._startDay = '';
-
-		/**
-		 * The end year in YYYY format.
-		 * @type {string}
-		 * @private
-		 */
-		this._endYear = '';
-
-		/**
-		 * The end month in MM format.
-		 * @type {string}
-		 * @private
-		 */
-		this._endMonth = '';
-
-		/**
-		 * The end day in DD format.
-		 * @type {string}
-		 * @private
-		 */
-		this._endDay = '';
-
-		/**
-		 * A term to search for.
-		 * @type {string}
-		 * @private
-		 */
-		this._search = '';
+		this._dateChooser = new DateChooser(this.get('dateChooser'), new Date());
 
 		this._transactionList = new TransactionList(this.get('transactionList'));
 
-		this._initializeFilterInputs();
+		this._updateFromQuery = this._updateFromQuery.bind(this);
 
-		this.update();
+		this._updateFromQuery();
+
+		this._financio.router.addCallback(this._updateFromQuery);
 	}
 
-	_initializeFilterInputs() {
-		// Get the start date from the query.
-		const start = this._financio.router.getValue('start');
-		const end = this._financio.router.getValue('end');
+	destroy() {
+		this._financio.router.removeCallback(this._updateFromQuery);
+		super.destroy();
+	}
 
-		// Set the dates for the state.
+	async _updateFromQuery() {
+		// Set the start and end dates from the query.
+		let startDate = this._financio.router.getValue('startDate');
+		let endDate = this._financio.router.getValue('endDate');
 		const today = new Date();
-		if (start) {
-			this._startYear = start.substr(0, 4);
-			this._startMonth = start.substr(5, 2);
-			this._startDay = start.substr(8, 2);
-		}
-		else {
+		if (!startDate) {
 			const threeMonthsBack = new Date(today.getFullYear(), today.getMonth() - 3, today.getDate());
-			this._startYear = (threeMonthsBack.getFullYear() + '').padStart(4, '0');
-			this._startMonth = ((threeMonthsBack.getMonth() + 1) + '').padStart(2, '0');
-			this._startDay = (threeMonthsBack.getDate() + '').padStart(2, '0');
+			startDate = this._dateToString(threeMonthsBack);
+			console.log(startDate);
 		}
-		if (end) {
-			this._endYear = end.substr(0, 4);
-			this._endMonth = end.substr(5, 2);
-			this._endDay = end.substr(8, 2);
+		if (!endDate) {
+			endDate = this._dateToString(today);
 		}
-		else {
-			this._endYear = (today.getFullYear() + '').padStart(4, '0');
-			this._endMonth = ((today.getMonth() + 1) + '').padStart(2, '0');
-			this._endDay = (today.getDate() + '').padStart(2, '0');
-		}
+		this.get('startDate').value = startDate;
+		this.get('endDate').value = endDate;
 
-		this._search = this._financio.router.getValue('search');
+		// Set the min and max amounts from the query.
+		const minAmount = this._financio.router.getValue('minAmount') || '';
+		const maxAmount = this._financio.router.getValue('maxAmount') || '';
+		this.get('minAmount').value = minAmount;
+		this.get('maxAmount').value = maxAmount;
 
-		// Set the values of the inputs.
-		this.get('startDate').value = this._startYear + '-' + this._startMonth + '-' + this._startDay;
-		this.get('endDate').value = this._endYear + '-' + this._endMonth + '-' + this._endDay;
+		// Set the search from the query.
+		const search = this._financio.router.getValue('search') || '';
+		this.get('search').value = search;
 
-		if (this._search) {
-			this.get('search').value = this._search;
-		}
+		// Update the transactions.
+		/** @type {Transaction[]} */
+		const transactions = await this._financio.server.send({
+			command: 'list transactions',
+			name: this._financio.router.getValue('name'),
+			startDate: startDate,
+			endDate: endDate,
+			minAmount: minAmount,
+			maxAmount: maxAmount,
+			search: search
+		});
+		this._transactionList.transactions = transactions;
 	}
 
 	_toggleFilterForm() {
@@ -129,74 +90,89 @@ export default class Transactions extends Component {
 	_goToImportTransactions() {
 		this._financio.router.pushQuery({
 			page: 'importTransactions',
-			name: this._financio.router.get('name')
+			name: this._financio.router.getValue('name')
 		});
-	}
-
-	async _submitForm(event) {
-		const filterInputs = this.getFormInputs('filterForm');
-		// Send the command to the server.
-		try {
-			// Get the date inputs and parse them as Date objects.
-			const startDate = new Date(filterInputs.startDate);
-			const endDate = new Date(filterInputs.endDate);
-			if (isNaN(startDate)) {
-				throw new Error('Please enter a valid start date.');
-			}
-			if (isNaN(endDate)) {
-				throw new Error('Please enter a valid end date.');
-			}
-			if (startDate > endDate) {
-				throw new Error('The start date must be equal to or prior to the end date.');
-			}
-
-			// Set the start and end dates using the Date objects.
-			this._startYear = (startDate.getUTCFullYear() + '').padStart(4, '0');
-			this._startMonth = ((startDate.getUTCMonth() + 1) + '').padStart(2, '0');
-			this._startDay = (startDate.getUTCDate() + '').padStart(2, '0');
-			this._endYear = (endDate.getUTCFullYear() + '').padStart(4, '0');
-			this._endMonth = ((endDate.getUTCMonth() + 1) + '').padStart(2, '0');
-			this._endDay = (endDate.getUTCDate() + '').padStart(2, '0');
-
-			// Set the search input.
-			this._search = filterInputs.search;
-
-			// Update the transation list.
-			await this.update();
-		}
-		catch (error) {
-			this.setHtmlVariable('feedback', error.message);
-		}
 	}
 
 	/**
 	 * Updates the list of transactions.
 	 * @private
 	 */
-	async update() {
-		/** @type {Transaction[]} */
-		const transactions = await this._financio.server.send({
-			command: 'list transactions',
+	async _updateQueryFromInputs() {
+		// Get the form inputs.
+		const filterInputs = this.getFormInputs('filterForm');
+
+		// Set the start date.
+		let startDate = '';
+		if (filterInputs.startDate !== '') {
+			console.log(filterInputs.startDate);
+			// Get the date inputs and parse them as Date objects.
+			// IT'S OFF BY ONE DAY BECAUSE STARTDATE IS IN THE YYYY-MM-DD FORMAT WHICH IS TAKE TO BE UTC AND THEN CONVERTED TO LOCAL.
+			const startDateAsDate = new Date(filterInputs.startDate);
+			console.log(startDateAsDate);
+			if (isNaN(startDateAsDate)) {
+				this.setHtmlVariable('feedback', 'Please enter a valid start date.');
+				return;
+			}
+			startDate = this._dateToString(startDateAsDate);
+		}
+
+		// Set the end date.
+		let endDate = '';
+		if (filterInputs.endDate !== '') {
+			const endDateAsDate = new Date(filterInputs.endDate);
+			if (isNaN(endDateAsDate)) {
+				this.setHtmlVariable('feedback', 'Please enter a valid end date.');
+				return;
+			}
+			endDate = this._dateToString(endDateAsDate);
+		}
+
+		// Get the min and max amounts.
+		const minAmount = filterInputs.minAmount;
+		const maxAmount = filterInputs.maxAmount;
+
+		// Get the search.
+		const search = filterInputs.search;
+
+		this._financio.router.pushQuery({
+			page: this._financio.router.getValue('page'),
 			name: this._financio.router.getValue('name'),
-			startDate: this._startYear + '-' + this._startMonth + '-' + this._startDay,
-			endDate: this._endYear + '-' + this._endMonth + '-' + this._endDay,
-			search: this._search
-		});
-		this._transactionList.transactions = transactions;
+			startDate: startDate,
+			endDate: endDate,
+			minAmount: minAmount,
+			maxAmount: maxAmount,
+			search: search });
+	}
+
+	/**
+	 * Converts a date to a string.
+	 * @param {Date} date
+	 * @returns {string}
+	 */
+	_dateToString(date) {
+		return (date.getFullYear() + '').padStart(4, '0')
+			+ '-' + ((date.getMonth() + 1) + '').padStart(2, '0')
+			+ '-' + (date.getDate() + '').padStart(2, '0');
 	}
 }
 
 Transactions.html = `
 	<p><button id="filterButton" onclick="_toggleFilterForm">${filterSVG}</button> <button id="importButton" onclick="_goToImportTransactions">${importSVG}</button></p>
+	<div id="dateChooser"></div>
 	<form id="filterForm" style="display: none;" action="javascript:">
-		<label for="startDate" class="left">Start:</label>
+		<label for="startDate" class="left">Start date:</label>
 		<input id="startDate" name="startDate" type="text" class="right" />
-		<label for="endDate" class="left">End:</label>
+		<label for="endDate" class="left">End date:</label>
 		<input id="endDate" name="endDate" type="text" class="right" />
+		<label for="minAmount" class="left">Minimum amount:</label>
+		<input id="minAmount" name="minAmount" type="text" class="right" />
+		<label for="maxAmount" class="left">Maximum amount:</label>
+		<input id="maxAmount" name="maxAmount" type="text" class="right" />
 		<label for="search" class="left">Search:</label>
 		<input id="search" name="search" type="text" class="right" />
 		<div id="feedback" class="feedback">{{feedback}}</div>
-		<button class="submit" onclick="_submitForm">Update</button>
+		<button class="submit" onclick="_updateQueryFromInputs">Update</button>
 	</form>
 	<div id="transactionList"></div>
 	`;
