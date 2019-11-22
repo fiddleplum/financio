@@ -44,9 +44,9 @@ async function processMessage(ws, message) {
 			let startDate = requestData.startDate;
 			let endDate = requestData.endDate;
 			let search = requestData.search;
-			console.log('started');
-			responseData = await Accounts.listTransactions(name, startDate, endDate, search);
-			console.log('done');
+			let minAmount = requestData.minAmount;
+			let maxAmount = requestData.maxAmount;
+			responseData = await Accounts.listTransactions(name, startDate, endDate, search, minAmount, maxAmount);
 		}
 		else if (requestData.command === 'check duplicate transactions') {
 			let name = requestData.name;

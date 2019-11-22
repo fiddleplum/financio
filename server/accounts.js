@@ -128,14 +128,17 @@ class Accounts {
 	 * @param {string} startDate - ISO format
 	 * @param {string} endDate - ISO format
 	 * @param {string} search - The search string. If it starts and ends with / or /[a-z], it is interpreted a regular expression.
+	 * @param {string} minAmount - The minimum amount.
+	 * @param {string} maxAmount - The maximum amount.
 	 * @returns {Transaction[]}
 	 */
-	static listTransactions(name, startDate, endDate, search) {
+	static listTransactions(name, startDate, endDate, search, minAmount, maxAmount) {
 		// Validate the name.
 		if (!this._validateName(name)) {
 			throw new Error('The name "' + name + '" is not a valid account name. Please use only alphanumeric, space, underscore, and dash characters.');
 		}
 
+		// Prepare the regular expression for searching.
 		let regExp = /.*/;
 		if (search) {
 			if (/^\/[^/]*\/[a-z]*$/.test(search)) {
@@ -146,6 +149,20 @@ class Accounts {
 			else {
 				regExp = new RegExp(search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
 			}
+		}
+
+		// Prepare the min and max amounts.
+		if (minAmount === '') {
+			minAmount = Number.NEGATIVE_INFINITY;
+		}
+		else {
+			minAmount = parseInt(minAmount);
+		}
+		if (maxAmount === '') {
+			maxAmount = Number.POSITIVE_INFINITY;
+		}
+		else {
+			maxAmount = parseInt(maxAmount);
 		}
 
 		/** @type {Transaction[]} */
@@ -165,6 +182,9 @@ class Accounts {
 							continue;
 						}
 						if (!regExp.test(newTransaction.description) && !regExp.test(newTransaction.notes)) {
+							continue;
+						}
+						if (newTransaction.amount < minAmount || maxAmount < newTransaction.amount) {
 							continue;
 						}
 						transactions.push(newTransaction);
