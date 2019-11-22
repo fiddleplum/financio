@@ -3,6 +3,7 @@ import Calendar from './calendar';
 import style from './date_chooser.css';
 import YMD from './ymd';
 import Interval from './interval';
+import calendarSVG from './date_chooser_calendar.svg';
 
 /**
  * A generic date chooser.
@@ -27,7 +28,17 @@ export default class DateChooser extends Component {
 		this.date = date;
 
 		// Set the calendar.
-		this.__setComponent('calendar', Calendar, [new Interval(this._date, this._date), new Interval(new YMD(this._date.year, this._date.month - 1, 15), new YMD(this._date.year, this._date.month, 1))]);
+		this.__setComponent('calendar', Calendar, this._date, (date) => {
+			console.log(date);
+			this.date = date;
+		});
+	}
+
+	/**
+	 * Gets the date.
+	 */
+	get date() {
+		return this._date;
 	}
 
 	/**
@@ -36,25 +47,32 @@ export default class DateChooser extends Component {
 	 */
 	set date(date) {
 		this._date.copy(date);
-		this.setHtmlVariable('date', this._date.toString('en-US', {
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric',
-			weekday: 'long'
-		}));
-		// this.setHtmlVariable('year', this._date.getFullYear().toString().padStart(4, '0') + );
-		// this.setHtmlVariable('month', (this._date.getMonth() + 1).toString().padStart(2, '0'));
-		// this.setHtmlVariable('day', this._date.getDate().toString().padStart(2, '0'));
+		this.get('date').value = this._date.toString();
 	}
 
-	_openCalendar() {
-		ShowHide.show(this.get('calendar'));
+	_onDateChange() {
+		const input = this.get('date').value;
+		try {
+			const date = new YMD(input);
+			this._date.copy(date);
+		}
+		catch (e) {
+		}
+	}
+
+	_toggleCalendar() {
+		const calendar = this.__getComponent('calendar');
+		if (calendar instanceof Calendar) {
+			calendar.clearSelections();
+			calendar.select(this._date);
+			ShowHide.toggle(calendar.elem);
+		}
 	}
 }
 
 DateChooser.html = `
-	<div><span id="date">{{date}}</span><span id="calendarButton" onclick="_openCalendar"></span></div>
-	<div id="calendar"></div>
+	<div><input id="date" value="" placeholder="YYYY-MM-DD" onchange="_onDateChange"><button onclick="_toggleCalendar">${calendarSVG}</button></div>
+	<div id="calendar" style="display: none;"></div>
 	`;
 
 DateChooser.style = style;

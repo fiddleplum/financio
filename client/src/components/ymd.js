@@ -1,7 +1,7 @@
 export default class YMD {
 	/**
 	 * Constructs the date.
-	 * @param {number} [year]
+	 * @param {number|YMD|string} [year]
 	 * @param {number} [month]
 	 * @param {number} [day]
 	 */
@@ -11,27 +11,47 @@ export default class YMD {
 		 * @type {number}
 		 * @private
 		 */
-		this._year = year;
+		this._year = 2000;
 
 		/**
 		 * The month.
 		 * @type {number}
 		 * @private
 		 */
-		this._month = month;
+		this._month = 1;
 
 		/**
 		 * The day.
 		 * @type {number}
 		 * @private
 		 */
-		this._day = day;
+		this._day = 1;
 
-		if (this._year === undefined) {
+		if (year === undefined) { // Nothing defined so use today.
 			const now = new Date();
 			this._year = now.getFullYear();
 			this._month = now.getMonth() + 1;
 			this._day = now.getDate();
+		}
+		else if (typeof year === 'string') {
+			this._year = parseInt(year.substr(0, 4));
+			this._month = parseInt(year.substr(5, 2));
+			this._day = parseInt(year.substr(8, 2));
+		}
+		else if (year instanceof YMD) { // YMD given so copy.
+			this._year = year._year;
+			this._month = year._month;
+			this._day = year._day;
+		}
+		else if (month === undefined) { // Single number given so convert it.
+			this._year = Math.floor(year / 12 / 31);
+			this._month = Math.floor((year % (12 * 31)) / 31);
+			this._day = year % 31;
+		}
+		else { // Actual params given.
+			this._year = year;
+			this._month = month;
+			this._day = day;
 		}
 
 		// Clean it up.
@@ -91,12 +111,19 @@ export default class YMD {
 
 	/**
 	 * Copies another YMD to this.
-	 * @param {YMD} ymd
+	 * @param {YMD|number} ymd
 	 */
 	copy(ymd) {
-		this._year = ymd._year;
-		this._month = ymd._month;
-		this._day = ymd._day;
+		if (ymd instanceof YMD) {
+			this._year = ymd._year;
+			this._month = ymd._month;
+			this._day = ymd._day;
+		}
+		else { // number
+			this._year = Math.floor(ymd / 12 / 31);
+			this._month = Math.floor((ymd % (12 * 31)) / 31);
+			this._day = ymd % 31;
+		}
 	}
 
 	/**
@@ -117,6 +144,30 @@ export default class YMD {
 	 */
 	equals(other) {
 		return this._year === other._year && this._month === other._month && this._day === other._day;
+	}
+
+	/**
+	 * Returns the maximum of this or the other dae.
+	 * @param {YMD} other
+	 * @returns {YMD}
+	 */
+	max(other) {
+		if (this >= other) {
+			return this;
+		}
+		return other;
+	}
+
+	/**
+	 * Returns the maximum of this or the other dae.
+	 * @param {YMD} other
+	 * @returns {YMD}
+	 */
+	min(other) {
+		if (this <= other) {
+			return this;
+		}
+		return other;
 	}
 
 	/**
@@ -171,13 +222,23 @@ export default class YMD {
 	}
 
 	/**
-	 * Returns a new date object.
+	 * Returns a string with the given locale and options, the same as the Date object.
 	 * @param {string|string[]} [locales]
 	 * @param {Intl.DateTimeFormatOptions} [options]
 	 * @returns {string}
 	 */
-	toString(locales, options) {
-		return new Date(this._year, this._month, this._day, 0, 0, 0, 0).toLocaleDateString(locales, options);
+	toLocaleString(locales, options) {
+		return new Date(this._year, this._month - 1, this._day, 0, 0, 0, 0).toLocaleDateString(locales, options);
+	}
+
+	/**
+	 * Returns a string in the form YYYY-MM-DD.
+	 * @param {string|string[]} [locales]
+	 * @param {Intl.DateTimeFormatOptions} [options]
+	 * @returns {string}
+	 */
+	toString() {
+		return (this._year + '').padStart(4, '0') + '-' + (this._month + '').padStart(2, '0') + '-' + (this._day + '').padStart(2, '0');
 	}
 
 	/**
