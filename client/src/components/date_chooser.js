@@ -2,7 +2,6 @@ import { Component, ShowHide } from '../../../../app-js/src/index';
 import Calendar from './calendar';
 import style from './date_chooser.css';
 import YMD from './ymd';
-import Interval from './interval';
 import calendarSVG from './date_chooser_calendar.svg';
 
 /**
@@ -11,10 +10,11 @@ import calendarSVG from './date_chooser_calendar.svg';
 export default class DateChooser extends Component {
 	/**
 	 * Constructs the app.
-	 * @param {HTMLElement} elem - The element inside which thee the component will reside.
+	 * @param {HTMLElement} elem - The element inside which the component will reside.
 	 * @param {YMD} date - The date to initially present.
+	 * @param {string} name - The name of the form input.
 	 */
-	constructor(elem, date) {
+	constructor(elem, date, name) {
 		super(elem);
 
 		/**
@@ -23,6 +23,8 @@ export default class DateChooser extends Component {
 		 * @private
 		 */
 		this._date = new YMD();
+
+		this.get('date').name = name;
 
 		// Set the date.
 		this.date = date;
@@ -71,7 +73,7 @@ export default class DateChooser extends Component {
 }
 
 DateChooser.html = `
-	<div><input id="date" value="" placeholder="YYYY-MM-DD" onchange="_onDateChange"><button onclick="_toggleCalendar">${calendarSVG}</button></div>
+	<div><input id="date" type="text" value="" placeholder="YYYY-MM-DD" onchange="_onDateChange"><button onclick="_toggleCalendar">${calendarSVG}</button></div>
 	<div id="calendar" style="display: none;"></div>
 	`;
 

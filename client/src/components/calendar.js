@@ -98,7 +98,8 @@ export default class Calendar extends Component {
 	 */
 	select(date) {
 		// Add the selected dates.
-		this._selectedDateRanges.splice(this._selectedDateRanges, 0, ...this._getIntervalsFromParam(date));
+		const selectedDates = this._getIntervalsFromParam(date);
+		this._selectedDateRanges.splice(this._selectedDateRanges, 0, ...selectedDates);
 		// Union up any ranges.
 		for (let i = 0; i < this._selectedDateRanges.length; i++) {
 			for (let j = i + 1; j < this._selectedDateRanges.length; j++) {
@@ -115,7 +116,7 @@ export default class Calendar extends Component {
 			}
 		}
 		// Update the calendar.
-		this._updateShown(this._shownYear, this._shownMonth, true);
+		this._updateShown(selectedDates[selectedDates.length - 1].max.year, selectedDates[selectedDates.length - 1].max.month, true);
 	}
 
 	/**
@@ -149,7 +150,7 @@ export default class Calendar extends Component {
 			}
 		}
 		// Update the calendar.
-		this._updateShown(this._shownYear, this._shownMonth, true);
+		this._updateShown(deselectedDates[deselectedDates.length - 1].max.year, deselectedDates[deselectedDates.length - 1].max.month, true);
 	}
 
 	/**

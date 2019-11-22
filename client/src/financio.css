@@ -20,6 +20,7 @@ body {
 	background: var(--bg-light);
 	color: var(--fg-light);
 	font-family: 'Muli', sans-serif;
+	font-size: 0;
 	font-size: 1rem;
 	line-height: 1.5rem;
 }
@@ -86,6 +87,7 @@ form .left {
 form .right {
 	text-align: left;
 	margin-left: .5rem;
+	width: calc(50% - .5rem);
 }
 
 @media (max-width: 30rem) {
@@ -119,6 +121,7 @@ input[type="text"], input[type="password"], select {
 	background: var(--bg-light);
 	color: var(--fg-light);
 	border: 1px solid var(--fg-light);
+	border-radius: .25rem;
 	height: 1.5rem;
 	padding: 0 .125rem;
 	max-width: 100%;

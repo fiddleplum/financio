@@ -14,7 +14,7 @@ import YMD from './ymd';
 export default class Transactions extends Component {
 	/**
 	 * Constructs the app.
-	 * @param {HTMLElement} elem - The element inside which thee the component will reside.
+	 * @param {HTMLElement} elem - The element inside which the component will reside.
 	 * @param {Financio} financio - The app.
 	 */
 	constructor(elem, financio) {
@@ -27,7 +27,9 @@ export default class Transactions extends Component {
 		 */
 		this._financio = financio;
 
-		this._dateChooser = new DateChooser(this.get('dateChooser'), new YMD());
+		this._startDate = new DateChooser(this.get('startDate'), new YMD(), 'startDate');
+
+		this._endDate = new DateChooser(this.get('endDate'), new YMD(), 'endDate');
 
 		this._transactionList = new TransactionList(this.get('transactionList'));
 
@@ -49,15 +51,22 @@ export default class Transactions extends Component {
 		let endDate = this._financio.router.getValue('endDate');
 		const today = new YMD();
 		if (!startDate) {
-			const threeMonthsBack = new YMD(today.year, today.month - 3, today.day);
-			startDate = this._dateToString(threeMonthsBack);
+			startDate = new YMD(today.year, today.month - 3, today.day);
 			console.log(startDate);
 		}
-		if (!endDate) {
-			endDate = this._dateToString(today);
+		else {
+			startDate = new YMD(startDate);
 		}
-		this.get('startDate').value = startDate;
-		this.get('endDate').value = endDate;
+		if (!endDate) {
+			endDate = today;
+		}
+		else {
+			endDate = new YMD(endDate);
+		}
+
+		// Set the components.
+		this._startDate.date = startDate;
+		this._endDate.date = endDate;
 
 		// Set the min and max amounts from the query.
 		const minAmount = this._financio.router.getValue('minAmount') || '';
@@ -74,8 +83,8 @@ export default class Transactions extends Component {
 		const transactions = await this._financio.server.send({
 			command: 'list transactions',
 			name: this._financio.router.getValue('name'),
-			startDate: startDate,
-			endDate: endDate,
+			startDate: startDate.toString(),
+			endDate: endDate.toString(),
 			minAmount: minAmount,
 			maxAmount: maxAmount,
 			search: search
@@ -108,25 +117,25 @@ export default class Transactions extends Component {
 		if (filterInputs.startDate !== '') {
 			console.log(filterInputs.startDate);
 			// Get the date inputs and parse them as Date objects.
-			// IT'S OFF BY ONE DAY BECAUSE STARTDATE IS IN THE YYYY-MM-DD FORMAT WHICH IS TAKE TO BE UTC AND THEN CONVERTED TO LOCAL.
-			const startDateAsDate = new Date(filterInputs.startDate);
-			console.log(startDateAsDate);
-			if (isNaN(startDateAsDate)) {
+			try {
+				startDate = new YMD(filterInputs.startDate).toString();
+			}
+			catch (e) {
 				this.setHtmlVariable('feedback', 'Please enter a valid start date.');
 				return;
 			}
-			startDate = this._dateToString(startDateAsDate);
 		}
 
 		// Set the end date.
 		let endDate = '';
 		if (filterInputs.endDate !== '') {
-			const endDateAsDate = new YMD(filterInputs.endDate);
-			if (isNaN(endDateAsDate)) {
+			try {
+				endDate = new YMD(filterInputs.endDate).toString();
+			}
+			catch (e) {
 				this.setHtmlVariable('feedback', 'Please enter a valid end date.');
 				return;
 			}
-			endDate = this._dateToString(endDateAsDate);
 		}
 
 		// Get the min and max amounts.
@@ -163,9 +172,9 @@ Transactions.html = `
 	<div id="dateChooser"></div>
 	<form id="filterForm" style="display: none;" action="javascript:">
 		<label for="startDate" class="left">Start date:</label>
-		<input id="startDate" name="startDate" type="text" class="right" />
-		<label for="endDate" class="left">End date:</label>
-		<input id="endDate" name="endDate" type="text" class="right" />
+		<div id="startDate" class="right"></div>
+		<label for="endDate" class="left">End date:</label><!--
+		--><div id="endDate" class="right"></div>
 		<label for="minAmount" class="left">Minimum amount:</label>
 		<input id="minAmount" name="minAmount" type="text" class="right" />
 		<label for="maxAmount" class="left">Maximum amount:</label>
