@@ -114,7 +114,6 @@ export default class Transactions extends Component {
 		// Set the start date.
 		let startDate = '';
 		if (!isNaN(this._startDate.date.year)) {
-			console.log(this._startDate.date);
 			// Get the date inputs and parse them as Date objects.
 			try {
 				startDate = this._startDate.date.toString();
@@ -171,9 +170,9 @@ Transactions.html = `
 	<div id="dateChooser"></div>
 	<form id="filterForm" style="display: none;" action="javascript:">
 		<label for="startDate" class="left">Start date:</label>
-		<DateChooser id="startDate" class="right" />
+		<DateChooser id="startDate" class="right"></DateChooser>
 		<label for="endDate" class="left">End date:</label>
-		<DateChooser id="endDate" class="right" />
+		<DateChooser id="endDate" class="right"></DateChooser>
 		<label for="minAmount" class="left">Minimum amount:</label>
 		<input id="minAmount" name="minAmount" type="text" class="right" />
 		<label for="maxAmount" class="left">Maximum amount:</label>
