@@ -27,8 +27,18 @@ export default class Transactions extends Component {
 		 */
 		this._financio = financio;
 
+		/**
+		 * The start date input.
+		 * @type {DateChooser}
+		 * @private
+		 */
 		this._startDate = this.getComponent('startDate');
 
+		/**
+		 * The end date input.
+		 * @type {DateChooser}
+		 * @private
+		 */
 		this._endDate = this.getComponent('endDate');
 
 		this._transactionList = new TransactionList(this.get('transactionList'));

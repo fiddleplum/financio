@@ -2,7 +2,7 @@ import { Component, ShowHide } from '../../../../app-js/src/index';
 import style from './date_chooser.css';
 import YMD from './ymd';
 import calendarSVG from './date_chooser_calendar.svg';
-import './calendar';
+import Calendar from './calendar';
 
 /**
  * A generic date chooser.
@@ -11,9 +11,8 @@ export default class DateChooser extends Component {
 	/**
 	 * Constructs the app.
 	 * @param {HTMLElement} elem - The element inside which the component will reside.
-	 * @param {YMD} date - The date to initially present.
 	 */
-	constructor(elem, date) {
+	constructor(elem) {
 		super(elem);
 
 		/**
@@ -23,18 +22,21 @@ export default class DateChooser extends Component {
 		 */
 		this._date = new YMD();
 
+		/**
+		 * The calendar.
+		 * @type {Calendar}
+		 * @private
+		 */
+		this._calendar = this.getComponent('calendar');
+
 		this._onClickInsideCalendar = this._onClickInsideCalendar.bind(this);
 		this._onClickOutsideCalendar = this._onClickOutsideCalendar.bind(this);
 
-		// Set the date.
-		this.date = date;
-
 		// Setup the click callback for the calendar.
-		const calendar = this.getComponent('calendar');
-		calendar.clickCallback = (date) => {
+		this._calendar.clickCallback = (date) => {
 			this.date = date;
-			calendar.select(this._date);
-			ShowHide.hide(calendar.elem);
+			this._calendar.select(this._date);
+			ShowHide.hide(this._calendar.elem);
 		};
 	}
 
@@ -44,6 +46,7 @@ export default class DateChooser extends Component {
 
 	/**
 	 * Gets the date.
+	 * @returns {YMD}
 	 */
 	get date() {
 		return this._date;
@@ -79,18 +82,17 @@ export default class DateChooser extends Component {
 	 * @param {MouseEvent} event
 	 */
 	_toggleCalendar(event) {
-		const calendar = this.getComponent('calendar');
-		calendar.clearSelections();
-		if (ShowHide.isHidden(calendar.elem)) {
-			calendar.select(this._date);
-			ShowHide.show(calendar.elem);
-			calendar.elem.addEventListener('click', this._onClickInsideCalendar);
+		this._calendar.clearSelections();
+		if (ShowHide.isHidden(this._calendar.elem)) {
+			this._calendar.select(this._date);
+			ShowHide.show(this._calendar.elem);
+			this._calendar.elem.addEventListener('click', this._onClickInsideCalendar);
 			window.addEventListener('click', this._onClickOutsideCalendar);
 		}
 		else {
-			calendar.elem.removeEventListener('click', this._onClickInsideCalendar);
+			this._calendar.elem.removeEventListener('click', this._onClickInsideCalendar);
 			window.removeEventListener('click', this._onClickOutsideCalendar);
-			ShowHide.hide(calendar.elem);
+			ShowHide.hide(this._calendar.elem);
 		}
 		event.stopPropagation();
 	}
@@ -108,10 +110,80 @@ export default class DateChooser extends Component {
 	_onClickOutsideCalendar(event) {
 		ShowHide.hide(this.getComponent('calendar').elem);
 	}
+
+	_onDateInputKeyDown(event) {
+		const input = event.target;
+		const cursor = input.selectionStart;
+		if (input.selectionEnd !== cursor) {
+			return;
+		}
+		if (event.key === 'Delete') {
+			if (input.value[cursor] === '-') {
+				input.selectionStart++;
+			}
+		}
+		else if (event.key === 'Backspace') {
+			if (cursor > 0 && input.value[cursor - 1] === '-') {
+				input.selectionEnd--;
+			}
+		}
+		else if (event.key === 'ArrowRight') {
+			if (cursor === 3 || cursor === 6) {
+				input.selectionStart++;
+			}
+		}
+		else if (event.key === 'ArrowLeft') {
+			if (cursor === 5 || cursor === 8) {
+				input.selectionEnd--;
+			}
+		}
+		this._onDateInputInput(event);
+	}
+
+	/**
+	 * @param {InputEvent} event
+	 * @private
+	 */
+	_onDateInputInput(event) {
+		/** @type {HTMLInputElement} */
+		const input = event.target;
+		let cursor = input.selectionStart;
+		const value = [...input.value];
+		for (let i = 0; i < value.length; i++) {
+			if ((0 <= i && i <= 3) || (5 <= i && i <= 6) || (8 <= i && i <= 9)) {
+				if (value[i] < '0' || '9' < value[i]) {
+					value.splice(i, 1);
+					if (cursor > i) {
+						cursor--;
+					}
+					i--;
+				}
+			}
+			else if (i === 4 || i === 7) {
+				if (value[i] === '-' && i === value.length - 1) { // If there is a dash on the last one, remove it.
+					value.splice(i, 1);
+					if (cursor > i) {
+						cursor--;
+					}
+					i--;
+				}
+				else if (value[i] !== '-') {
+					value.splice(i, 0, '-');
+					if (cursor >= i) {
+						cursor++;
+					}
+					i++;
+				}
+			}
+		}
+		input.value = value.join('');
+		input.selectionEnd = cursor;
+	}
 }
 
 DateChooser.html = `
-	<div><span id="date"><input id="year" type="text" value="" placeholder="YYYY" maxlength=4 onchange="_onDateChange">-<input id="month" type="text" value="" placeholder="MM" maxlength=2 onchange="_onDateChange">-<input id="day" type="text" value="" placeholder="DD" maxlength=2 onchange="_onDateChange"></span> <button onclick="_toggleCalendar">${calendarSVG}</button></div>
+	<input id="date" type="text" placeholder="YYYY-MM-DD" maxlength=10 title="Please use the format YYYY-MM-DD" pattern="\\d\\d\\d\\d-\\d\\d-\\d\\d" onkeydown="_onDateInputKeyDown" oninput="_onDateInputInput" onchange="_onDateChange"/>
+	<span id="date"><input id="year" type="text" value="" placeholder="YYYY" maxlength=4 onchange="_onDateChange">-<input id="month" type="text" value="" placeholder="MM" maxlength=2 onchange="_onDateChange">-<input id="day" type="text" value="" placeholder="DD" maxlength=2 onchange="_onDateChange"></span> <button onclick="_toggleCalendar">${calendarSVG}</button>
 	<Calendar id="calendar" style="display: none;" />
 	`;
 DateChooser.style = style;
