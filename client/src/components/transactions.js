@@ -27,9 +27,9 @@ export default class Transactions extends Component {
 		 */
 		this._financio = financio;
 
-		this._startDate = new DateChooser(this.get('startDate'), new YMD(), 'startDate');
+		this._startDate = this.getComponent('startDate');
 
-		this._endDate = new DateChooser(this.get('endDate'), new YMD(), 'endDate');
+		this._endDate = this.getComponent('endDate');
 
 		this._transactionList = new TransactionList(this.get('transactionList'));
 
@@ -52,7 +52,6 @@ export default class Transactions extends Component {
 		const today = new YMD();
 		if (!startDate) {
 			startDate = new YMD(today.year, today.month - 3, today.day);
-			console.log(startDate);
 		}
 		else {
 			startDate = new YMD(startDate);
@@ -114,11 +113,11 @@ export default class Transactions extends Component {
 
 		// Set the start date.
 		let startDate = '';
-		if (filterInputs.startDate !== '') {
-			console.log(filterInputs.startDate);
+		if (!isNaN(this._startDate.date.year)) {
+			console.log(this._startDate.date);
 			// Get the date inputs and parse them as Date objects.
 			try {
-				startDate = new YMD(filterInputs.startDate).toString();
+				startDate = this._startDate.date.toString();
 			}
 			catch (e) {
 				this.setHtmlVariable('feedback', 'Please enter a valid start date.');
@@ -128,9 +127,9 @@ export default class Transactions extends Component {
 
 		// Set the end date.
 		let endDate = '';
-		if (filterInputs.endDate !== '') {
+		if (!isNaN(this._endDate.date.year)) {
 			try {
-				endDate = new YMD(filterInputs.endDate).toString();
+				endDate = this._endDate.date.toString();
 			}
 			catch (e) {
 				this.setHtmlVariable('feedback', 'Please enter a valid end date.');
@@ -172,9 +171,9 @@ Transactions.html = `
 	<div id="dateChooser"></div>
 	<form id="filterForm" style="display: none;" action="javascript:">
 		<label for="startDate" class="left">Start date:</label>
-		<div id="startDate" class="right"></div>
-		<label for="endDate" class="left">End date:</label><!--
-		--><div id="endDate" class="right"></div>
+		<DateChooser id="startDate" class="right" />
+		<label for="endDate" class="left">End date:</label>
+		<DateChooser id="endDate" class="right" />
 		<label for="minAmount" class="left">Minimum amount:</label>
 		<input id="minAmount" name="minAmount" type="text" class="right" />
 		<label for="maxAmount" class="left">Maximum amount:</label>

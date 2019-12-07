@@ -1,4 +1,8 @@
-.ImportTransactions .importBox {
+.ImportTransactions > #step1, .ImportTransactions > #step2, .ImportTransactions #step3 {
+	display: none;
+}
+
+.ImportTransactions #importBox {
 	width: 16rem;
 	max-width: 100%;
 	height: 8rem;
@@ -6,3 +10,4 @@
 	text-align: center;
 	line-height: 8rem;
 }
+

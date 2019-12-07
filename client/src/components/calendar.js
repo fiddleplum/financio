@@ -1,4 +1,5 @@
 import { Component } from '../../../../app-js/src/index';
+import html from './calendar.html';
 import style from './calendar.css';
 import Interval from './interval';
 import YMD from './ymd';
@@ -10,10 +11,8 @@ export default class Calendar extends Component {
 	/**
 	 * Constructor.
 	 * @param {HTMLElement} elem
-	 * @param {YMD|Interval<YMD>|(YMD|Interval<YMD>)[]} date
-	 * @param {(date:YMD) => void} [clickCallback]
 	 */
-	constructor(elem, date, clickCallback = null) {
+	constructor(elem) {
 		super(elem);
 
 		/**
@@ -56,7 +55,7 @@ export default class Calendar extends Component {
 		 * @type {(date:YMD) => void}
 		 * @private
 		 */
-		this._clickCallback = clickCallback;
+		this._clickCallback = null;
 
 		// Setup the date objects.
 		for (let i = 0; i < 42; i++) {
@@ -82,14 +81,14 @@ export default class Calendar extends Component {
 		this.on('month_inc', 'click', () => {
 			this._offsetDate(0, +1, 0);
 		});
+	}
 
-		// Set the selected dates.
-		this._selectedDateRanges = this._getIntervalsFromParam(date);
-
-		// Update the calendar.
-		if (this._selectedDateRanges.length > 0) {
-			this._updateShown(this._selectedDateRanges[0].min.year, this._selectedDateRanges[0].max.month);
-		}
+	/**
+	 * Sets the click callback.
+	 * @param {(date:YMD) => void} clickCallback
+	 */
+	set clickCallback(clickCallback) {
+		this._clickCallback = clickCallback;
 	}
 
 	/**
@@ -99,7 +98,7 @@ export default class Calendar extends Component {
 	select(date) {
 		// Add the selected dates.
 		const selectedDates = this._getIntervalsFromParam(date);
-		this._selectedDateRanges.splice(this._selectedDateRanges, 0, ...selectedDates);
+		this._selectedDateRanges.splice(this._selectedDateRanges.length - 1, 0, ...selectedDates);
 		// Union up any ranges.
 		for (let i = 0; i < this._selectedDateRanges.length; i++) {
 			for (let j = i + 1; j < this._selectedDateRanges.length; j++) {
@@ -160,14 +159,6 @@ export default class Calendar extends Component {
 		this._selectedDateRanges = [];
 		// Update the calendar.
 		this._updateShown(this._shownYear, this._shownMonth, true);
-	}
-
-	/**
-	 * Sets the callback that is called when the user clicks a date.
-	 * @param {(date:YMD) => void} clickCallback
-	 */
-	setClickCallback(clickCallback) {
-		this._clickCallback = clickCallback;
 	}
 
 	/**
@@ -235,7 +226,6 @@ export default class Calendar extends Component {
 					let first = false;
 					let last = false;
 					for (let i = 0; i < this._selectedDateRanges.length; i++) {
-						console.error(this._selectedDateRanges[i], date);
 						if (this._selectedDateRanges[i].min <= date && date <= this._selectedDateRanges[i].max) {
 							selected = true;
 							first = this._selectedDateRanges[i].min.equals(date);
@@ -291,100 +281,16 @@ export default class Calendar extends Component {
 		if (this._clickCallback !== null) {
 			const elem = event.target;
 			if (elem instanceof HTMLDivElement) {
-				console.log(this._dates[9]);
 				const index = parseInt(elem.id.substr(4));
-				this._clickCallback(this._dates[index]);
+				if (this._clickCallback !== null) {
+					this._clickCallback(this._dates[index]);
+				}
 			}
 		}
 	}
 }
 
-Calendar.html = `
-	<div id="decade_dec" class="clickable">
-		<svg viewBox="0 0 32 32">
-			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="20,4 4,16 20,27" />
-			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="28,4 12,16 28,27" />
-		</svg>
-	</div>
-	<div id="year_dec" class="clickable">
-		<svg viewBox="0 0 32 32">
-			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="24,4 8,16 24,27" />
-		</svg>
-	</div>
-	<div id="year_current"></div>
-	<div id="year_inc" class="clickable">
-		<svg viewBox="0 0 32 32">
-			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="8,4 24,16 8,27" />
-		</svg>
-	</div>
-	<div id="decade_inc" class="clickable">
-		<svg viewBox="0 0 32 32">
-			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="12,4 28,16 12,27" />
-			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="4,4 20,16 4,27" />
-		</svg>
-	</div>
-	<div id="month_dec" class="clickable">
-		<svg viewBox="0 0 32 32">
-			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="24,4 8,16 24,27" />
-		</svg>
-	</div>
-	<div id="month_current"></div>
-	<div id="month_inc" class="clickable">
-		<svg viewBox="0 0 32 32">
-			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="8,4 24,16 8,27" />
-		</svg>
-	</div>
-	<div class="week">S</div>
-	<div class="week">M</div>
-	<div class="week">T</div>
-	<div class="week">W</div>
-	<div class="week">T</div>
-	<div class="week">F</div>
-	<div class="week">S</div>
-	<div id="day_0" onclick="_onClick"></div>
-	<div id="day_1" onclick="_onClick"></div>
-	<div id="day_2" onclick="_onClick"></div>
-	<div id="day_3" onclick="_onClick"></div>
-	<div id="day_4" onclick="_onClick"></div>
-	<div id="day_5" onclick="_onClick"></div>
-	<div id="day_6" onclick="_onClick"></div>
-	<div id="day_7" onclick="_onClick"></div>
-	<div id="day_8" onclick="_onClick"></div>
-	<div id="day_9" onclick="_onClick"></div>
-	<div id="day_10" onclick="_onClick"></div>
-	<div id="day_11" onclick="_onClick"></div>
-	<div id="day_12" onclick="_onClick"></div>
-	<div id="day_13" onclick="_onClick"></div>
-	<div id="day_14" onclick="_onClick"></div>
-	<div id="day_15" onclick="_onClick"></div>
-	<div id="day_16" onclick="_onClick"></div>
-	<div id="day_17" onclick="_onClick"></div>
-	<div id="day_18" onclick="_onClick"></div>
-	<div id="day_19" onclick="_onClick"></div>
-	<div id="day_20" onclick="_onClick"></div>
-	<div id="day_21" onclick="_onClick"></div>
-	<div id="day_22" onclick="_onClick"></div>
-	<div id="day_23" onclick="_onClick"></div>
-	<div id="day_24" onclick="_onClick"></div>
-	<div id="day_25" onclick="_onClick"></div>
-	<div id="day_26" onclick="_onClick"></div>
-	<div id="day_27" onclick="_onClick"></div>
-	<div id="day_28" onclick="_onClick"></div>
-	<div id="day_29" onclick="_onClick"></div>
-	<div id="day_30" onclick="_onClick"></div>
-	<div id="day_31" onclick="_onClick"></div>
-	<div id="day_32" onclick="_onClick"></div>
-	<div id="day_33" onclick="_onClick"></div>
-	<div id="day_34" onclick="_onClick"></div>
-	<div id="day_35" onclick="_onClick"></div>
-	<div id="day_36" onclick="_onClick"></div>
-	<div id="day_37" onclick="_onClick"></div>
-	<div id="day_38" onclick="_onClick"></div>
-	<div id="day_39" onclick="_onClick"></div>
-	<div id="day_40" onclick="_onClick"></div>
-	<div id="day_41" onclick="_onClick"></div>
-	`;
-
+Calendar.html = html;
 Calendar.style = style;
 
 Calendar._monthNames = [
@@ -400,3 +306,5 @@ Calendar._monthNames = [
 	'October',
 	'November',
 	'December'];
+
+Component.register(Calendar);

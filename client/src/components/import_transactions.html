@@ -1,0 +1,26 @@
+<h1>Import Transactions</h1>
+<div id="step1">
+	<h2>Step 1 - Choose Files</h2>
+	<p>If your device supports drag and drop, you can drag the files into the box below.</p>
+	<p id="importBox" onDragOver="_onDragOver" onDrop="_onDrop">Drag File Here</p>
+	<p>Or you can upload files here below.</p>
+	<form>
+		<p><input type="file" onChange="_onUpload" multiple /></p>
+	</form>
+	<p><button onClick="_nextStep">Next</button></p>
+</div>
+<div id="step2">
+	<h2>Step 2 - Configure the Options</h2>
+	<div id="fileList"></div>
+	<p>// Check box to automatically apply rules or not. (defaults to true)</p>
+	<p><button onClick="_nextStep">Next</button></p>
+</div>
+<div id="step3">
+	<h2>Step 3 - Review the Transactions</h2>
+	<h3>New Transactions</h3>
+	<div id="newTransactions" />
+	<h3>Duplicate Transactions (will not be overwritten)</h3>
+	<div id="duplicateTransactions" />
+	<p><button onClick="_nextStep">Finish</button></p>
+</div>
+<div>{{feedback}}</div>
