@@ -1,26 +1,8 @@
-.DateChooser > div > span#date {
-	display: inline-block;
-	border: 1px solid var(--fg-light);
-	border-radius: 0.25rem;
+.DateChooser > #date {
+	width: 7rem;
+	text-align: center;
 }
 
-.DateChooser > div > span#date > #year {
-	max-width: 3rem;
-	border: 0;
-	text-align: center;
-	background: none;
-}
-
-.DateChooser > div > span#date > #month {
-	max-width: 2rem;
-	border: 0;
-	text-align: center;
-	background: none;
-}
-
-.DateChooser > div > span#date > #day {
-	max-width: 2rem;
-	border: 0;
-	text-align: center;
-	background: none;
+.DateChooser > #Calendar {
+	margin-top: 1rem;
 }

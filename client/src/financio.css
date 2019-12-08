@@ -70,7 +70,7 @@ button svg {
 
 form {
 	display: grid;
-	grid-auto-rows: 2rem;
+	grid-auto-rows: minmax(2rem, max-content);
 	grid-template-columns: 20rem 1fr;
 	gap: 1rem;
 	margin: 0 auto;

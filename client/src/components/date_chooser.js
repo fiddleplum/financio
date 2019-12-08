@@ -2,7 +2,7 @@ import { Component, ShowHide } from '../../../../app-js/src/index';
 import style from './date_chooser.css';
 import YMD from './ymd';
 import calendarSVG from './date_chooser_calendar.svg';
-import Calendar from './calendar';
+import './calendar';
 
 /**
  * A generic date chooser.
@@ -58,17 +58,18 @@ export default class DateChooser extends Component {
 	 */
 	set date(date) {
 		this._date.copy(date);
-		this.get('year').value = this._date.year;
-		this.get('month').value = this._date.month;
-		this.get('day').value = this._date.day;
+		this.get('date').value = this._date.toString();
+		// this.get('year').value = this._date.year;
+		// this.get('month').value = this._date.month;
+		// this.get('day').value = this._date.day;
 	}
 
 	_onDateChange() {
 		try {
-			const year = parseInt(this.get('year').value);
-			const month = parseInt(this.get('month').value);
-			const day = parseInt(this.get('day').value);
-			const date = new YMD(year, month, day);
+			// const year = parseInt(this.get('year').value);
+			// const month = parseInt(this.get('month').value);
+			// const day = parseInt(this.get('day').value);
+			const date = new YMD(this.get('date').value);
 			this._date.copy(date);
 		}
 		catch (e) {
@@ -84,6 +85,7 @@ export default class DateChooser extends Component {
 	_toggleCalendar(event) {
 		this._calendar.clearSelections();
 		if (ShowHide.isHidden(this._calendar.elem)) {
+			console.log(this._date);
 			this._calendar.select(this._date);
 			ShowHide.show(this._calendar.elem);
 			this._calendar.elem.addEventListener('click', this._onClickInsideCalendar);
@@ -111,6 +113,10 @@ export default class DateChooser extends Component {
 		ShowHide.hide(this.getComponent('calendar').elem);
 	}
 
+	/**
+	 * On the date input key down event
+	 * @param {KeyboardEvent} event
+	 */
 	_onDateInputKeyDown(event) {
 		const input = event.target;
 		const cursor = input.selectionStart;
@@ -141,6 +147,7 @@ export default class DateChooser extends Component {
 	}
 
 	/**
+	 * On the date input changing content.
 	 * @param {InputEvent} event
 	 * @private
 	 */
@@ -182,8 +189,7 @@ export default class DateChooser extends Component {
 }
 
 DateChooser.html = `
-	<input id="date" type="text" placeholder="YYYY-MM-DD" maxlength=10 title="Please use the format YYYY-MM-DD" pattern="\\d\\d\\d\\d-\\d\\d-\\d\\d" onkeydown="_onDateInputKeyDown" oninput="_onDateInputInput" onchange="_onDateChange"/>
-	<span id="date"><input id="year" type="text" value="" placeholder="YYYY" maxlength=4 onchange="_onDateChange">-<input id="month" type="text" value="" placeholder="MM" maxlength=2 onchange="_onDateChange">-<input id="day" type="text" value="" placeholder="DD" maxlength=2 onchange="_onDateChange"></span> <button onclick="_toggleCalendar">${calendarSVG}</button>
+	<input id="date" type="text" placeholder="YYYY-MM-DD" maxlength=10 title="Please use the format YYYY-MM-DD" pattern="\\d\\d\\d\\d-\\d\\d-\\d\\d" onkeydown="_onDateInputKeyDown" oninput="_onDateInputInput" onchange="_onDateChange"/> <button onclick="_toggleCalendar">${calendarSVG}</button>
 	<Calendar id="calendar" style="display: none;" />
 	`;
 DateChooser.style = style;

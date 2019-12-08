@@ -48,7 +48,7 @@ export default class Calendar extends Component {
 		 * @type {Interval<YMD>}
 		 * @private
 		 */
-		this._dateBounds = new Interval(new YMD(1900, 0, 1), new YMD(2100, 0, 1));
+		this._dateBounds = new Interval(new YMD(1, 1, 1), new YMD(9999, 12, 31));
 
 		/**
 		 * A callback that is called when the user clicks a date.
@@ -250,12 +250,13 @@ export default class Calendar extends Component {
 					else {
 						dayElem.classList.remove('last');
 					}
-					this._dates[i].copy(date);
 				}
 				else {
 					dayElem.innerHTML = '';
-					dayElem.classList.remove(['clickable', 'selected']);
+					console.log('removing ');
+					dayElem.classList.remove('clickable', 'selected');
 				}
+				this._dates[i].copy(date);
 			}
 		}
 	}
@@ -282,8 +283,11 @@ export default class Calendar extends Component {
 			const elem = event.target;
 			if (elem instanceof HTMLDivElement) {
 				const index = parseInt(elem.id.substr(4));
-				if (this._clickCallback !== null) {
-					this._clickCallback(this._dates[index]);
+				const date = this._dates[index];
+				if (this._dateBounds.min <= date && date <= this._dateBounds.max) {
+					if (this._clickCallback !== null) {
+						this._clickCallback(date);
+					}
 				}
 			}
 		}

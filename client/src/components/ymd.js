@@ -132,9 +132,8 @@ export default class YMD {
 	 */
 	get dayOfWeek() {
 		const t = [6, 2, 1, 4, 6, 2, 4, 0, 3, 5, 1, 3];
-		this._year -= this._month < 3;
-		return (this._year + Math.floor(this._year / 4) - Math.floor(this._year / 100) + Math.floor(this._year / 400) + t[this._month - 1] + this._day) % 7;
-		// return new Date(Date.UTC(this._year, this._month, this._day)).getUTCDay();
+		const year = (this._month < 3 ? this._year - 1 : this._year);
+		return (year + Math.floor(year / 4) - Math.floor(year / 100) + Math.floor(year / 400) + t[this._month - 1] + this._day) % 7;
 	}
 
 	/**
@@ -193,11 +192,11 @@ export default class YMD {
 	 * @return {number}
 	 */
 	static daysInMonth(year, month) {
-		if ([1, 3, 5, 7, 8, 10, 12].includes(this._month)) {
+		if ([1, 3, 5, 7, 8, 10, 12].includes(month)) {
 			return 31;
 		}
-		else if (this._month === 2) {
-			return this.isLeapYear() ? 29 : 28;
+		else if (month === 2) {
+			return this.isLeapYear(year) ? 29 : 28;
 		}
 		else {
 			return 30;
