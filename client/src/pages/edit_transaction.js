@@ -1,6 +1,5 @@
 import { Component, ShowHide } from '../../../../app-js/src/index';
 import TransactionList from './transaction_list';
-import style from './transactions.css';
 import filterSVG from './filter.svg';
 import importSVG from './import.svg';
 import DateChooser from './date_chooser';
@@ -194,5 +193,3 @@ Transactions.html = `
 	</form>
 	<div id="transactionList"></div>
 	`;
-
-Transactions.style = style;

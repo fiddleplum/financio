@@ -1,8 +1,7 @@
 import { Component } from '../../../../app-js/src/index';
-import Transactions from './transactions';
+import '../components/transaction_list';
+import html from './view_account.html';
 import style from './view_account.css';
-import trashSVG from './trash.svg';
-import editSVG from './edit.svg';
 /** @typedef {import('../financio').default} Financio */
 
 /**
@@ -11,7 +10,7 @@ import editSVG from './edit.svg';
 export default class ViewAccount extends Component {
 	/**
 	 * Constructs the app.
-	 * @param {HTMLElement} elem - The element inside which thee the component will reside.
+	 * @param {HTMLElement} elem - The element inside which the component will reside.
 	 * @param {Financio} financio - The app.
 	 */
 	constructor(elem, financio) {
@@ -54,12 +53,7 @@ export default class ViewAccount extends Component {
 	}
 }
 
-ViewAccount.html = `
-<div class="toolbar">
-<button id="renameAccount">` + editSVG + `</button> <button id="deleteAccount">` + trashSVG + `</button>
-</div>
-<h1 id="accountName"></h1>
-	<div id="transactions"></div>
-	`;
-
+ViewAccount.html = html;
 ViewAccount.style = style;
+
+Component.register(ViewAccount);

@@ -7,7 +7,7 @@ import { Component } from '../../../../app-js/src/index';
 export default class DeleteAccount extends Component {
 	/**
 	 * Constructs the app.
-	 * @param {HTMLElement} elem - The element inside which thee the component will reside.
+	 * @param {HTMLElement} elem - The element inside which the component will reside.
 	 * @param {Financio} financio - The app.
 	 */
 	constructor(elem, financio) {
@@ -65,3 +65,5 @@ DeleteAccount.html = `
 		<p>{{feedback}}</p>
 	</form>
 	`;
+
+Component.register(DeleteAccount);

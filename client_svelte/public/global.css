@@ -13,26 +13,27 @@
 	--bg-medium: rgb(101, 130, 214);
 	--fg-medium: rgb(197, 203, 221);
 	--bg-dark: rgb(42, 69, 151);
-	--fg-dark: rgb(197, 203, 221);
+	--fg-dark: rgb(224, 227, 235);
 }
 
 body {
 	background: var(--bg-light);
 	color: var(--fg-light);
+	margin: 0;
 	font-family: 'Muli', sans-serif;
-	font-size: 0;
-	font-size: 1rem;
-	line-height: 1.5rem;
 }
 
-.Financio #title {
-	background: var(--bg-dark);
-	color: var(--fg-dark);
+a {
+	/* color: rgb(0,100,200); */
+	text-decoration: none;
 }
 
-.Financio #message {
-	background: var(--bg-dark);
-	color: var(--fg-dark);
+a:hover {
+	text-decoration: underline;
+}
+
+a:visited {
+	color: rgb(0,80,160);
 }
 
 h1 {
@@ -41,11 +42,10 @@ h1 {
 	font-size: 1.5rem;
 	height: 2rem;
 	line-height: 2rem;
-	text-align: center;
 }
 
 p {
-	margin-top: 1rem;
+	margin-top: 0;
 	margin-bottom: 1rem;
 }
 

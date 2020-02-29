@@ -1,5 +1,4 @@
 import { Component } from '../../../../app-js/src/index';
-import style from './add_account.css';
 /** @typedef {import('../financio').default} Financio */
 
 /**
@@ -8,7 +7,7 @@ import style from './add_account.css';
 export default class AddAccount extends Component {
 	/**
 	 * Constructs the app.
-	 * @param {HTMLElement} elem - The element inside which thee the component will reside.
+	 * @param {HTMLElement} elem - The element inside which the component will reside.
 	 * @param {Financio} financio - The app.
 	 */
 	constructor(elem, financio) {
@@ -54,6 +53,16 @@ AddAccount.html = `
 		<button class="submit" onclick="_submitForm">Add Account</button>
 		<div id="feedback">{{feedback}}</div>
 	</form>
+`;
+
+AddAccount.style = `
+	.AddAccount form #name {
+		width: 10rem;
+	}
+
+	.AddAccount form #type {
+		width: 6rem;
+	}
 	`;
 
-AddAccount.style = style;
+Component.register(AddAccount);

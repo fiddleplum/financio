@@ -1,7 +1,7 @@
 import { Component } from '../../../../app-js/src/index';
 import html from './import_transactions.html';
 import style from './import_transactions.css';
-import TransactionList from './transaction_list';
+import '../components/transaction_list';
 import Transaction from '../../../src/transaction';
 /** @typedef {import('../financio').default} Financio */
 
@@ -11,7 +11,7 @@ import Transaction from '../../../src/transaction';
 export default class ImportTransactions extends Component {
 	/**
 	 * Constructs the app.
-	 * @param {HTMLElement} elem - The element inside which thee the component will reside.
+	 * @param {HTMLElement} elem - The element inside which the component will reside.
 	 * @param {Financio} financio - The app.
 	 */
 	constructor(elem, financio) {
@@ -63,9 +63,9 @@ export default class ImportTransactions extends Component {
 			this._step += 1;
 		}
 		else if (this._step === 2) {
-			this._loadTransactions();
 			this.get('step2').style.display = '';
 			this.get('step3').style.display = 'block';
+			this._loadTransactions();
 			this._step += 1;
 		}
 		else if (this._step === 3) {
@@ -113,6 +113,8 @@ export default class ImportTransactions extends Component {
 		}).then((result) => {
 			this._newTransactions = result[0];
 			this._duplicateTransactions = result[1];
+			this.getComponent('newTransactions').transactions = this._newTransactions;
+			this.getComponent('duplicateTransactions').transactions = this._duplicateTransactions;
 		});
 	}
 
@@ -182,3 +184,5 @@ export default class ImportTransactions extends Component {
 
 ImportTransactions.html = html;
 ImportTransactions.style = style;
+
+Component.register(ImportTransactions);

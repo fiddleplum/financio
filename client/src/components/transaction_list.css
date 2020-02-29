@@ -1,10 +1,10 @@
 .TransactionList .transaction {
 	width: 100%;
 	display: grid;
-	grid-template-columns: 8rem 1fr 6rem 10rem;
+	grid-template-columns: 7rem 29rem 6rem 8rem;
 	grid-template-rows: 1.5rem;
 	grid-template-areas:
-		"date description amount category";
+		"date description category amount";
 }
 .TransactionList .transaction .date {
 	grid-area: date;
@@ -27,7 +27,7 @@
 }
 .TransactionList .transaction .category {
 	grid-area: category;
-	text-align: right;
+	text-align: left;
 	line-height: 1.5rem;
 	padding-right: .125rem;
 }
@@ -35,7 +35,19 @@
 	background: var(--bg-medium);
 	color: var(--bg-light);
 }
-@media (max-width: 50rem) {
+@media (max-width: 52rem) {
+	.TransactionList .heading {
+		display: none;
+	}
+	.TransactionList .transaction {
+		grid-template-columns: 7rem 1fr 8rem;
+		grid-template-rows: 1.5rem 1.5rem;
+		grid-template-areas:
+		"date description amount"
+		". category category";
+	}
+}
+@media (max-width: 46rem) {
 	.TransactionList .heading {
 		display: none;
 	}
@@ -47,14 +59,13 @@
 		"category amount";
 	}
 }
-@media (max-width: 35rem) {
+@media (max-width: 38rem) {
 	.TransactionList .transaction {
-		grid-template-columns: 50% 50%;
-		grid-template-rows: 1.5rem 1fr 1.5rem;
+		grid-template-columns: 7rem 6rem 1fr;
+		grid-template-rows: 1.5rem 1.5rem;
 		grid-template-areas:
-			"description description"
-			"category category"
-			"date amount";
+			"description description description"
+			"date category amount";
 	}
 	.TransactionList .transaction .category {
 		text-align: left;

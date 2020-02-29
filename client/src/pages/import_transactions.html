@@ -7,7 +7,6 @@
 	<form>
 		<p><input type="file" onChange="_onUpload" multiple /></p>
 	</form>
-	<p><button onClick="_nextStep">Next</button></p>
 </div>
 <div id="step2">
 	<h2>Step 2 - Configure the Options</h2>
@@ -18,9 +17,9 @@
 <div id="step3">
 	<h2>Step 3 - Review the Transactions</h2>
 	<h3>New Transactions</h3>
-	<div id="newTransactions" />
+	<TransactionList id="newTransactions"></TransactionList>
 	<h3>Duplicate Transactions (will not be overwritten)</h3>
-	<div id="duplicateTransactions" />
+	<TransactionList id="duplicateTransactions"></TransactionList>
 	<p><button onClick="_nextStep">Finish</button></p>
 </div>
 <div>{{feedback}}</div>

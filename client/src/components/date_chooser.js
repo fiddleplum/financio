@@ -1,5 +1,4 @@
 import { Component, ShowHide } from '../../../../app-js/src/index';
-import style from './date_chooser.css';
 import YMD from './ymd';
 import calendarSVG from './date_chooser_calendar.svg';
 import './calendar';
@@ -189,9 +188,20 @@ export default class DateChooser extends Component {
 }
 
 DateChooser.html = `
-	<input id="date" type="text" placeholder="YYYY-MM-DD" maxlength=10 title="Please use the format YYYY-MM-DD" pattern="\\d\\d\\d\\d-\\d\\d-\\d\\d" onkeydown="_onDateInputKeyDown" oninput="_onDateInputInput" onchange="_onDateChange"/> <button onclick="_toggleCalendar">${calendarSVG}</button>
+	<input id="date" type="text" placeholder="YYYY-MM-DD" maxlength=10 title="Please use the format YYYY-MM-DD" pattern="\\d\\d\\d\\d-\\d\\d-\\d\\d" onkeydown="_onDateInputKeyDown" oninput="_onDateInputInput" onchange="_onDateChange"/><button onclick="_toggleCalendar">${calendarSVG}</button>
 	<Calendar id="calendar" style="display: none;" />
 	`;
-DateChooser.style = style;
+
+DateChooser.style = `
+	.DateChooser > #date {
+		width: 7rem;
+		text-align: center;
+		margin-right: .25rem;
+	}
+
+	.DateChooser > #Calendar {
+		margin-top: .25rem;
+	}
+	`;
 
 Component.register(DateChooser);

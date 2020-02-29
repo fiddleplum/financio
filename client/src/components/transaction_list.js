@@ -14,8 +14,8 @@ export default class TransactionList extends Component {
 				<div class="transaction ${i % 2 === 0 ? 'even' : 'odd'}">
 					<div class="date">${transaction.date.substr(0, 10)}</div>
 					<div class="description">${transaction.description}</div>
-					<div class="amount">${Number.parseFloat(transaction.amount).toFixed(2)}</div>
 					<div class="category">${transaction.category}</div>
+					<div class="amount">${Number.parseFloat(transaction.amount).toFixed(2)}</div>
 				</div>`;
 		}
 		this.setHtml('rows', html);
@@ -26,10 +26,12 @@ TransactionList.html = `
 	<div class="transaction heading">
 		<div class="date">Date</div>
 		<div class="description">Description</div>
-		<div class="amount">Amount</div>
 		<div class="category">Category</div>
+		<div class="amount">Amount</div>
 	</div>
 	<div id="rows"></div>
 	`;
 
 TransactionList.style = style;
+
+Component.register(TransactionList);

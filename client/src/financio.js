@@ -1,11 +1,12 @@
 import { SimpleApp, WS } from '../../../app-js/src/index';
-import Menu from './components/menu';
-import Accounts from './components/accounts';
-import AddAccount from './components/add_account';
-import ViewAccount from './components/view_account';
-import RenameAccount from './components/rename_account';
-import DeleteAccount from './components/delete_account';
-import ImportTransactions from './components/import_transactions';
+import Menu from './pages/menu';
+import ListAccounts from './pages/list_accounts';
+import AddAccount from './pages/add_account';
+import ViewAccount from './pages/view_account';
+import RenameAccount from './pages/rename_account';
+import DeleteAccount from './pages/delete_account';
+import ImportTransactions from './pages/import_transactions';
+import ListCategories from './pages/list_categories';
 import style from './financio.css';
 
 export default class Financio extends SimpleApp {
@@ -31,12 +32,13 @@ export default class Financio extends SimpleApp {
 
 		// Register the pages.
 		this.registerPage('', Menu);
-		this.registerPage('accounts', Accounts);
+		this.registerPage('listAccounts', ListAccounts);
 		this.registerPage('addAccount', AddAccount);
 		this.registerPage('viewAccount', ViewAccount);
 		this.registerPage('renameAccount', RenameAccount);
 		this.registerPage('deleteAccount', DeleteAccount);
 		this.registerPage('importTransactions', ImportTransactions);
+		this.registerPage('listCategories', ListCategories);
 
 		// Wait until the web socket is connected.
 		this._server.getReadyPromise().then(() => {
@@ -53,5 +55,7 @@ export default class Financio extends SimpleApp {
 }
 
 Financio.style = style;
+
+Financio.register(Financio);
 
 Financio.setAppClass(Financio);

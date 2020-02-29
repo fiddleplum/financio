@@ -4,14 +4,13 @@ import { Component } from '../../../../app-js/src/index';
 /**
  * The accounts page.
  */
-export default class Accounts extends Component {
+export default class ListAccounts extends Component {
 	/**
 	 * Constructs the app.
-	 * @param {HTMLElement} elem - The element inside which thee the component will reside.
 	 * @param {Financio} financio - The app.
 	 */
-	constructor(elem, financio) {
-		super(elem);
+	constructor(financio) {
+		super();
 
 		/**
 		 * The app.
@@ -32,35 +31,37 @@ export default class Accounts extends Component {
 		// const listElem = this.elem.querySelector('#list');
 		let html = '';
 		for (let i = 0, l = accountNames.length; i < l; i++) {
-			html += `<button id="${accountNames[i]}" onclick="_goToViewAccount">${accountNames[i]}</button>`;
+			html += `<button ref="${accountNames[i]}" onclick="_goToViewAccount">${accountNames[i]}</button>`;
 		}
-		this.setHtml('list', html);
+		this.__setHtml('list', html);
 	}
 
 	_goToViewAccount(event) {
 		this._financio.router.pushQuery({
 			page: 'viewAccount',
-			name: event.target.id
+			name: event.target.getAttribute('ref')
 		});
 	}
 
-	_goToAddAccount(event) {
+	_goToAddAccount() {
 		this._financio.router.pushQuery({
 			page: 'addAccount'
 		});
 	}
 }
 
-Accounts.html = `
+ListAccounts.html = `
 	<h1>Accounts</h1>
-	<div id="list"></div>
+	<div ref="list"></div>
 	<button onclick="_goToAddAccount">+ New Account +</button>
 	`;
 
-Accounts.style = `
-	.Accounts button {
+ListAccounts.style = `
+	button.ListAccounts, .ListAccounts button {
 		display: block;
 		margin: 1rem auto;
 		width: 10rem;
 	}
 	`;
+
+ListAccounts.register(ListAccounts);

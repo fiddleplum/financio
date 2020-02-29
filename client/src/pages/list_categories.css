@@ -9,3 +9,11 @@
 	margin-right: .5rem;
 }
 
+.Categories li {
+	margin-left: 0;
+}
+
+.Categories ul, li {
+	list-style-type: none;
+	margin: .5rem 0;
+}
