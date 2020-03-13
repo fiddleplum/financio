@@ -1,0 +1,46 @@
+IDEAS
+
+SVG needs to be imported in JS or in www/svg.
+HTML needs to reference imported SVG or href to www/svg.
+Does CSS need anything that could require it to be in JS?
+
+If HTML is imported as .html file:
+* It looks a little odd when it references JS vars and functions via on events or html vars.
+* SVG must be referenced via <img src...
+* SVG must then be in the www/svg folder.
+
+If HTML is in JS:
+* SVG can be in JS.
+  * Multiple components may need the same SVG, so this doesn't work.
+* SVG must be imported or referenced as <img src...
+	* If SVG is imported as .svg file, but HTML is in JS, this feels incongruous.
+	* If SVG is referenced as <img src..., it must be in the www/svg folder.
+
+Options:
+* HTML imported, SVG as <img src... in www/svg.
+* HTML inline,
+		* SVG as <img src... in www/svg.
+		* SVG imported.
+
+Decisions:
+(1)
+HTML and CSS will be inline. This will allow for maximum flexibility.
+SVG will be imported, so that they can be properly edited.
+
+OR
+
+(2)
+HTML and CSS will be imported
+SVG will be as <img src... in www/svg.
+
+BUT BUT BUT SVG images aren't affected by css, only inline are!
+https://stackoverflow.com/questions/24933430/img-src-svg-changing-the-styles-with-css
+
+This means that the SVG *must* be inline and therefore imported.
+The only option that supports importing SVGs is when the HTML is imported.
+
+So:
+SVG must be imported.
+HTML must be inline in the JS so that it can reference the imported SVG variable.
+Put all .svg files in a single src/svg folder, since they aren't unique to each component.
+Make CSS inline as well, since the HTML already is, for consistency.
