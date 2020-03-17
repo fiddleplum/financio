@@ -1,5 +1,5 @@
 import { Component } from '../../../../app-js/src/index';
-import style from './transaction_list.css';
+import css from './transaction_list.css';
 /** @typedef {import('../../../src/transaction').default} Transaction */
 
 /**
@@ -32,6 +32,6 @@ TransactionList.html = `
 	<div id="rows"></div>
 	`;
 
-TransactionList.style = style;
+TransactionList.css = css;
 
-Component.register(TransactionList);
+TransactionList.register();

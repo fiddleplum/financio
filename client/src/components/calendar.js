@@ -454,4 +454,4 @@ Calendar.style = `
 	}
 	`;
 
-Component.register(Calendar);
+Calendar.register();

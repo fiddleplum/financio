@@ -7,7 +7,7 @@ import RenameAccount from './pages/rename_account';
 import DeleteAccount from './pages/delete_account';
 import ImportTransactions from './pages/import_transactions';
 import ListCategories from './pages/list_categories';
-import style from './financio.css';
+import css from './financio.css';
 
 export default class Financio extends SimpleApp {
 	constructor() {
@@ -34,11 +34,11 @@ export default class Financio extends SimpleApp {
 		this.registerPage('', Menu);
 		this.registerPage('listAccounts', ListAccounts);
 		this.registerPage('addAccount', AddAccount);
-		this.registerPage('viewAccount', ViewAccount);
-		this.registerPage('renameAccount', RenameAccount);
-		this.registerPage('deleteAccount', DeleteAccount);
-		this.registerPage('importTransactions', ImportTransactions);
-		this.registerPage('listCategories', ListCategories);
+		// this.registerPage('viewAccount', ViewAccount);
+		// this.registerPage('renameAccount', RenameAccount);
+		// this.registerPage('deleteAccount', DeleteAccount);
+		// this.registerPage('importTransactions', ImportTransactions);
+		// this.registerPage('listCategories', ListCategories);
 
 		// Wait until the web socket is connected.
 		this._server.getReadyPromise().then(() => {
@@ -54,8 +54,8 @@ export default class Financio extends SimpleApp {
 	}
 }
 
-Financio.style = style;
+Financio.css = css;
 
-Financio.register(Financio);
+Financio.register();
 
 Financio.setAppClass(Financio);

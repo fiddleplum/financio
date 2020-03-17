@@ -6,18 +6,18 @@ import { Component } from '../../../../app-js/src/index';
  */
 export default class Menu extends Component {
 	/**
-	 * Constructs the app.
-	 * @param {Financio} financio - The app.
+	 * Constructor.
+	 * @param {Component.Params} params
 	 */
-	constructor(financio) {
-		super();
+	constructor(params) {
+		super(params);
 
 		/**
 		 * The app.
 		 * @type {Financio}
 		 * @private
 		 */
-		this._financio = financio;
+		this._app = params.attributes.get('app');
 	}
 
 	/**
@@ -27,7 +27,7 @@ export default class Menu extends Component {
 	 * @private
 	 */
 	_goToPage(element, event) {
-		this._financio.router.pushQuery({
+		this._app.router.pushQuery({
 			page: element.getAttribute('ref')
 		});
 	}
@@ -42,7 +42,7 @@ Menu.html = `
 	<button ref="reports" onclick="_goToPage">Reports</button>
 	`;
 
-Menu.style = `
+Menu.css = `
 	button.Menu {
 		display: block;
 		margin: 1rem auto;
@@ -50,4 +50,4 @@ Menu.style = `
 	}
 	`;
 
-Menu.register(Menu);
+Menu.register();

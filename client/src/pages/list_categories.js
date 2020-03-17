@@ -1,6 +1,6 @@
 import { Component } from '../../../../app-js/src/index';
 import html from './list_categories.html';
-import style from './list_categories.css';
+import css from './list_categories.css';
 
 /** @typedef {import('../financio').default} Financio */
 
@@ -11,7 +11,7 @@ import style from './list_categories.css';
 /**
  * The category list page.
  */
-export default class CategoriesList extends Component {
+export default class ListCategories extends Component {
 	/**
 	 * Constructs the app.
 	 * @param {HTMLElement} elem - The element inside which the component will reside.
@@ -91,4 +91,7 @@ export default class CategoriesList extends Component {
 	}
 }
 
-Component.register(CategoriesList, html, style);
+ListCategories.html = html;
+ListCategories.css = css;
+
+ListCategories.register();

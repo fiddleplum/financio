@@ -6,56 +6,70 @@ import { Component } from '../../../../app-js/src/index';
  */
 export default class AddAccount extends Component {
 	/**
-	 * Constructs the app.
-	 * @param {HTMLElement} elem - The element inside which the component will reside.
-	 * @param {Financio} financio - The app.
+	 * Constructor.
+	 * @param {Component.Params} params
 	 */
-	constructor(elem, financio) {
-		super(elem);
+	constructor(params) {
+		super(params);
 
 		/**
 		 * The app.
 		 * @type {Financio}
 		 * @private
 		 */
-		this._financio = financio;
+		this._app = params.attributes.get('app');
 	}
 
-	async _submitForm(event) {
-		const inputs = this.getFormInputs('form');
+	/**
+	 * The click event handler for the menu buttons.
+	 * @param {Element} element
+	 * @param {UIEvent} event
+	 * @private
+	 */
+	_goToListCategories(element, event) {
+		this._app.router.pushQuery({
+			page: 'listAccounts'
+		});
+	}
+
+	async _submitForm() {
+		const inputs = Component.getFormInputs(this.__element('form'));
 		// Send the command to the server.
 		try {
-			await this._financio.server.send({
+			await this._app.server.send({
 				command: 'create account',
 				name: inputs.name,
 				type: inputs.type
 			});
-			this._financio.router.pushQuery({
+			this._app.router.pushQuery({
 				page: 'accounts'
 			});
 		}
 		catch (error) {
-			this.setHtmlVariable('feedback', error.message);
+			this.__element('feedback').innerHTML = error.message;
 		}
 	}
 }
 
 AddAccount.html = `
 	<h1>Add an Account</h1>
-	<form id="form" action="javascript:">
-		<label for="name" class="left">Name:</label>
-		<input name="name" type="text" class="right" />
-		<label for="type" class="left">Type:</label>
-		<select name="type" class="right">
-			<option value="credit">Credit</option>
-			<option value="debit">Debit</option>
-		</select>
+	<form ref="form" action="javascript:">
+		<div class="inputs">
+			<label for="name" class="left">Name:</label>
+			<input name="name" type="text" class="right" />
+			<label for="type" class="left">Type:</label>
+			<select name="type" class="right">
+				<option value="credit">Credit</option>
+				<option value="debit">Debit</option>
+			</select>
+		</div>
 		<button class="submit" onclick="_submitForm">Add Account</button>
-		<div id="feedback">{{feedback}}</div>
+		<button class="cancel" onclick="_goToListCategories">Cancel</button>
 	</form>
-`;
+	<div ref="feedback"></div>
+	`;
 
-AddAccount.style = `
+AddAccount.css = `
 	.AddAccount form #name {
 		width: 10rem;
 	}
@@ -65,4 +79,4 @@ AddAccount.style = `
 	}
 	`;
 
-Component.register(AddAccount);
+AddAccount.register();

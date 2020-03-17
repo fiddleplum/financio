@@ -1,6 +1,6 @@
 import { Component } from '../../../../app-js/src/index';
 import html from './import_transactions.html';
-import style from './import_transactions.css';
+import css from './import_transactions.css';
 import '../components/transaction_list';
 import Transaction from '../../../src/transaction';
 /** @typedef {import('../financio').default} Financio */
@@ -183,6 +183,6 @@ export default class ImportTransactions extends Component {
 }
 
 ImportTransactions.html = html;
-ImportTransactions.style = style;
+ImportTransactions.css = css;
 
-Component.register(ImportTransactions);
+ImportTransactions.register();

@@ -193,3 +193,5 @@ Transactions.html = `
 	</form>
 	<div id="transactionList"></div>
 	`;
+
+Transactions.register();

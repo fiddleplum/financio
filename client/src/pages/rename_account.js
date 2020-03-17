@@ -1,12 +1,12 @@
 import { Component } from '../../../../app-js/src/index';
 import html from './rename_account.html';
-import style from './rename_account.css';
+import css from './rename_account.css';
 /** @typedef {import('../financio').default} Financio */
 
 /**
  * The rename account page.
  */
-export default class AccountsRename extends Component {
+export default class RenameAccount extends Component {
 	/**
 	 * Constructs the app.
 	 * @param {HTMLElement} elem - The element inside which the component will reside.
@@ -52,4 +52,4 @@ export default class AccountsRename extends Component {
 	}
 }
 
-Component.register(AccountsRename, html, style);
+RenameAccount.register();

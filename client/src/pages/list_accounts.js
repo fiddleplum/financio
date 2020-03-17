@@ -6,25 +6,25 @@ import { Component } from '../../../../app-js/src/index';
  */
 export default class ListAccounts extends Component {
 	/**
-	 * Constructs the app.
-	 * @param {Financio} financio - The app.
+	 * Constructor.
+	 * @param {Component.Params} params
 	 */
-	constructor(financio) {
-		super();
+	constructor(params) {
+		super(params);
 
 		/**
 		 * The app.
 		 * @type {Financio}
 		 * @private
 		 */
-		this._financio = financio;
+		this._app = params.attributes.get('app');
 
 		this._populateAccountNames();
 	}
 
 	async _populateAccountNames() {
 		/** @type string[]} */
-		const accountNames = await this._financio.server.send({
+		const accountNames = await this._app.server.send({
 			command: 'list accounts'
 		});
 
@@ -33,18 +33,23 @@ export default class ListAccounts extends Component {
 		for (let i = 0, l = accountNames.length; i < l; i++) {
 			html += `<button ref="${accountNames[i]}" onclick="_goToViewAccount">${accountNames[i]}</button>`;
 		}
-		this.__setHtml('list', html);
+		this.__setHtml(this.__element('list'), html);
 	}
 
+	/**
+	 * @param {Event} event
+	 */
 	_goToViewAccount(event) {
-		this._financio.router.pushQuery({
-			page: 'viewAccount',
-			name: event.target.getAttribute('ref')
-		});
+		if (event.target instanceof HTMLElement) {
+			this._app.router.pushQuery({
+				page: 'viewAccount',
+				name: event.target.getAttribute('ref')
+			});
+		}
 	}
 
 	_goToAddAccount() {
-		this._financio.router.pushQuery({
+		this._app.router.pushQuery({
 			page: 'addAccount'
 		});
 	}
@@ -56,7 +61,7 @@ ListAccounts.html = `
 	<button onclick="_goToAddAccount">+ New Account +</button>
 	`;
 
-ListAccounts.style = `
+ListAccounts.css = `
 	button.ListAccounts, .ListAccounts button {
 		display: block;
 		margin: 1rem auto;
@@ -64,4 +69,4 @@ ListAccounts.style = `
 	}
 	`;
 
-ListAccounts.register(ListAccounts);
+ListAccounts.register();

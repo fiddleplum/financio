@@ -84,4 +84,4 @@ EditCategory.html = `
 	<p>Name: <input type="text" id="name"/>
 	`;
 
-Component.register(CategoriesEdit);
+EditCategory.register();

@@ -1,5 +1,10 @@
 IDEAS
 
+
+I'm running into a problem. If I have a generic panel component as an element, <panel>, and it has children,
+if those children have their own components, how do I 
+
+
 SVG needs to be imported in JS or in www/svg.
 HTML needs to reference imported SVG or href to www/svg.
 Does CSS need anything that could require it to be in JS?

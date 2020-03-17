@@ -1,5 +1,5 @@
 import { Component, Font } from '../../../../app-js/src/index';
-import style from './selection.css';
+import css from './selection.css';
 
 export default class Selection extends Component {
 	constructor(elem, selectCallback, cancelCallback) {
@@ -100,4 +100,6 @@ Selection.html = `
 	<div id="items" o2nwheel="_onWheel" o2ntouchstart="_onTouchStart" style="margin-top: 0;"></div>
 	`;
 
-Selection.style = style;
+Selection.css = css;
+
+Selection.register();

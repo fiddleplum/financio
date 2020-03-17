@@ -204,4 +204,4 @@ DateChooser.style = `
 	}
 	`;
 
-Component.register(DateChooser);
+DateChooser.register();

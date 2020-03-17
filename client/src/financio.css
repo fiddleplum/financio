@@ -39,7 +39,6 @@ h1 {
 	margin-top: 0;
 	margin-bottom: 1rem;
 	font-size: 1.5rem;
-	height: 2rem;
 	line-height: 2rem;
 	text-align: center;
 }
@@ -69,42 +68,54 @@ button svg {
 	fill: var(--bg-light);
 }
 
-form {
+form .inputs {
 	display: grid;
 	grid-auto-rows: minmax(2rem, max-content);
-	grid-template-columns: 20rem 1fr;
+	grid-template-columns: 10rem 1fr;
 	gap: 1rem;
-	margin: 0 auto;
+	margin: 0 auto 1rem auto;
 }
 
-form .left, form .right {
+form .inputs .left, form .inputs .right {
 	display: inline-block;
 	margin-top: 0;
 	line-height: 2rem;
 }
 
-form .left {
-	text-align: right;
-}
-
-form .right {
+form .inputs .left {
 	text-align: left;
 }
 
+form .inputs .right {
+	text-align: left;
+}
+
+form .cancel {
+	background-color: var(--bg-light);
+	border: 1px solid var(--fg-light);
+	color: var(--fg-light);
+	float: left;
+	width: 10rem;
+}
+
+form .submit {
+	float: right;
+	width: 10rem;
+}
+
 @media (max-width: 40rem) {
-	form {
+	form .inputs {
 		grid-template-columns: 1fr;
 		grid-auto-rows: 1rem minmax(2rem, max-content);
 	}
-
-	form .left {
+	form .inputs .left {
 		display: block;
 		text-align: left;
 		margin-right: 0;
 		width: 100%;
 		margin-bottom: .25rem;
 	}
-	form .right {
+	form .inputs .right {
 		display: block;
 		text-align: left;
 		margin-left: 0;
@@ -112,12 +123,18 @@ form .right {
 	}
 }
 
-form .feedback {
-	margin-bottom: 1rem;
+@media (max-width: 24rem) {
+	form .cancel {
+		width: 100%;
+	}
+
+	form .submit {
+		width: 100%;
+		margin-bottom: 1rem;
+	}
 }
 
-form .submit {
-	width: 100%;
+form .feedback {
 	margin-bottom: 1rem;
 }
 

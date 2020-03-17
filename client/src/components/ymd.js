@@ -232,8 +232,6 @@ export default class YMD {
 
 	/**
 	 * Returns a string in the form YYYY-MM-DD.
-	 * @param {string|string[]} [locales]
-	 * @param {Intl.DateTimeFormatOptions} [options]
 	 * @returns {string}
 	 */
 	toString() {

@@ -66,4 +66,4 @@ DeleteAccount.html = `
 	</form>
 	`;
 
-Component.register(DeleteAccount);
+DeleteAccount.register();

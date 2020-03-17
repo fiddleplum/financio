@@ -1,7 +1,7 @@
 import { Component } from '../../../../app-js/src/index';
 import '../components/transaction_list';
 import html from './view_account.html';
-import style from './view_account.css';
+import css from './view_account.css';
 /** @typedef {import('../financio').default} Financio */
 
 /**
@@ -54,6 +54,6 @@ export default class ViewAccount extends Component {
 }
 
 ViewAccount.html = html;
-ViewAccount.style = style;
+ViewAccount.css = css;
 
-Component.register(ViewAccount);
+ViewAccount.register();
