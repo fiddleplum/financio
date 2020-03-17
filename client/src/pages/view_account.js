@@ -9,44 +9,40 @@ import css from './view_account.css';
  */
 export default class ViewAccount extends Component {
 	/**
-	 * Constructs the app.
-	 * @param {HTMLElement} elem - The element inside which the component will reside.
-	 * @param {Financio} financio - The app.
+	 * Constructor.
+	 * @param {Component.Params} params
 	 */
-	constructor(elem, financio) {
-		super(elem);
+	constructor(params) {
+		super(params);
 
 		/**
 		 * The app.
 		 * @type {Financio}
 		 * @private
 		 */
-		this._financio = financio;
+		this._app = params.attributes.get('app');
 
 		/**
 		 * The name of the account to view.
 		 * @type {string}
 		 * @private
 		 */
-		this._name = this._financio.router.getValue('name');
+		this._name = this._app.router.getValue('name');
 
-		this.get('accountName').innerHTML = this._name;
+		this._element('accountName').innerHTML = this._name;
 
-		this._transactions = new Transactions(this.get('transactions'), this._financio);
-
-		this.on('renameAccount', 'click', this.goToRenameAccount);
-		this.on('deleteAccount', 'click', this.goToDeleteAccount);
+		this._transactions = new Transactions(this.get('transactions'), this._app);
 	}
 
-	goToRenameAccount() {
-		this._financio.router.pushQuery({
+	_goToRenameAccount() {
+		this._app.router.pushQuery({
 			page: 'renameAccount',
 			name: this._name
 		});
 	}
 
-	goToDeleteAccount() {
-		this._financio.router.pushQuery({
+	_goToDeleteAccount() {
+		this._app.router.pushQuery({
 			page: 'deleteAccount',
 			name: this._name
 		});

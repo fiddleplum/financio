@@ -34,7 +34,7 @@ export default class Financio extends SimpleApp {
 		this.registerPage('', Menu);
 		this.registerPage('listAccounts', ListAccounts);
 		this.registerPage('addAccount', AddAccount);
-		// this.registerPage('viewAccount', ViewAccount);
+		this.registerPage('viewAccount', ViewAccount);
 		// this.registerPage('renameAccount', RenameAccount);
 		// this.registerPage('deleteAccount', DeleteAccount);
 		// this.registerPage('importTransactions', ImportTransactions);

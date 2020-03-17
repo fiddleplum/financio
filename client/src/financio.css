@@ -68,6 +68,10 @@ button svg {
 	fill: var(--bg-light);
 }
 
+form {
+	overflow: auto;
+}
+
 form .inputs {
 	display: grid;
 	grid-auto-rows: minmax(2rem, max-content);
@@ -90,7 +94,11 @@ form .inputs .right {
 	text-align: left;
 }
 
-form .cancel {
+form .actions {
+	margin-bottom: 1rem;
+}
+
+form .actions .cancel {
 	background-color: var(--bg-light);
 	border: 1px solid var(--fg-light);
 	color: var(--fg-light);
@@ -98,7 +106,7 @@ form .cancel {
 	width: 10rem;
 }
 
-form .submit {
+form .actions .submit {
 	float: right;
 	width: 10rem;
 }
@@ -124,11 +132,11 @@ form .submit {
 }
 
 @media (max-width: 24rem) {
-	form .cancel {
+	form .actions .cancel {
 		width: 100%;
 	}
 
-	form .submit {
+	form .actions .submit {
 		width: 100%;
 		margin-bottom: 1rem;
 	}

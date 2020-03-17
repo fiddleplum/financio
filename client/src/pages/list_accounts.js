@@ -2,7 +2,7 @@ import { Component } from '../../../../app-js/src/index';
 /** @typedef {import('../financio').default} Financio */
 
 /**
- * The accounts page.
+ * The list accounts page.
  */
 export default class ListAccounts extends Component {
 	/**
@@ -40,6 +40,7 @@ export default class ListAccounts extends Component {
 	 * @param {Event} event
 	 */
 	_goToViewAccount(event) {
+		console.log(event);
 		if (event.target instanceof HTMLElement) {
 			this._app.router.pushQuery({
 				page: 'viewAccount',

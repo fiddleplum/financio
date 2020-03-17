@@ -42,7 +42,7 @@ export default class AddAccount extends Component {
 				type: inputs.type
 			});
 			this._app.router.pushQuery({
-				page: 'accounts'
+				page: 'listAccounts'
 			});
 		}
 		catch (error) {
@@ -63,8 +63,10 @@ AddAccount.html = `
 				<option value="debit">Debit</option>
 			</select>
 		</div>
-		<button class="submit" onclick="_submitForm">Add Account</button>
-		<button class="cancel" onclick="_goToListCategories">Cancel</button>
+		<div class="actions">
+			<button class="submit" onclick="_submitForm">Add Account</button>
+			<button class="cancel" onclick="_goToListCategories">Cancel</button>
+		</div>
 	</form>
 	<div ref="feedback"></div>
 	`;
