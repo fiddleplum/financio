@@ -25,12 +25,12 @@ body {
 	line-height: 1.5rem;
 }
 
-.Financio #title {
+.Financio.title {
 	background: var(--bg-dark);
 	color: var(--fg-dark);
 }
 
-.Financio #message {
+.Financio.message {
 	background: var(--bg-dark);
 	color: var(--fg-dark);
 }

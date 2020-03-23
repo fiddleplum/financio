@@ -65,5 +65,3 @@ DeleteAccount.html = `
 		<p>{{feedback}}</p>
 	</form>
 	`;
-
-DeleteAccount.register();

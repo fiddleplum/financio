@@ -93,5 +93,3 @@ export default class ListCategories extends Component {
 
 ListCategories.html = html;
 ListCategories.css = css;
-
-ListCategories.register();

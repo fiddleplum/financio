@@ -7,29 +7,30 @@ import { Component } from '../../../../app-js/src/index';
 export default class Menu extends Component {
 	/**
 	 * Constructor.
-	 * @param {Component.Params} params
+	 * @param {Financio} app
 	 */
-	constructor(params) {
-		super(params);
+	constructor(app) {
+		super();
 
 		/**
 		 * The app.
 		 * @type {Financio}
 		 * @private
 		 */
-		this._app = params.attributes.get('app');
+		this._app = app;
 	}
 
 	/**
 	 * The click event handler for the menu buttons.
-	 * @param {Element} element
 	 * @param {UIEvent} event
 	 * @private
 	 */
-	_goToPage(element, event) {
-		this._app.router.pushQuery({
-			page: element.getAttribute('ref')
-		});
+	_goToPage(event) {
+		if (event.target instanceof Element) {
+			this._app.router.pushQuery({
+				page: event.target.getAttribute('ref')
+			});
+		}
 	}
 }
 
@@ -49,5 +50,3 @@ Menu.css = `
 		width: 10rem;
 	}
 	`;
-
-Menu.register();

@@ -51,5 +51,3 @@ export default class RenameAccount extends Component {
 		}
 	}
 }
-
-RenameAccount.register();

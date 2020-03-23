@@ -33,5 +33,3 @@ TransactionList.html = `
 	`;
 
 TransactionList.css = css;
-
-TransactionList.register();

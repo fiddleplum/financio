@@ -56,6 +56,4 @@ export default class Financio extends SimpleApp {
 
 Financio.css = css;
 
-Financio.register();
-
 Financio.setAppClass(Financio);

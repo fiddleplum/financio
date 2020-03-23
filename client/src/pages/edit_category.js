@@ -83,5 +83,3 @@ EditCategory.html = `
 	<p><button>Save</button></p>
 	<p>Name: <input type="text" id="name"/>
 	`;
-
-EditCategory.register();

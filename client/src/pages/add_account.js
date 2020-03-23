@@ -80,5 +80,3 @@ AddAccount.css = `
 		width: 6rem;
 	}
 	`;
-
-AddAccount.register();

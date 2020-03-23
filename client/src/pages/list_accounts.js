@@ -7,17 +7,19 @@ import { Component } from '../../../../app-js/src/index';
 export default class ListAccounts extends Component {
 	/**
 	 * Constructor.
-	 * @param {Component.Params} params
+	 * @param {Financio} app
 	 */
-	constructor(params) {
-		super(params);
+	constructor(app) {
+		super();
 
 		/**
 		 * The app.
 		 * @type {Financio}
 		 * @private
 		 */
-		this._app = params.attributes.get('app');
+		this._app = app;
+
+		this.__on('newAccount', 'click', this._goToAddAccount);
 
 		this._populateAccountNames();
 	}
@@ -37,10 +39,10 @@ export default class ListAccounts extends Component {
 	}
 
 	/**
+	 * Goes to the page named in the ref.
 	 * @param {Event} event
 	 */
 	_goToViewAccount(event) {
-		console.log(event);
 		if (event.target instanceof HTMLElement) {
 			this._app.router.pushQuery({
 				page: 'viewAccount',
@@ -49,6 +51,9 @@ export default class ListAccounts extends Component {
 		}
 	}
 
+	/**
+	 * Goes to the add account page.
+	 */
 	_goToAddAccount() {
 		this._app.router.pushQuery({
 			page: 'addAccount'
@@ -59,7 +64,7 @@ export default class ListAccounts extends Component {
 ListAccounts.html = `
 	<h1>Accounts</h1>
 	<div ref="list"></div>
-	<button onclick="_goToAddAccount">+ New Account +</button>
+	<button ref="newAccount">+ New Account +</button>
 	`;
 
 ListAccounts.css = `
@@ -69,5 +74,3 @@ ListAccounts.css = `
 		width: 10rem;
 	}
 	`;
-
-ListAccounts.register();

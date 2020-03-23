@@ -8,11 +8,11 @@ import './calendar';
  */
 export default class DateChooser extends Component {
 	/**
-	 * Constructs the app.
-	 * @param {HTMLElement} elem - The element inside which the component will reside.
+	 * Constructor.
+	 * @param {Component.Params} params
 	 */
-	constructor(elem) {
-		super(elem);
+	constructor(params) {
+		super(params);
 
 		/**
 		 * The displayed date.
@@ -189,7 +189,7 @@ export default class DateChooser extends Component {
 
 DateChooser.html = `
 	<input id="date" type="text" placeholder="YYYY-MM-DD" maxlength=10 title="Please use the format YYYY-MM-DD" pattern="\\d\\d\\d\\d-\\d\\d-\\d\\d" onkeydown="_onDateInputKeyDown" oninput="_onDateInputInput" onchange="_onDateChange"/><button onclick="_toggleCalendar">${calendarSVG}</button>
-	<Calendar id="calendar" style="display: none;" />
+	<Calendar id="calendar"/>
 	`;
 
 DateChooser.style = `
@@ -203,5 +203,3 @@ DateChooser.style = `
 		margin-top: .25rem;
 	}
 	`;
-
-DateChooser.register();

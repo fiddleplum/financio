@@ -184,5 +184,3 @@ export default class ImportTransactions extends Component {
 
 ImportTransactions.html = html;
 ImportTransactions.css = css;
-
-ImportTransactions.register();

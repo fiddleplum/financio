@@ -1,4 +1,6 @@
 import { Component } from '../../../../app-js/src/index';
+import html from './calendar.css';
+import css from './calendar.html';
 import Interval from './interval';
 import YMD from './ymd';
 
@@ -8,10 +10,10 @@ import YMD from './ymd';
 export default class Calendar extends Component {
 	/**
 	 * Constructor.
-	 * @param {HTMLElement} elem
+	 * @param {Component.Params} params
 	 */
-	constructor(elem) {
-		super(elem);
+	constructor(params) {
+		super(params);
 
 		/**
 		 * The currently shown year.
@@ -62,22 +64,22 @@ export default class Calendar extends Component {
 
 		// Setup the event handlers.
 		this.on('decade_dec', 'click', () => {
-			this._offsetDate(-10, 0, 0);
+			this._offsetDate(-10, 0);
 		});
 		this.on('decade_inc', 'click', () => {
-			this._offsetDate(+10, 0, 0);
+			this._offsetDate(+10, 0);
 		});
 		this.on('year_dec', 'click', () => {
-			this._offsetDate(-1, 0, 0);
+			this._offsetDate(-1, 0);
 		});
 		this.on('year_inc', 'click', () => {
-			this._offsetDate(+1, 0, 0);
+			this._offsetDate(+1, 0);
 		});
 		this.on('month_dec', 'click', () => {
-			this._offsetDate(0, -1, 0);
+			this._offsetDate(0, -1);
 		});
 		this.on('month_inc', 'click', () => {
-			this._offsetDate(0, +1, 0);
+			this._offsetDate(0, +1);
 		});
 	}
 
@@ -306,152 +308,5 @@ Calendar._monthNames = [
 	'November',
 	'December'];
 
-Calendar.html = `
-	<div id="decade_dec" class="clickable no-select">
-		<svg viewBox="0 0 32 32">
-			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="20,4 4,16 20,27" />
-			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="28,4 12,16 28,27" />
-		</svg>
-	</div>
-	<div id="year_dec" class="clickable no-select">
-		<svg viewBox="0 0 32 32">
-			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="24,4 8,16 24,27" />
-		</svg>
-	</div>
-	<div id="year_current" class="no-select"></div>
-	<div id="year_inc" class="clickable">
-		<svg viewBox="0 0 32 32">
-			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="8,4 24,16 8,27" />
-		</svg>
-	</div>
-	<div id="decade_inc" class="clickable no-select">
-		<svg viewBox="0 0 32 32">
-			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="12,4 28,16 12,27" />
-			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="4,4 20,16 4,27" />
-		</svg>
-	</div>
-	<div id="month_dec" class="clickable no-select">
-		<svg viewBox="0 0 32 32">
-			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="24,4 8,16 24,27" />
-		</svg>
-	</div>
-	<div id="month_current" class="no-select"></div>
-	<div id="month_inc" class="clickable no-select">
-		<svg viewBox="0 0 32 32">
-			<polyline stroke="var(--fg-light)" stroke-width="2" fill="none" points="8,4 24,16 8,27" />
-		</svg>
-	</div>
-	<div class="week no-select">S</div>
-	<div class="week no-select">M</div>
-	<div class="week no-select">T</div>
-	<div class="week no-select">W</div>
-	<div class="week no-select">T</div>
-	<div class="week no-select">F</div>
-	<div class="week no-select">S</div>
-	<div id="day_0" class="no-select" onclick="_onClick"></div>
-	<div id="day_1" class="no-select" onclick="_onClick"></div>
-	<div id="day_2" class="no-select" onclick="_onClick"></div>
-	<div id="day_3" class="no-select" onclick="_onClick"></div>
-	<div id="day_4" class="no-select" onclick="_onClick"></div>
-	<div id="day_5" class="no-select" onclick="_onClick"></div>
-	<div id="day_6" class="no-select" onclick="_onClick"></div>
-	<div id="day_7" class="no-select" onclick="_onClick"></div>
-	<div id="day_8" class="no-select" onclick="_onClick"></div>
-	<div id="day_9" class="no-select" onclick="_onClick"></div>
-	<div id="day_10" class="no-select" onclick="_onClick"></div>
-	<div id="day_11" class="no-select" onclick="_onClick"></div>
-	<div id="day_12" class="no-select" onclick="_onClick"></div>
-	<div id="day_13" class="no-select" onclick="_onClick"></div>
-	<div id="day_14" class="no-select" onclick="_onClick"></div>
-	<div id="day_15" class="no-select" onclick="_onClick"></div>
-	<div id="day_16" class="no-select" onclick="_onClick"></div>
-	<div id="day_17" class="no-select" onclick="_onClick"></div>
-	<div id="day_18" class="no-select" onclick="_onClick"></div>
-	<div id="day_19" class="no-select" onclick="_onClick"></div>
-	<div id="day_20" class="no-select" onclick="_onClick"></div>
-	<div id="day_21" class="no-select" onclick="_onClick"></div>
-	<div id="day_22" class="no-select" onclick="_onClick"></div>
-	<div id="day_23" class="no-select" onclick="_onClick"></div>
-	<div id="day_24" class="no-select" onclick="_onClick"></div>
-	<div id="day_25" class="no-select" onclick="_onClick"></div>
-	<div id="day_26" class="no-select" onclick="_onClick"></div>
-	<div id="day_27" class="no-select" onclick="_onClick"></div>
-	<div id="day_28" class="no-select" onclick="_onClick"></div>
-	<div id="day_29" class="no-select" onclick="_onClick"></div>
-	<div id="day_30" class="no-select" onclick="_onClick"></div>
-	<div id="day_31" class="no-select" onclick="_onClick"></div>
-	<div id="day_32" class="no-select" onclick="_onClick"></div>
-	<div id="day_33" class="no-select" onclick="_onClick"></div>
-	<div id="day_34" class="no-select" onclick="_onClick"></div>
-	<div id="day_35" class="no-select" onclick="_onClick"></div>
-	<div id="day_36" class="no-select" onclick="_onClick"></div>
-	<div id="day_37" class="no-select" onclick="_onClick"></div>
-	<div id="day_38" class="no-select" onclick="_onClick"></div>
-	<div id="day_39" class="no-select" onclick="_onClick"></div>
-	<div id="day_40" class="no-select" onclick="_onClick"></div>
-	<div id="day_41" class="no-select" onclick="_onClick"></div>
-	`;
-
-Calendar.style = `
-	.Calendar {
-		width: 14rem;
-		border: 1px solid var(--fg-light);
-		border-radius: .5rem;
-		display: grid;
-		grid-template-rows: repeat(9, 2rem);
-		grid-template-columns: repeat(7, 2rem);
-		cursor: default;
-	}
-	.Calendar #year_current {
-		grid-column-start: 3;
-		grid-column-end: 6;
-	}
-	.Calendar #month_current {
-		grid-column-start: 2;
-		grid-column-end: 7;
-	}
-	.Calendar > div {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 1rem;
-		line-height: 1.5rem;
-	}
-	.Calendar svg {
-		height: 1.5rem;
-	}
-	.Calendar .clickable {
-		cursor: pointer;
-	}
-	.Calendar .clickable:hover {
-		font-weight: bold;
-		font-size: 1.5rem;
-		line-height: 2rem;
-	}
-	.Calendar .clickable:hover svg {
-		height: 2rem;
-	}
-	.Calendar .clickable:hover svg polyline {
-		stroke-width: 4;
-	}
-	.Calendar .week {
-		border-bottom: 1px solid var(--fg-light);
-	}
-	.Calendar .anotherMonth {
-		color: var(--fg-light-disabled);
-	}
-	.Calendar .selected {
-		background: var(--bg-dark);
-		color: var(--fg-dark);
-	}
-	.Calendar .selected.first {
-		border-top-left-radius: 1rem;
-		border-bottom-left-radius: 1rem;
-	}
-	.Calendar .selected.last {
-		border-top-right-radius: 1rem;
-		border-bottom-right-radius: 1rem;
-	}
-	`;
-
-Calendar.register();
+Calendar.html = html;
+Calendar.css = css;

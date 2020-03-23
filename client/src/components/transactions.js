@@ -1,5 +1,6 @@
 import { Component, ShowHide } from '../../../../app-js/src/index';
 import TransactionList from './transaction_list';
+import style from './transactions.css';
 import filterSVG from './filter.svg';
 import importSVG from './import.svg';
 import DateChooser from './date_chooser';
@@ -12,33 +13,32 @@ import YMD from './ymd';
  */
 export default class Transactions extends Component {
 	/**
-	 * Constructs the app.
-	 * @param {HTMLElement} elem - The element inside which the component will reside.
-	 * @param {Financio} financio - The app.
+	 * Constructor.
+	 * @param {Component.Params} params
 	 */
-	constructor(elem, financio) {
-		super(elem);
+	constructor(params) {
+		super(params);
 
 		/**
 		 * The app.
 		 * @type {Financio}
 		 * @private
 		 */
-		this._financio = financio;
+		this._app = params.attributes.get('app');
 
 		/**
 		 * The start date input.
 		 * @type {DateChooser}
 		 * @private
 		 */
-		this._startDate = this.getComponent('startDate');
+		this._startDate = this.__component('startDate');
 
 		/**
 		 * The end date input.
 		 * @type {DateChooser}
 		 * @private
 		 */
-		this._endDate = this.getComponent('endDate');
+		this._endDate = this.__component('endDate');
 
 		this._transactionList = new TransactionList(this.get('transactionList'));
 
@@ -46,18 +46,18 @@ export default class Transactions extends Component {
 
 		this._updateFromQuery();
 
-		this._financio.router.addCallback(this._updateFromQuery);
+		this._app.router.addCallback(this._updateFromQuery);
 	}
 
 	destroy() {
-		this._financio.router.removeCallback(this._updateFromQuery);
+		this._app.router.removeCallback(this._updateFromQuery);
 		super.destroy();
 	}
 
 	async _updateFromQuery() {
 		// Set the start and end dates from the query.
-		let startDate = this._financio.router.getValue('startDate');
-		let endDate = this._financio.router.getValue('endDate');
+		let startDate = this._app.router.getValue('startDate');
+		let endDate = this._app.router.getValue('endDate');
 		const today = new YMD();
 		if (!startDate) {
 			startDate = new YMD(today.year, today.month - 3, today.day);
@@ -77,20 +77,20 @@ export default class Transactions extends Component {
 		this._endDate.date = endDate;
 
 		// Set the min and max amounts from the query.
-		const minAmount = this._financio.router.getValue('minAmount') || '';
-		const maxAmount = this._financio.router.getValue('maxAmount') || '';
+		const minAmount = this._app.router.getValue('minAmount') || '';
+		const maxAmount = this._app.router.getValue('maxAmount') || '';
 		this.get('minAmount').value = minAmount;
 		this.get('maxAmount').value = maxAmount;
 
 		// Set the search from the query.
-		const search = this._financio.router.getValue('search') || '';
+		const search = this._app.router.getValue('search') || '';
 		this.get('search').value = search;
 
 		// Update the transactions.
 		/** @type {Transaction[]} */
-		const transactions = await this._financio.server.send({
+		const transactions = await this._app.server.send({
 			command: 'list transactions',
-			name: this._financio.router.getValue('name'),
+			name: this._app.router.getValue('name'),
 			startDate: startDate.toString(),
 			endDate: endDate.toString(),
 			minAmount: minAmount,
@@ -106,9 +106,9 @@ export default class Transactions extends Component {
 	}
 
 	_goToImportTransactions() {
-		this._financio.router.pushQuery({
+		this._app.router.pushQuery({
 			page: 'importTransactions',
-			name: this._financio.router.getValue('name')
+			name: this._app.router.getValue('name')
 		});
 	}
 
@@ -152,9 +152,9 @@ export default class Transactions extends Component {
 		// Get the search.
 		const search = filterInputs.search;
 
-		this._financio.router.pushQuery({
-			page: this._financio.router.getValue('page'),
-			name: this._financio.router.getValue('name'),
+		this._app.router.pushQuery({
+			page: this._app.router.getValue('page'),
+			name: this._app.router.getValue('name'),
 			startDate: startDate,
 			endDate: endDate,
 			minAmount: minAmount,
@@ -193,3 +193,5 @@ Transactions.html = `
 	</form>
 	<div id="transactionList"></div>
 	`;
+
+Transactions.style = style;
