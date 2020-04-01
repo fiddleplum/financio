@@ -14,8 +14,21 @@ button {
 </style>
 
 <script>
-import { getContext } from 'svelte';
-const router = getContext('router');
+import A from './a';
+
+/** @type {A} */
+const a = null;
+
+const b = new A();
+
+/** @type {Router} */
+export let router;
+
+/** @type {Router} */
+const a = null;
+
+// import { getContext } from 'svelte';
+// const router = getContext('router');
 
 function goToPage(event) {
 	console.log(event);

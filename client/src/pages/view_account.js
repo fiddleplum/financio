@@ -10,17 +10,17 @@ import css from './view_account.css';
 export default class ViewAccount extends Component {
 	/**
 	 * Constructor.
-	 * @param {Component.Params} params
+	 * @param {Financio} app
 	 */
-	constructor(params) {
-		super(params);
+	constructor(app) {
+		super();
 
 		/**
 		 * The app.
 		 * @type {Financio}
 		 * @private
 		 */
-		this._app = params.attributes.get('app');
+		this._app = app;
 
 		/**
 		 * The name of the account to view.
@@ -31,10 +31,9 @@ export default class ViewAccount extends Component {
 
 		this.__element('accountName').innerHTML = this._name;
 
-		const transactionList = this.__component('transactionList');
-		if (transactionList instanceof TransactionList) {
-			// transactionList.transactions =
-		}
+		// const transactionList = this.__component('transactionList');
+		// if (transactionList instanceof TransactionList) {
+		// }
 	}
 
 	_goToRenameAccount() {
