@@ -1,5 +1,5 @@
 module.exports = {
-	entry: './src/financio.ts',
+	entry: './src/index.ts',
 	output: {
 		filename: 'script.js'
 	},

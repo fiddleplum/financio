@@ -1,7 +1,7 @@
-import { SimpleApp } from '../../../../app-ts/src/index';
+import { Financio } from '../internal';
 
 /** The menu page. */
-export default class Menu extends SimpleApp.Page {
+export class Menu extends Financio.Page {
 	/** The click event handler for the menu buttons. */
 	private goToPage(event: UIEvent): void {
 		if (event.target instanceof Element) {
