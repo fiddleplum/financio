@@ -1,10 +1,5 @@
 import { SimpleApp, Component, WS } from '../../../app-ts/src/index';
-import { Menu } from './internal';
-import { ListAccounts } from './internal';
-import { AddAccount } from './internal';
-// import ViewAccount from './pages/view_account';
-// import RenameAccount from './pages/rename_account';
-// import DeleteAccount from './pages/delete_account';
+import { Menu, ListAccounts, AddAccount, ViewAccount, RenameAccount, DeleteAccount } from './internal';
 // import ImportTransactions from './pages/import_transactions';
 // import ListCategories from './pages/list_categories';
 import css from './financio.css';
@@ -19,7 +14,7 @@ export class Financio extends SimpleApp {
 	constructor() {
 		super();
 
-		// Star tthe server.
+		// Start the server.
 		this.server = new WS(this.serverHost);
 
 		// Set the title.
@@ -29,9 +24,9 @@ export class Financio extends SimpleApp {
 		this.registerPage('', Menu);
 		this.registerPage('listAccounts', ListAccounts);
 		this.registerPage('addAccount', AddAccount);
-		// this.registerPage('viewAccount', ViewAccount);
-		// this.registerPage('renameAccount', RenameAccount);
-		// this.registerPage('deleteAccount', DeleteAccount);
+		this.registerPage('viewAccount', ViewAccount);
+		this.registerPage('renameAccount', RenameAccount);
+		this.registerPage('deleteAccount', DeleteAccount);
 		// this.registerPage('importTransactions', ImportTransactions);
 		// this.registerPage('listCategories', ListCategories);
 

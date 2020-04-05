@@ -1,16 +1,8 @@
 import { Component } from '../../../../app-ts/src/index';
 import { Financio } from '../internal';
 
-/**
- * The add account page.
- */
+/** The add account page. */
 export class AddAccount extends Financio.Page {
-	/**
-	 * The click event handler for the menu buttons.
-	 * @param {Element} element
-	 * @param {UIEvent} event
-	 * @private
-	 */
 	private goToListCategories(): void {
 		this.app.router.pushQuery({
 			page: 'listAccounts'
