@@ -30,23 +30,21 @@ export class AddAccount extends Financio.Page {
 }
 
 AddAccount.html = `
-	<h1>Add an Account</h1>
-	<form ref="form" action="javascript:">
-		<div class="inputs">
-			<label for="name" class="left">Name:</label>
-			<input name="name" type="text" class="right" />
-			<label for="type" class="left">Type:</label>
-			<select name="type" class="right">
+	<div>
+		<h1>Add an Account</h1>
+		<form ref="form" action="javascript:">
+			<p class="label"><label for="name">Name:</label></p>
+			<p><input name="name" type="text" /></p>
+			<p class="label"><label for="type">Type:</label></p>
+			<p><select name="type">
 				<option value="credit">Credit</option>
 				<option value="debit">Debit</option>
-			</select>
-		</div>
-		<div class="actions">
-			<button class="submit" onclick="submitForm">Add Account</button>
-			<button class="cancel" onclick="goToListCategories">Cancel</button>
-		</div>
-	</form>
-	<div ref="feedback"></div>
+			</select></p>
+			<button class="left" onclick="goToListCategories">Cancel</button>
+			<button class="right" onclick="submitForm">Add Account</button>
+		</form>
+		<div ref="feedback"></div>
+	</div>
 	`;
 
 AddAccount.css = `

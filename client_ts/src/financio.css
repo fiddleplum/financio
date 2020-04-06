@@ -25,12 +25,12 @@ body {
 	line-height: 1.5rem;
 }
 
-.Financio.title {
+.Financio .title {
 	background: var(--bg-dark);
 	color: var(--fg-dark);
 }
 
-.Financio.message {
+.Financio .message {
 	background: var(--bg-dark);
 	color: var(--fg-dark);
 }
@@ -44,7 +44,7 @@ h1 {
 }
 
 p {
-	margin-top: 1rem;
+	margin-top: 0;
 	margin-bottom: 1rem;
 }
 
@@ -57,14 +57,16 @@ button {
 	font-size: inherit;
 	font-family: inherit;
 	text-align: center;
+	vertical-align: top;
 	cursor: pointer;
 	line-height: 1.5rem;
+	min-width: 2.0rem;
 	height: 2.0rem;
 }
 
 button svg {
-	width: 1rem;
-	height: 1rem;
+	width: 1.5rem;
+	height: 1.5rem;
 	fill: var(--bg-light);
 }
 
@@ -72,41 +74,16 @@ form {
 	overflow: auto;
 }
 
-form .inputs {
-	display: grid;
-	grid-auto-rows: minmax(2rem, max-content);
-	grid-template-columns: 10rem 1fr;
-	gap: 1rem;
-	margin: 0 auto 1rem auto;
+form p.label {
+	margin-bottom: 0.25rem;
 }
 
-form .inputs .left, form .inputs .right {
-	display: inline-block;
-	margin-top: 0;
-	line-height: 2rem;
-}
-
-form .inputs .left {
-	text-align: left;
-}
-
-form .inputs .right {
-	text-align: left;
-}
-
-form .actions {
-	margin-bottom: 1rem;
-}
-
-form .actions .cancel {
-	background-color: var(--bg-light);
-	border: 1px solid var(--fg-light);
-	color: var(--fg-light);
+form button.left {
 	float: left;
 	width: 10rem;
 }
 
-form .actions .submit {
+form button.right {
 	float: right;
 	width: 10rem;
 }

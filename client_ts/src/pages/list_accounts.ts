@@ -40,13 +40,15 @@ export class ListAccounts extends Financio.Page {
 }
 
 ListAccounts.html = `
-	<h1>Accounts</h1>
-	<div ref="list"></div>
-	<button ref="newAccount" onclick="goToAddAccount">+ New Account +</button>
+	<div>
+		<h1>Accounts</h1>
+		<div ref="list"></div>
+		<button ref="newAccount" onclick="goToAddAccount">+ New Account +</button>
+	</div>
 	`;
 
 ListAccounts.css = `
-	button.ListAccounts, .ListAccounts button {
+	.ListAccounts button {
 		display: block;
 		margin: 1rem auto;
 		width: 10rem;

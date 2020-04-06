@@ -15,6 +15,14 @@ export class RenameAccount extends Financio.Page {
 		this.__element('name').innerHTML = this.name;
 	}
 
+	/** Goes to the view account page. */
+	private goToViewAccount(): void {
+		this.app.router.pushQuery({
+			page: 'viewAccount',
+			name: this.name
+		});
+	}
+
 	private submitForm(): void {
 		const formElem = this.__element('form');
 		const inputs = Component.getFormInputs(formElem);
@@ -35,26 +43,25 @@ export class RenameAccount extends Financio.Page {
 }
 
 RenameAccount.html = `
-	<h1>Rename Account</h1>
-	<p>The name of the account to be renamed is <b ref="name"></b>.</p>
-	<form ref="form" action="javascript:">
-		<div class="inputs">
-			<label for="name" class="left">New name:</label>
-			<input name="newName" type="text" class="right" />
-		</div>
-		<div class="actions">
-			<button class="submit" onclick="submitForm">Rename Account</button>
-		</div>
+	<div>
+		<h1>Rename Account</h1>
+		<p>The name of the account to be renamed is <b ref="name"></b>.</p>
+		<form ref="form" action="javascript:">
+			<p class="label"><label for="name">New name:</label></p>
+			<p><input name="newName" type="text" /></p>
+			<button class="left" onclick="goToViewAccount">Cancel</button>
+			<button class="right" onclick="submitForm">Rename Account</button>
+		</form>
 		<p ref="feedback"></p>
-	</form>
+	</div>
 	`;
 
 RenameAccount.css = `
-	form.RenameAccount .left {
+	.RenameAccount form .left {
 		width: 7rem;
 	}
 
-	form.RenameAccount .right {
+	.RenameAccount form .right {
 		width: 10rem;
 	}
 	`;

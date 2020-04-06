@@ -16,16 +16,18 @@ export class Menu extends Financio.Page {
 }
 
 Menu.html = `
-	<h1>Main Menu</h1>
-	<button ref="listAccounts" onclick="goToPage">Accounts</button>
-	<button ref="listCategories" onclick="goToPage">Categories</button>
-	<button ref="rules" onclick="goToPage">Rules</button>
-	<button ref="budgets" onclick="goToPage">Budgets</button>
-	<button ref="reports" onclick="goToPage">Reports</button>
+	<div>
+		<h1>Main Menu</h1>
+		<button ref="listAccounts" onclick="goToPage">Accounts</button>
+		<button ref="listCategories" onclick="goToPage">Categories</button>
+		<button ref="rules" onclick="goToPage">Rules</button>
+		<button ref="budgets" onclick="goToPage">Budgets</button>
+		<button ref="reports" onclick="goToPage">Reports</button>
+	</div>
 	`;
 
 Menu.css = `
-	button.Menu {
+	.Menu button {
 		display: block;
 		margin: 1rem auto;
 		width: 10rem;

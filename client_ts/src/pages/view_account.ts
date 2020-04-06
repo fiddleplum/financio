@@ -1,5 +1,5 @@
 import { Component } from '../../../../app-ts/src/index';
-import { Financio, TransactionList } from '../internal';
+import { Financio } from '../internal';
 
 /** The view accounts page. */
 export class ViewAccount extends Financio.Page {
@@ -19,6 +19,12 @@ export class ViewAccount extends Financio.Page {
 		// }
 	}
 
+	private goToListAccounts(): void {
+		this.app.router.pushQuery({
+			page: 'listAccounts'
+		});
+	}
+
 	private goToRenameAccount(): void {
 		this.app.router.pushQuery({
 			page: 'renameAccount',
@@ -35,11 +41,14 @@ export class ViewAccount extends Financio.Page {
 }
 
 ViewAccount.html = `
-	<div class="toolbar">
-		<button ref="renameAccount" onclick="goToRenameAccount"><icon src="svg/edit.svg"/></button> <button ref="deleteAccount" onclick="goToDeleteAccount"><icon src="svg/trash.svg"/></button>
+	<div>
+		<div class="toolbar">
+			<button onclick="goToListAccounts">Back</button> <button ref="renameAccount" onclick="goToRenameAccount"><icon src="svg/edit.svg"/></button> <button ref="deleteAccount" onclick="goToDeleteAccount"><icon src="svg/trash.svg"/></button>
+		</div>
+		<h1 ref="accountName"></h1>
+		<datechooser/>
+		<!--<div ref="transactionList"></div>-->
 	</div>
-	<h1 ref="accountName"></h1>
-	<div ref="transactionList"></div>
 	`;
 
 ViewAccount.css = `

@@ -1,8 +1,18 @@
 IDEAS
 
+Multiple vs Single Root
 
-I'm running into a problem. If I have a generic panel component as an element, <panel>, and it has children,
-if those children have their own components, how do I 
+If you have a component with a single element as its root, and then you have another component that just has the first component as its root, not all of the second component's root nodes will have the proper classes to identify them as the components. So you could have three nested components, but it'll look like this:
+
+<div class="Component1">
+	<div class="Component3"></div>
+</div>
+
+And so Component2 isn't represented because it only contained a single Component3 root node.
+
+So every component should have a single root node (not zero or multiple) for it to be instantiated properly.
+
+
 
 
 SVG needs to be imported in JS or in www/svg.

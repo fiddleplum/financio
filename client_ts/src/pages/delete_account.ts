@@ -15,6 +15,14 @@ export class DeleteAccount extends Financio.Page {
 		this.__element('name').innerHTML = this.name;
 	}
 
+	/** Goes to the view account page. */
+	private goToViewAccount(): void {
+		this.app.router.pushQuery({
+			page: 'viewAccount',
+			name: this.name
+		});
+	}
+
 	private submitForm(): void {
 		const formElem = this.__element('form');
 		const inputs = Component.getFormInputs(formElem);
@@ -25,7 +33,7 @@ export class DeleteAccount extends Financio.Page {
 				name: this.name
 			}).then(() => {
 				this.app.router.pushQuery({
-					page: 'accounts'
+					page: 'listAccounts'
 				});
 			}).catch((error) => {
 				this.__element('feedback').innerHTML = error.message;
@@ -38,19 +46,18 @@ export class DeleteAccount extends Financio.Page {
 }
 
 DeleteAccount.html = `
-	<h1>Delete Account</h1>
-	<p>The name of the account to be deleted is <b ref="name"></b>.</p>
-	<p>All data associated with the account will be irrecoverably deleted, with no undoing the action.</p>
-	<form ref="form" action="javascript:">
-		<div class="inputs">
+	<div>
+		<h1>Delete Account</h1>
+		<p>The name of the account to be deleted is <b ref="name"></b>.</p>
+		<p>All data associated with the account will be irrecoverably deleted, with no undoing the action.</p>
+		<form ref="form" action="javascript:">
 			<p>If you want to delete your account, enter the <b>DELETE</b> in all capital letters:</p>
 			<p><input name="delete" type="text" /></p>
-		</div>
-		<div class="actions">
-			<button class="submit" onclick="submitForm">Delete Account</button>
-		</div>
+			<button class="left" onclick="goToViewAccount">Cancel</button>
+			<button class="right" onclick="submitForm">Delete Account</button>
+		</form>
 		<p ref="feedback"></p>
-	</form>
+	</div>
 	`;
 
 DeleteAccount.register();
