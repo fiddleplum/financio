@@ -46,7 +46,7 @@ ViewAccount.html = `
 			<button onclick="goToListAccounts">Back</button> <button ref="renameAccount" onclick="goToRenameAccount"><icon src="svg/edit.svg"/></button> <button ref="deleteAccount" onclick="goToDeleteAccount"><icon src="svg/trash.svg"/></button>
 		</div>
 		<h1 ref="accountName"></h1>
-		<datechooser/>
+		<!--<datechooser/>-->
 		<!--<div ref="transactionList"></div>-->
 	</div>
 	`;
@@ -57,10 +57,6 @@ ViewAccount.css = `
 		font-size: 1rem;
 		line-height: 2rem;
 		height: 2rem;
-	}
-
-	.ViewAccount .toolbar button {
-		vertical-align: baseline;
 	}
 	`;
 

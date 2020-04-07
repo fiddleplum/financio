@@ -19,25 +19,25 @@ async function processMessage(ws, message) {
 	console.log('received: %s', JSON.stringify(requestData));
 	try {
 		if (requestData.command === 'list accounts') {
-			responseData = await Accounts.list();
+			responseData = Accounts.list();
 		}
 		else if (requestData.command === 'create account') {
 			let name = requestData.name;
 			let type = requestData.type;
-			responseData = await Accounts.create(name, type);
+			responseData = Accounts.create(name, type);
 		}
 		else if (requestData.command === 'delete account') {
 			let name = requestData.name;
-			responseData = await Accounts.delete(name);
+			responseData = Accounts.delete(name);
 		}
 		else if (requestData.command === 'view account') {
 			let name = requestData.name;
-			responseData = await Accounts.view(name);
+			responseData = Accounts.view(name);
 		}
 		else if (requestData.command === 'rename account') {
 			let name = requestData.name;
 			let newName = requestData.newName;
-			responseData = await Accounts.rename(name, newName);
+			responseData = Accounts.rename(name, newName);
 		}
 		else if (requestData.command === 'list transactions') {
 			let name = requestData.name;
@@ -46,24 +46,24 @@ async function processMessage(ws, message) {
 			let search = requestData.search;
 			let minAmount = requestData.minAmount;
 			let maxAmount = requestData.maxAmount;
-			responseData = await Accounts.listTransactions(name, startDate, endDate, search, minAmount, maxAmount);
+			responseData = Accounts.listTransactions(name, startDate, endDate, search, minAmount, maxAmount);
 		}
 		else if (requestData.command === 'check duplicate transactions') {
 			let name = requestData.name;
 			let transactions = requestData.transactions;
-			responseData = await Accounts.checkDuplicateTransactions(name, transactions);
+			responseData = Accounts.checkDuplicateTransactions(name, transactions);
 		}
 		else if (requestData.command === 'add transactions') {
 			let name = requestData.name;
 			let transactions = requestData.transactions;
-			responseData = await Accounts.addTransactions(name, transactions);
+			responseData = Accounts.addTransactions(name, transactions);
 		}
 		else if (requestData.command === 'get categories') {
-			responseData = await Categories.get();
+			responseData = Categories.get();
 		}
 		else if (requestData.command === 'set categories') {
 			let categories = requestData.categories;
-			responseData = await Categories.set(categories);
+			responseData = Categories.set(categories);
 		}
 		else {
 			throw new Error('Unknown command.');
@@ -71,7 +71,7 @@ async function processMessage(ws, message) {
 		success = true;
 	}
 	catch (e) {
-		console.log(e.message);
+		console.log('Error: ' + e.message);
 		error = e.message;
 	}
 	ws.send(JSON.stringify({

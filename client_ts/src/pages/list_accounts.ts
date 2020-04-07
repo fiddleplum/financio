@@ -1,5 +1,5 @@
 import { Component } from '../../../../app-ts/src/index';
-import { Financio } from '../internal';
+import { Financio, Account } from '../internal';
 
 /** The list accounts page. */
 export class ListAccounts extends Financio.Page {
@@ -9,10 +9,10 @@ export class ListAccounts extends Financio.Page {
 		// Populate the list of account names.
 		this.app.server.send({
 			command: 'list accounts'
-		}).then((accountNames: string[]) => {
+		}).then((accounts: Account[]) => {
 			let html = '';
-			for (let i = 0, l = accountNames.length; i < l; i++) {
-				html += `<button ref="${accountNames[i]}" onclick="goToViewAccount">${accountNames[i]}</button>`;
+			for (let i = 0, l = accounts.length; i < l; i++) {
+				html += `<button ref="${accounts[i].name}" onclick="goToViewAccount">${accounts[i].name}</button>`;
 			}
 			this.__setHtml(this.__element('list'), html);
 		});

@@ -1,8 +1,9 @@
 export * from './financio';
 
 export * from './types/interval';
-export * from './types/transaction';
 export * from './types/ymd';
+export * from './types/transaction';
+export * from './types/account';
 
 export * from './components/calendar';
 export * from './components/date_chooser';

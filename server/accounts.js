@@ -8,25 +8,48 @@ class Accounts {
 		}
 	}
 
-	static list() {
-		let accounts = [];
-		let files = fs.readdirSync('data/accounts/');
-		for (let i = 0, l = files.length; i < l; i++) {
-			if (files[i].endsWith('.json')) {
-				accounts.push(files[i].substr(0, files[i].length - 5));
+	static loadAccounts() {
+		try {
+			return JSON.parse(fs.readFileSync('data/accounts.json'));
+		}
+		catch (error) {
+			throw new Error('The file "data/accounts.json" could not be read. ' + error);
+		}
+	}
+
+	static saveAccounts(accounts) {
+		try {
+			fs.writeFileSync('data/accounts.json', JSON.stringify(accounts));
+		}
+		catch (error) {
+			throw new Error('The file "data/accounts.json" could not be written to. ' + error);
+		}
+	}
+
+	static getAccountIndex(name, accounts) {
+		for (let i = 0; i < accounts.length; i++) {
+			if (accounts[i].name === name) {
+				return i;
 			}
 		}
-		return accounts;
+		return undefined;
+	}
+
+	static list() {
+		return this.loadAccounts();
 	}
 
 	static create(name, type) {
 		// Validate the name.
 		if (!this._validateName(name)) {
-			throw new Error('Error: The name "' + name + '" is not a valid account name. Please use only alphanumeric, space, underscore, and dash characters.');
+			throw new Error('The name "' + name + '" is not a valid account name. Please use only alphanumeric, space, underscore, and dash characters.');
 		}
 
+		// Load the accounts file.
+		const accounts = this.loadAccounts();
+
 		// Verify that the name doesn't already exist.
-		if (fs.existsSync('data/accounts/' + name + '.json')) {
+		if (this.getAccountIndex(name, accounts) !== undefined) {
 			throw new Error('The name "' + name + '" already exists.');
 		}
 
@@ -35,14 +58,10 @@ class Accounts {
 			name: name,
 			type: type
 		};
+		accounts.push(account);
 
-		// Create the .json file.
-		try {
-			fs.writeFileSync('data/accounts/' + name + '.json', JSON.stringify(account));
-		}
-		catch (error) {
-			throw new Error('Error: The file "data/accounts/' + name + '.json" could not be written to. ' + error);
-		}
+		// Save the accounts file.
+		this.saveAccounts(accounts);
 
 		// Create the data folder.
 		try {
@@ -51,20 +70,28 @@ class Accounts {
 			}
 		}
 		catch (error) {
-			throw new Error('Error: The folder "data/accounts/' + name + '/" could not be created. ' + error);
+			throw new Error('The folder "data/accounts/' + name + '/" could not be created. ' + error);
 		}
 	}
 
 	static delete(name) {
 		// Validate the name.
 		if (!this._validateName(name)) {
-			throw new Error('Error: The name "' + name + '" is not a valid account name. Please use only alphanumeric, space, underscore, and dash characters.');
+			throw new Error('The name "' + name + '" is not a valid account name. Please use only alphanumeric, space, underscore, and dash characters.');
 		}
 
-		// Verify that the name already exists.
-		if (!fs.existsSync('data/accounts/' + name + '.json')) {
+		// Load the accounts file.
+		const accounts = this.loadAccounts();
+
+		// Delete the account JSON.
+		const accountIndex = this.getAccountIndex(name, accounts);
+		if (accountIndex === undefined) {
 			throw new Error('The name "' + name + '" does not exist.');
 		}
+		accounts.splice(i, 1);
+
+		// Save the accounts file.
+		this.saveAccounts(accounts);
 
 		// Delete all created folders and files for the account.
 		fs.unlinkSync('data/accounts/' + name + '.json');
@@ -91,18 +118,23 @@ class Accounts {
 			throw new Error('The name "' + newName + '" is not a valid account name. Please use only alphanumeric, space, underscore, and dash characters.');
 		}
 
-		// Verify that the name already exists.
-		if (!fs.existsSync('data/accounts/' + name + '.json')) {
-			throw new Error('The name "' + name + '" does not exist.');
-		}
+		// Load the accounts file.
+		const accounts = this.loadAccounts();
 
 		// Verify that the newName doesn't already exist.
-		if (fs.existsSync('data/accounts/' + newName + '.json')) {
+		if (this.getAccountIndex(newName, accounts) !== undefined) {
 			throw new Error('The name "' + newName + '" already exists.');
 		}
 
-		// Rename the .json file.
-		fs.renameSync('data/accounts/' + name + '.json', 'data/accounts/' + newName + '.json');
+		// Rename the account JSON.
+		const accountIndex = this.getAccountIndex(name, accounts);
+		if (accountIndex === undefined) {
+			throw new Error('The name "' + name + '" does not exist.');
+		}
+		accounts[i].name === newName;
+
+		// Save the accounts file.
+		this.saveAccounts(accounts);
 
 		// Rename the data folder.
 		fs.renameSync('data/accounts/' + name + '/', 'data/accounts/' + newName + '/');
@@ -114,12 +146,15 @@ class Accounts {
 			throw new Error('The name "' + name + '" is not a valid account name. Please use only alphanumeric, space, underscore, and dash characters.');
 		}
 
-		// Verify that the name exists.
-		if (!fs.existsSync('data/accounts/' + name + '.json')) {
-			throw new Error('Error: The account "' + name + '" does not exist.');
-		}
+		// Load the accounts file.
+		const accounts = this.loadAccounts();
 
-		return JSON.parse(fs.readFileSync('data/accounts/' + name + '.json'));
+		// Return the account.
+		const accountIndex = this.getAccountIndex(newName, accounts);
+		if (accountIndex === undefined) {
+			throw new Error('The name "' + name + '" does not exist.');
+		}
+		return accounts[accountIndex];
 	}
 
 	/**
