@@ -26,7 +26,7 @@ export class DeleteAccount extends Financio.Page {
 	private submitForm(): void {
 		const formElem = this.__element('form');
 		const inputs = Component.getFormInputs(formElem);
-		if (inputs.delete === 'DELETE') {
+		if (inputs.delete === this.name) {
 			// Send the command to the server.
 			this.app.server.send({
 				command: 'delete account',
@@ -40,7 +40,7 @@ export class DeleteAccount extends Financio.Page {
 			});
 		}
 		else {
-			this.__element('feedback').innerHTML = 'Please enter DELETE to delete the account.';
+			this.__element('feedback').innerHTML = 'Please enter the name of the account exactly.';
 		}
 	}
 }
@@ -51,7 +51,7 @@ DeleteAccount.html = /*html*/`
 		<p>The name of the account to be deleted is <b ref="name"></b>.</p>
 		<p>All data associated with the account will be irrecoverably deleted, with no undoing the action.</p>
 		<form ref="form" action="javascript:">
-			<p>If you want to delete your account, enter the <b>DELETE</b> in all capital letters:</p>
+			<p>If you want to delete your account, enter the name in of the account (case sensitive).</p>
 			<p><input name="delete" type="text" /></p>
 			<button class="left" onclick="goToViewAccount">Cancel</button>
 			<button class="right" onclick="submitForm">Delete Account</button>
