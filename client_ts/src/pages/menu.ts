@@ -15,7 +15,7 @@ export class Menu extends Financio.Page {
 	}
 }
 
-Menu.html = `
+Menu.html = /*html*/`
 	<div>
 		<h1>Main Menu</h1>
 		<button ref="listAccounts" onclick="goToPage">Accounts</button>
@@ -26,7 +26,7 @@ Menu.html = `
 	</div>
 	`;
 
-Menu.css = `
+Menu.css = /*css*/`
 	.Menu button {
 		display: block;
 		margin: 1rem auto;

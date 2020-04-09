@@ -157,14 +157,14 @@ export default class DateChooser extends Component {
 	}
 }
 
-DateChooser.html = `
+DateChooser.html = /*html*/`
 	<span>
 		<input ref="date" class="date" type="text" placeholder="YYYY-MM-DD" maxlength=10 title="Please use the format YYYY-MM-DD" pattern="\\d\\d\\d\\d-\\d\\d-\\d\\d" onkeydown="_onDateInputKeyDown" oninput="_onDateInputInput" onchange="_onDateChange"/><button onclick="_toggleCalendar"><icon src="svg/calendar.svg" /></button>
 		<Calendar ref="calendar" style="display: none;" onclick="{{_onDateSelected}}"/>
 	</span>
 	`;
 
-DateChooser.css = `
+DateChooser.css = /*css*/`
 	.DateChooser .date {
 		width: 7rem;
 		text-align: left;

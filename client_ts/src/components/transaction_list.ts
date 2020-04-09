@@ -26,7 +26,7 @@ export class TransactionList extends Component {
 	}
 }
 
-TransactionList.html = `
+TransactionList.html = /*html*/`
 	<div class="heading">
 		<div class="transaction">
 			<div class="date">Date</div>
@@ -38,7 +38,7 @@ TransactionList.html = `
 	<div class="rows"></div>
 	`;
 
-TransactionList.css = `
+TransactionList.css = /*css*/`
 	.TransactionList .transaction {
 		width: 100%;
 		display: grid;

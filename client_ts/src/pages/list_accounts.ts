@@ -39,7 +39,7 @@ export class ListAccounts extends Financio.Page {
 	}
 }
 
-ListAccounts.html = `
+ListAccounts.html = /*html*/`
 	<div>
 		<h1>Accounts</h1>
 		<div ref="list"></div>
@@ -47,7 +47,7 @@ ListAccounts.html = `
 	</div>
 	`;
 
-ListAccounts.css = `
+ListAccounts.css = /*css*/`
 	.ListAccounts button {
 		display: block;
 		margin: 1rem auto;

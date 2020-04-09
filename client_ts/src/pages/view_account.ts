@@ -40,7 +40,7 @@ export class ViewAccount extends Financio.Page {
 	}
 }
 
-ViewAccount.html = `
+ViewAccount.html = /*html*/`
 	<div>
 		<div class="toolbar">
 			<button onclick="goToListAccounts">Back</button> <button ref="renameAccount" onclick="goToRenameAccount"><icon src="svg/edit.svg"/></button> <button ref="deleteAccount" onclick="goToDeleteAccount"><icon src="svg/trash.svg"/></button>
@@ -51,7 +51,7 @@ ViewAccount.html = `
 	</div>
 	`;
 
-ViewAccount.css = `
+ViewAccount.css = /*css*/`
 	.ViewAccount .toolbar {
 		float: right;
 		font-size: 1rem;

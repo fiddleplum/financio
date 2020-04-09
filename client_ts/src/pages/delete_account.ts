@@ -45,7 +45,7 @@ export class DeleteAccount extends Financio.Page {
 	}
 }
 
-DeleteAccount.html = `
+DeleteAccount.html = /*html*/`
 	<div>
 		<h1>Delete Account</h1>
 		<p>The name of the account to be deleted is <b ref="name"></b>.</p>

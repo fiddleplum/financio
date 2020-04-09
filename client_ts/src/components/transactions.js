@@ -163,7 +163,7 @@ export class Transactions extends Component {
 	}
 }
 
-Transactions.html = `
+Transactions.html = /*html*/`
 	<p><button id="filterButton" onclick="_toggleFilterForm">${filterSVG}</button> <button id="importButton" onclick="_goToImportTransactions">${importSVG}</button></p>
 	<div id="dateChooser"></div>
 	<form id="filterForm" style="display: none;" action="javascript:">

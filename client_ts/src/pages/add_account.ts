@@ -29,7 +29,7 @@ export class AddAccount extends Financio.Page {
 	}
 }
 
-AddAccount.html = `
+AddAccount.html = /*html*/`
 	<div>
 		<h1>Add an Account</h1>
 		<form ref="form" action="javascript:">
@@ -47,7 +47,7 @@ AddAccount.html = `
 	</div>
 	`;
 
-AddAccount.css = `
+AddAccount.css = /*css*/`
 	.AddAccount form #name {
 		width: 10rem;
 	}
