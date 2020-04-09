@@ -12,20 +12,17 @@ export class AddAccount extends Financio.Page {
 	private submitForm(): void {
 		const inputs = Component.getFormInputs(this.__element('form'));
 		// Send the command to the server.
-		try {
-			this.app.server.send({
-				command: 'create account',
-				name: inputs.name,
-				type: inputs.type
-			}).then(() => {
-				this.app.router.pushQuery({
-					page: 'listAccounts'
-				});
+		this.app.server.send({
+			command: 'create account',
+			name: inputs.name,
+			type: inputs.type
+		}).then(() => {
+			this.app.router.pushQuery({
+				page: 'listAccounts'
 			});
-		}
-		catch (error) {
+		}).catch((error) => {
 			this.__element('feedback').innerHTML = error.message;
-		}
+		});
 	}
 }
 
