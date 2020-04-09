@@ -53,8 +53,25 @@ class Accounts {
 			throw new Error('The name "' + name + '" already exists.');
 		}
 
+		// Find the next free id.
+		let id = 0;
+		while (true) {
+			let idTaken = false;
+			for (let i = 0; i < accounts.length; i++) {
+				if (accounts[i].id === id) {
+					idTaken = true;
+					break;
+				}
+			}
+			if (!idTaken) {
+				break;
+			}
+			id++;
+		}
+
 		// Create the account JSON.
 		const account = {
+			id: id,
 			name: name,
 			type: type
 		};
@@ -65,12 +82,12 @@ class Accounts {
 
 		// Create the data folder.
 		try {
-			if (!fs.existsSync('data/accounts/' + name + '/')) {
-				fs.mkdirSync('data/accounts/' + name + '/');
+			if (!fs.existsSync('data/accounts/' + id + '/')) {
+				fs.mkdirSync('data/accounts/' + id + '/');
 			}
 		}
 		catch (error) {
-			throw new Error('The folder "data/accounts/' + name + '/" could not be created. ' + error);
+			throw new Error('The folder "data/accounts/' + id + '/" could not be created. ' + error);
 		}
 	}
 
@@ -88,22 +105,22 @@ class Accounts {
 		if (accountIndex === undefined) {
 			throw new Error('The name "' + name + '" does not exist.');
 		}
-		accounts.splice(i, 1);
+		const accountFolder = 'data/accounts/' + accounts[accountIndex].id;
+		accounts.splice(accountIndex, 1);
 
 		// Save the accounts file.
 		this.saveAccounts(accounts);
 
 		// Delete all created folders and files for the account.
-		fs.unlinkSync('data/accounts/' + name + '.json');
-		if (fs.existsSync('data/accounts/' + name + '/')) {
-			if (fs.existsSync('data/accounts/' + name + '/transactions/')) {
-				let files = fs.readdirSync('data/accounts/' + name + '/transactions/');
+		if (fs.existsSync(accountFolder)) {
+			if (fs.existsSync(accountFolder + '/transactions/')) {
+				let files = fs.readdirSync(accountFolder + '/transactions/');
 				for (let i = 0, l = files.length; i < l; i++) {
-					fs.unlinkSync('data/accounts/' + name + '/transactions/' + files[i]);
+					fs.unlinkSync(accountFolder + '/transactions/' + files[i]);
 				}
-				fs.rmdirSync('data/accounts/' + name + '/transactions/');
+				fs.rmdirSync(accountFolder + '/transactions/');
 			}
-			fs.rmdirSync('data/accounts/' + name + '/');
+			fs.rmdirSync(accountFolder);
 		}
 	}
 
@@ -131,13 +148,10 @@ class Accounts {
 		if (accountIndex === undefined) {
 			throw new Error('The name "' + name + '" does not exist.');
 		}
-		accounts[i].name === newName;
+		accounts[accountIndex].name = newName;
 
 		// Save the accounts file.
 		this.saveAccounts(accounts);
-
-		// Rename the data folder.
-		fs.renameSync('data/accounts/' + name + '/', 'data/accounts/' + newName + '/');
 	}
 
 	static view(name) {
@@ -173,6 +187,15 @@ class Accounts {
 			throw new Error('The name "' + name + '" is not a valid account name. Please use only alphanumeric, space, underscore, and dash characters.');
 		}
 
+		// Load the accounts file.
+		const accounts = this.loadAccounts();
+
+		// Return the account.
+		const accountIndex = this.getAccountIndex(newName, accounts);
+		if (accountIndex === undefined) {
+			throw new Error('The name "' + name + '" does not exist.');
+		}
+
 		// Prepare the regular expression for searching.
 		let regExp = /.*/;
 		if (search) {
@@ -202,12 +225,13 @@ class Accounts {
 
 		/** @type {Transaction[]} */
 		let transactions = [];
-		if (fs.existsSync('data/accounts/' + name + '/transactions/')) {
+		const accountFolder = 'data/accounts/' + accounts[accountindex].id;
+		if (fs.existsSync(accountFolder + '/transactions/')) {
 			let date = new Date(startDate);
 			const end = new Date(endDate);
 			end.setUTCDate(end.getUTCDate() + 1); // Make it the next day to include the actual end date's transactions.
 			while (date.getTime() < end.getTime()) {
-				const filePath = this.getTransactionsFilePath(name, date);
+				const filePath = this.getTransactionsFilePath(accountFolder, date);
 				if (fs.existsSync(filePath)) {
 					/** @type {Transaction[]} */
 					const newTransactions = JSON.parse(fs.readFileSync(filePath));
@@ -243,6 +267,16 @@ class Accounts {
 			throw new Error('The name "' + name + '" is not a valid account name. Please use only alphanumeric, space, underscore, and dash characters.');
 		}
 
+		// Load the accounts file.
+		const accounts = this.loadAccounts();
+
+		// Get the account.
+		const accountIndex = this.getAccountIndex(newName, accounts);
+		if (accountIndex === undefined) {
+			throw new Error('The name "' + name + '" does not exist.');
+		}
+		const accountFolder = 'data/accounts/' + accounts[accountindex].id;
+
 		const newTransactions = [];
 		const duplicateTransactions = [];
 
@@ -251,7 +285,7 @@ class Accounts {
 		let currentTransactions = null;
 		for (let transaction of transactions) {
 			let date = new Date(transaction.date);
-			let transactionFilePath = this.getTransactionsFilePath(name, date);
+			let transactionFilePath = this.getTransactionsFilePath(accountFolder, date);
 			if (currentTransactionsFilePath !== transactionFilePath) {
 				if (currentTransactionsFilePath !== '') {
 					this.sortTransactions(currentTransactions);
@@ -295,9 +329,16 @@ class Accounts {
 			throw new Error('The name "' + name + '" is not a valid account name. Please use only alphanumeric, space, underscore, and dash characters.');
 		}
 
+		// Get the account.
+		const accountIndex = this.getAccountIndex(newName, accounts);
+		if (accountIndex === undefined) {
+			throw new Error('The name "' + name + '" does not exist.');
+		}
+		const accountFolder = 'data/accounts/' + accounts[accountindex].id;
+
 		// If the transactions folder doesn't already exist, create it.
-		if (!fs.existsSync('data/accounts/' + name + '/transactions/')) {
-			fs.mkdirSync('data/accounts/' + name + '/transactions/');
+		if (!fs.existsSync(accountFolder + '/transactions/')) {
+			fs.mkdirSync(accountFolder + '/transactions/');
 		}
 
 		let currentTransactionsFilePath = '';
@@ -305,7 +346,7 @@ class Accounts {
 		let currentTransactions = null;
 		for (let transaction of transactions) {
 			let date = new Date(transaction.date);
-			let transactionFilePath = this.getTransactionsFilePath(name, date);
+			let transactionFilePath = this.getTransactionsFilePath(accountFolder, date);
 			if (currentTransactionsFilePath !== transactionFilePath) {
 				if (currentTransactionsFilePath !== '') {
 					this.sortTransactions(currentTransactions);
@@ -354,8 +395,8 @@ class Accounts {
 	 * @param {string} name
 	 * @param {Date} date
 	 */
-	static getTransactionsFilePath(name, date) {
-		return 'data/accounts/' + name + '/transactions/' + date.getUTCFullYear().toString().padStart(4, '0') + (date.getUTCMonth() + 1).toString().padStart(2, '0') + '.json';
+	static getTransactionsFilePath(accountFolder, date) {
+		return accountFolder + '/transactions/' + date.getUTCFullYear().toString().padStart(4, '0') + (date.getUTCMonth() + 1).toString().padStart(2, '0') + '.json';
 	}
 
 	static sortTransactions(transactions) {
