@@ -7,11 +7,11 @@
 	grid-template-columns: repeat(7, 2rem);
 	cursor: default;
 }
-.Calendar .year_current {
+.Calendar #year_current {
 	grid-column-start: 3;
 	grid-column-end: 6;
 }
-.Calendar .month_current {
+.Calendar #month_current {
 	grid-column-start: 2;
 	grid-column-end: 7;
 }

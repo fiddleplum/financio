@@ -1,0 +1,20 @@
+{
+	"compilerOptions": {
+		"target": "es6",
+		"module": "commonjs",
+		"esModuleInterop": true,
+		"moduleResolution": "node",
+		"outDir": "dist",
+		"noImplicitAny": true,
+		"strictPropertyInitialization": true,
+		"strictNullChecks": true,
+		"noImplicitReturns": true,
+		"removeComments": true,
+		"preserveConstEnums": true,
+		"sourceMap": true
+	},
+	"lib": ["es2015"],
+	"include": [
+		"src/**/*"
+	]
+}

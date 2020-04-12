@@ -1,15 +1,12 @@
 'use strict';
 
-const fs = require('fs');
-const WebSocket = require('ws');
-const Accounts = require('./accounts.js');
-const Categories = require('./categories.js');
+import fs from 'fs';
+import WebSocket from 'ws';
+import AccountUtils from './account_utils';
+import CategoryUtils from './category_utils';
 
-/**
- * @param {WebSocket} ws
- * @param {string} message
- */
-async function processMessage(ws, message) {
+/** Process a message from the client. */
+async function processMessage(ws: WebSocket, message: string) {
 
 	let request = JSON.parse(message);
 	let requestData = request.data;
@@ -19,51 +16,54 @@ async function processMessage(ws, message) {
 	console.log('received: %s', JSON.stringify(requestData));
 	try {
 		if (requestData.command === 'list accounts') {
-			responseData = Accounts.list();
+			responseData = AccountUtils.list();
 		}
 		else if (requestData.command === 'create account') {
-			let name = requestData.name;
-			let type = requestData.type;
-			responseData = Accounts.create(name, type);
+			let name: string = requestData.name;
+			let currency: string = requestData.currency;
+			let parentId: string | undefined = requestData.parentId;
+			let beforeId: string | undefined = requestData.beforeId;
+			let isGroup: boolean = requestData.isGroup;
+			responseData = AccountUtils.create(name, currency, parentId, beforeId, isGroup);
 		}
 		else if (requestData.command === 'delete account') {
-			let name = requestData.name;
-			responseData = Accounts.delete(name);
+			let id: string = requestData.id;
+			responseData = AccountUtils.delete(id);
 		}
 		else if (requestData.command === 'view account') {
-			let name = requestData.name;
-			responseData = Accounts.view(name);
+			let id: string = requestData.id;
+			responseData = AccountUtils.view(id);
 		}
 		else if (requestData.command === 'rename account') {
-			let name = requestData.name;
+			let id = requestData.id;
 			let newName = requestData.newName;
-			responseData = Accounts.rename(name, newName);
+			responseData = AccountUtils.rename(id, newName);
 		}
 		else if (requestData.command === 'list transactions') {
-			let name = requestData.name;
-			let startDate = requestData.startDate;
-			let endDate = requestData.endDate;
-			let search = requestData.search;
-			let minAmount = requestData.minAmount;
-			let maxAmount = requestData.maxAmount;
-			responseData = Accounts.listTransactions(name, startDate, endDate, search, minAmount, maxAmount);
+			let id: string = requestData.id;
+			let startDate: string = requestData.startDate;
+			let endDate: string = requestData.endDate;
+			let search: string = requestData.search;
+			let minAmount: number | undefined = requestData.minAmount;
+			let maxAmount: number | undefined = requestData.maxAmount;
+			responseData = AccountUtils.listTransactions(id, startDate, endDate, search, minAmount, maxAmount);
 		}
 		else if (requestData.command === 'check duplicate transactions') {
 			let name = requestData.name;
 			let transactions = requestData.transactions;
-			responseData = Accounts.checkDuplicateTransactions(name, transactions);
+			responseData = AccountUtils.checkDuplicateTransactions(name, transactions);
 		}
 		else if (requestData.command === 'add transactions') {
 			let name = requestData.name;
 			let transactions = requestData.transactions;
-			responseData = Accounts.addTransactions(name, transactions);
+			responseData = AccountUtils.addTransactions(name, transactions);
 		}
 		else if (requestData.command === 'get categories') {
-			responseData = Categories.get();
+			responseData = CategoryUtils.get();
 		}
 		else if (requestData.command === 'set categories') {
 			let categories = requestData.categories;
-			responseData = Categories.set(categories);
+			responseData = CategoryUtils.set(categories);
 		}
 		else {
 			throw new Error('Unknown command.');
@@ -91,14 +91,14 @@ function startServer() {
 		fs.mkdirSync('data/');
 	}
 
-	Accounts.initialize();
+	AccountUtils.initialize();
 
 	console.log('The server has started.');
 
 	wss.on('connection', (ws) => {
 		console.log('Accepted a new connection.');
 		ws.on('message', (message) => {
-			processMessage(ws, message);
+			processMessage(ws, message.toString());
 		});
 		ws.on('close', () => {
 			console.log('Closed a connection.');

@@ -13,10 +13,6 @@ export class ViewAccount extends Financio.Page {
 		this.name = this.app.router.getValue('name');
 
 		this.__element('accountName').innerHTML = this.name;
-
-		// const transactionList = this.__component('transactionList');
-		// if (transactionList instanceof TransactionList) {
-		// }
 	}
 
 	private goToListAccounts(): void {
@@ -46,8 +42,7 @@ ViewAccount.html = /*html*/`
 			<button onclick="goToListAccounts">Back</button> <button ref="renameAccount" onclick="goToRenameAccount"><icon src="svg/edit.svg"/></button> <button ref="deleteAccount" onclick="goToDeleteAccount"><icon src="svg/trash.svg"/></button>
 		</div>
 		<h1 ref="accountName"></h1>
-		<!--<datechooser/>-->
-		<!--<div ref="transactionList"></div>-->
+		<TransactionList></TransactionList>
 	</div>
 	`;
 

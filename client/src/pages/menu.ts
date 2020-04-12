@@ -18,11 +18,12 @@ export class Menu extends Financio.Page {
 Menu.html = /*html*/`
 	<div>
 		<h1>Main Menu</h1>
-		<button ref="listAccounts" onclick="goToPage">Accounts</button>
-		<button ref="listCategories" onclick="goToPage">Categories</button>
-		<button ref="rules" onclick="goToPage">Rules</button>
-		<button ref="budgets" onclick="goToPage">Budgets</button>
-		<button ref="reports" onclick="goToPage">Reports</button>
+		<button ref="listAccounts" onclick="{{goToPage}}">Accounts</button>
+		<button ref="listCategories" onclick="{{goToPage}}">Categories</button>
+		<button ref="listFunds" onclick="{{goToPage}}">Funds</button>
+		<button ref="rules" onclick="{{goToPage}}">Rules</button>
+		<button ref="budgets" onclick="{{goToPage}}">Budgets</button>
+		<button ref="reports" onclick="{{goToPage}}">Reports</button>
 	</div>
 	`;
 

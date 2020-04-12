@@ -8,23 +8,12 @@ import YMD from './ymd';
 /** @typedef {import('../../../src/transaction').default} Transaction */
 /** @typedef {import('../financio').default} Financio */
 
-/**
- * The transactions page.
- */
-export default class Transactions extends Component {
-	/**
-	 * Constructor.
-	 * @param {Component.Params} params
-	 */
-	constructor(params) {
-		super(params);
+/** The transactions page. */
+export class Transactions extends Component {
+	private startDate: DateChooser;
 
-		/**
-		 * The app.
-		 * @type {Financio}
-		 * @private
-		 */
-		this._app = params.attributes.get('app');
+	constructor(params: Component.Params) {
+		super(params);
 
 		/**
 		 * The start date input.
@@ -167,14 +156,14 @@ export default class Transactions extends Component {
 	 * @param {YMD} date
 	 * @returns {string}
 	 */
-	_dateToString(date) {
+	_dateToString(date): string {
 		return (date.year + '').padStart(4, '0')
 			+ '-' + (date.month + '').padStart(2, '0')
 			+ '-' + (date.day + '').padStart(2, '0');
 	}
 }
 
-Transactions.html = `
+Transactions.html = /*html*/`
 	<p><button id="filterButton" onclick="_toggleFilterForm">${filterSVG}</button> <button id="importButton" onclick="_goToImportTransactions">${importSVG}</button></p>
 	<div id="dateChooser"></div>
 	<form id="filterForm" style="display: none;" action="javascript:">

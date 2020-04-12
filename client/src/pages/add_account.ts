@@ -3,13 +3,13 @@ import { Financio } from '../internal';
 
 /** The add account page. */
 export class AddAccount extends Financio.Page {
-	private goToListCategories(): void {
+	private _goToListCategories(): void {
 		this.app.router.pushQuery({
 			page: 'listAccounts'
 		});
 	}
 
-	private submitForm(): void {
+	private _submitForm(): void {
 		const inputs = Component.getFormInputs(this.__element('form'));
 		// Send the command to the server.
 		this.app.server.send({
@@ -37,8 +37,8 @@ AddAccount.html = /*html*/`
 				<option value="credit">Credit</option>
 				<option value="debit">Debit</option>
 			</select></p>
-			<button class="left" onclick="goToListCategories">Cancel</button>
-			<button class="right" onclick="submitForm">Add Account</button>
+			<button class="left" onclick="{{_goToListCategories}}">Cancel</button>
+			<button class="right" onclick="{{_submitForm}}">Add Account</button>
 		</form>
 		<div ref="feedback"></div>
 	</div>

@@ -1,8 +1,8 @@
 {
-	"name": "financio",
-	"version": "0.0.0",
-	"description": "Financio",
-	"private": true,
+	"name": "@fiddleplum/app-js",
+	"version": "1.0.0",
+	"description": "AppJS",
+	"private": false,
 	"scripts": {
 		"setup": "yarn install; mkdir -p dist; cp www/config.example.js dist/config.js",
 		"update": "yarn install --no-default-rc",
@@ -13,19 +13,21 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/fiddleplum/financio"
+		"url": "git+https://github.com/fiddleplum/app-js.git"
 	},
 	"author": "Stephen Hurley",
-	"license": "ISC",
-	"dependencies": {},
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/fiddleplum/app-js/issues"
+	},
+	"homepage": "https://github.com/fiddleplum/app-js",
 	"devDependencies": {
 		"eslint": "latest",
-		"eslint-config-standard": "latest",
-		"eslint-plugin-import": "latest",
-		"eslint-plugin-node": "latest",
-		"eslint-plugin-promise": "latest",
-		"eslint-plugin-standard": "latest",
+		"@typescript-eslint/parser": "latest",
+		"@typescript-eslint/eslint-plugin": "latest",
 		"raw-loader": "latest",
+		"ts-loader": "latest",
+		"typescript": "latest",
 		"webpack": "latest",
 		"webpack-cli": "latest",
 		"webpack-dev-server": "latest",
