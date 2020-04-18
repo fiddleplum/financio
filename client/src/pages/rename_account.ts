@@ -49,8 +49,8 @@ RenameAccount.html = `
 		<form ref="form" action="javascript:">
 			<p class="label"><label for="name">New name:</label></p>
 			<p><input name="newName" type="text" /></p>
-			<button class="left" onclick="goToViewAccount">Cancel</button>
-			<button class="right" onclick="submitForm">Rename Account</button>
+			<button class="left" onclick="{{goToViewAccount}}">Cancel</button>
+			<button class="right" onclick="{{submitForm}}">Rename Account</button>
 		</form>
 		<p ref="feedback"></p>
 	</div>

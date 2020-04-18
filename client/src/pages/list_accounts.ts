@@ -10,12 +10,24 @@ export class ListAccounts extends Financio.Page {
 		this.app.server.send({
 			command: 'list accounts'
 		}).then((accounts: Account[]) => {
-			let html = '';
-			for (let i = 0, l = accounts.length; i < l; i++) {
-				html += `<button ref="${accounts[i].name}" onclick="goToViewAccount">${accounts[i].name}</button>`;
-			}
+			const html = this.listAccounts(accounts, 0);
 			this.__setHtml(this.__element('list'), html);
 		});
+	}
+
+	private listAccounts(accounts: Account[], depth: number): string {
+		let html = '';
+		for (let i = 0, l = accounts.length; i < l; i++) {
+			const account = accounts[i];
+			if (account.children !== undefined) {
+				html += `<h2 style="margin-left: ${depth}em">${accounts[i].name}</h2>`;
+				html += this.listAccounts(account.children, depth + 1);
+			}
+			else {
+				html += `<h2 style="margin-left: ${depth}em"><a ref="${accounts[i].id}" onclick="{{goToViewAccount}}">${accounts[i].name}</a> &rarr;</h2>`;
+			}
+		}
+		return html;
 	}
 
 	/** Goes to the page named in the ref. */
@@ -43,15 +55,17 @@ ListAccounts.html = /*html*/`
 	<div>
 		<h1>Accounts</h1>
 		<div ref="list"></div>
-		<button ref="newAccount" onclick="goToAddAccount">+ New Account +</button>
+		<button ref="newAccount" onclick="{{goToAddAccount}}"><icon src="svg/add.svg"/></button>
 	</div>
 	`;
 
 ListAccounts.css = /*css*/`
+		
 	.ListAccounts button {
-		display: block;
-		margin: 1rem auto;
-		width: 10rem;
+	}
+	.ListAccounts .list {
+		widdth: 20rem;
+		font-size: 1.5rem;
 	}
 	`;
 

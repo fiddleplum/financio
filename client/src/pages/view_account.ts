@@ -39,7 +39,7 @@ export class ViewAccount extends Financio.Page {
 ViewAccount.html = /*html*/`
 	<div>
 		<div class="toolbar">
-			<button onclick="goToListAccounts">Back</button> <button ref="renameAccount" onclick="goToRenameAccount"><icon src="svg/edit.svg"/></button> <button ref="deleteAccount" onclick="goToDeleteAccount"><icon src="svg/trash.svg"/></button>
+			<button onclick="{{goToListAccounts}}">Accounts</button> <button ref="renameAccount" onclick="{{goToRenameAccount}}"><icon src="svg/edit.svg"/></button> <button ref="deleteAccount" onclick="{{goToDeleteAccount}}"><icon src="svg/trash.svg"/></button>
 		</div>
 		<h1 ref="accountName"></h1>
 		<TransactionList></TransactionList>

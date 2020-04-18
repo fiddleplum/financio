@@ -53,8 +53,8 @@ DeleteAccount.html = /*html*/`
 		<form ref="form" action="javascript:">
 			<p>If you want to delete your account, enter the name in of the account (case sensitive).</p>
 			<p><input name="delete" type="text" /></p>
-			<button class="left" onclick="goToViewAccount">Cancel</button>
-			<button class="right" onclick="submitForm">Delete Account</button>
+			<button class="left" onclick="{{goToViewAccount}}">Cancel</button>
+			<button class="right" onclick="{{submitForm}}">Delete Account</button>
 		</form>
 		<p ref="feedback"></p>
 	</div>
