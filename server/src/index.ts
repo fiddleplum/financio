@@ -20,11 +20,10 @@ async function processMessage(ws: WebSocket, message: string) {
 		}
 		else if (requestData.command === 'create account') {
 			let name: string = requestData.name;
-			let currency: string = requestData.currency;
-			let parentId: string | undefined = requestData.parentId;
-			let beforeId: string | undefined = requestData.beforeId;
 			let isGroup: boolean = requestData.isGroup;
-			responseData = AccountUtils.create(name, currency, parentId, beforeId, isGroup);
+			let currency: string = requestData.currency;
+			let placement: string = requestData.placement;
+			responseData = AccountUtils.create(name, currency, placement, isGroup);
 		}
 		else if (requestData.command === 'delete account') {
 			let id: string = requestData.id;

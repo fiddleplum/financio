@@ -10,24 +10,16 @@ export class ListAccounts extends Financio.Page {
 		this.app.server.send({
 			command: 'list accounts'
 		}).then((accounts: Account[]) => {
-			const html = this.listAccounts(accounts, 0);
+			const html = Account.surroundByText(accounts, (account: Account, depth: number) => {
+				if (account.children !== undefined) {
+					return `<h2 style="margin-left: ${depth}em">${account.name}</h2>`;
+				}
+				else {
+					return `<h2 style="margin-left: ${depth}em"><a ref="${account.id}" onclick="{{goToViewAccount}}">${account.name}</a> &rarr;</h2>`;
+				}
+			});
 			this.__setHtml(this.__element('list'), html);
 		});
-	}
-
-	private listAccounts(accounts: Account[], depth: number): string {
-		let html = '';
-		for (let i = 0, l = accounts.length; i < l; i++) {
-			const account = accounts[i];
-			if (account.children !== undefined) {
-				html += `<h2 style="margin-left: ${depth}em">${accounts[i].name}</h2>`;
-				html += this.listAccounts(account.children, depth + 1);
-			}
-			else {
-				html += `<h2 style="margin-left: ${depth}em"><a ref="${accounts[i].id}" onclick="{{goToViewAccount}}">${accounts[i].name}</a> &rarr;</h2>`;
-			}
-		}
-		return html;
 	}
 
 	/** Goes to the page named in the ref. */
@@ -55,7 +47,7 @@ ListAccounts.html = /*html*/`
 	<div>
 		<h1>Accounts</h1>
 		<div ref="list"></div>
-		<button ref="newAccount" onclick="{{goToAddAccount}}"><icon src="svg/add.svg"/></button>
+		<p><a ref="newAccount" onclick="{{goToAddAccount}}">Add</a></p>
 	</div>
 	`;
 
@@ -63,9 +55,13 @@ ListAccounts.css = /*css*/`
 		
 	.ListAccounts button {
 	}
-	.ListAccounts .list {
-		widdth: 20rem;
+	.ListAccounts [ref="newAccount"] {
+		font-size: 1.25rem;
+	}
+	.ListAccounts [ref="list"] {
 		font-size: 1.5rem;
+		border-bottom: 1px solid var(--fg-light);
+		margin-bottom: 1rem;
 	}
 	`;
 

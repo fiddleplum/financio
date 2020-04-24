@@ -7,6 +7,7 @@ export * from './types/account';
 
 export * from './components/calendar';
 export * from './components/date_chooser';
+export * from './components/toggle_switch';
 export * from './components/transaction_list';
 
 export * from './pages/menu';

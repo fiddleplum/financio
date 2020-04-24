@@ -1,4 +1,5 @@
 import fs from 'fs';
+import crypto from 'crypto';
 import { Transaction } from '../../client/src/types/transaction';
 import { Account } from '../../client/src/types/account';
 
@@ -50,7 +51,7 @@ export default class AccountUtils {
 	/** Get a unique id for the account. Source from https://stackoverflow.com/a/2117523/510380. */
 	static getUniqueId(): string {
 		return '10000000-1000-4000-80000000-100000000000'.replace(/[018]/g, (c: any) => {
-			return (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16);
+			return (c ^ crypto.randomFillSync(new Uint8Array(1))[0] & 15 >> c / 4).toString(16);
 		});
 	}
 
@@ -60,10 +61,15 @@ export default class AccountUtils {
 	}
 
 	/** Creates a new account within the parent group right before the before item. */
-	static create(name: string, currency: string, parentId: string | undefined, beforeId: string | undefined, isGroup: boolean) {
+	static create(name: string, currency: string, placement: string, isGroup: boolean) {
 		// Validate the name.
 		if (!this._validateName(name)) {
 			throw new Error('The name "' + name + '" is not a valid account name. Please use only alphanumeric, space, underscore, and dash characters.');
+		}
+
+		// Validate currency.
+		if (currency === '') {
+			throw new Error('The currency must be specified.');
 		}
 
 		// Load the accounts file.
@@ -77,39 +83,56 @@ export default class AccountUtils {
 			children: isGroup ? [] : undefined
 		};
 
-		// Get array where it will be inserted.
-		let insertArray: Account[];
-		let parent: Account | undefined;
-		if (parentId !== undefined) {
-			parent = this.getAccount(parentId, accounts);
-			if (parent === undefined) {
-				throw new Error('Parent "' + parentId + '" not found.');
+		// Get the placement account. It can be <beforeId>, end_of_<parentId>, or just end_of_.
+		let before = true;
+		let placementId = placement;
+		if (placementId.startsWith('end_of_')) { // End of the placementId's children.
+			placementId = placementId.substring(7);
+			before = false;
+
+			if (placementId !== '') {
+				const parentAccount = this.getAccount(placementId, accounts);
+				if (parentAccount === undefined) {
+					throw new Error('Account "' + placementId + '" not found.');
+				}
+				if (parentAccount.children === undefined) {
+					throw new Error('Account "' + placementId + '" is not a group account.');
+				}
+				// Set the parent of the account.
+				account.parent = parentAccount.id;
+				// Push it!
+				parentAccount.children.push(account);
 			}
-			if (parent.children === undefined) {
-				throw new Error('Parent "' + parentId + '" is not a group account.');
+			else { // End of the root list.
+				accounts.push(account);
 			}
-			account.parent = parent.id;
-			insertArray = parent.children;
+
 		}
 		else {
-			insertArray = accounts;
-		}
+			const placementAccount = this.getAccount(placementId, accounts);
+			if (placementAccount === undefined) {
+				throw new Error('Account "' + placementId + '" not found.');
+			}
 
-		// Insert into the array at the proper place, given the before id.
-		if (beforeId !== undefined) {
-			let beforeIndex: number | undefined;
-			for (let i = 0; i < insertArray.length; i++) {
-				if (insertArray[i].id === beforeId) {
-					beforeIndex = i;
+			// Get the list where the account will be inserted.
+			let accountList = accounts;
+			if (placementAccount.parent !== undefined) {
+				const parentAccount = this.getAccount(placementAccount.parent, accounts);
+				if (parentAccount === undefined || parentAccount.children === undefined) {
+					throw new Error('The accounts file has been corrupt as "' + placementId + '" + has an invalid parent.');
+				}
+				accountList = parentAccount.children;
+				// Set the parent of the account.
+				account.parent = placementAccount.parent;
+			}
+
+			// Insert the account.
+			for (let i = 0; i < accountList.length; i++) {
+				if (placementAccount === accountList[i]) {
+					accountList.splice(i, 0, account);
+					break;
 				}
 			}
-			if (beforeIndex === undefined) {
-				throw new Error('Account "' + beforeId + '" was not found as a child of "' + parentId + '".');
-			}
-			insertArray.splice(beforeIndex, 0, account);
-		}
-		else {
-			insertArray.push(account);
 		}
 
 		// Save the accounts file.

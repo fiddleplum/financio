@@ -129,3 +129,5 @@ TransactionList.css = /*css*/`
 		}
 	}
 	`;
+
+TransactionList.register();
