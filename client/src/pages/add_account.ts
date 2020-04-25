@@ -100,8 +100,8 @@ AddAccount.html = /*html*/`
 				<select name="placement" id="placement" ref="placement"></select>
 			</div>
 			<div>
-				<a href="javascript:" class="right" onclick="{{_submitForm}}">Add Account</a>
-				<a href="javascript:" class="left" onclick="{{_goToListCategories}}">Cancel</a>
+				<button class="right" onclick="{{_submitForm}}">Add Account</button>
+				<button class="left" onclick="{{_goToListCategories}}">Cancel</button>
 			</div>
 		</form>
 		<div ref="feedback"></div>

@@ -27,31 +27,33 @@ export class TransactionList extends Component {
 }
 
 TransactionList.html = /*html*/`
-	<p><button id="filterButton" onclick="_toggleFilterForm"><icon src='svg/filter.svg'></button> <button id="importButton" onclick="_goToImportTransactions"><icon src='svg/import.svg'></button></p>
-	<div id="dateChooser"></div>
-	<form id="filterForm" style="display: none;" action="javascript:">
-		<label for="startDate" class="left">Start date:</label>
-		<DateChooser id="startDate" class="right"></DateChooser>
-		<label for="endDate" class="left">End date:</label>
-		<DateChooser id="endDate" class="right"></DateChooser>
-		<label for="minAmount" class="left">Minimum amount:</label>
-		<input id="minAmount" name="minAmount" type="text" class="right" />
-		<label for="maxAmount" class="left">Maximum amount:</label>
-		<input id="maxAmount" name="maxAmount" type="text" class="right" />
-		<label for="search" class="left">Search:</label>
-		<input id="search" name="search" type="text" class="right" />
-		<div id="feedback" class="feedback"></div>
-		<button class="submit" onclick="_updateQueryFromInputs">Update</button>
-	</form>
-	<div class="heading">
-		<div class="transaction">
-			<div class="date">Date</div>
-			<div class="description">Description</div>
-			<div class="category">Category</div>
-			<div class="amount">Amount</div>
+	<div>
+		<p><button id="filterButton" onclick="_toggleFilterForm"><icon src='svg/filter.svg'></button> <button id="importButton" onclick="_goToImportTransactions"><icon src='svg/import.svg'></button></p>
+		<div id="dateChooser"></div>
+		<form id="filterForm" style="display: none;" action="javascript:">
+			<label for="startDate" class="left">Start date:</label>
+			<DateChooser id="startDate" class="right"></DateChooser>
+			<label for="endDate" class="left">End date:</label>
+			<DateChooser id="endDate" class="right"></DateChooser>
+			<label for="minAmount" class="left">Minimum amount:</label>
+			<input id="minAmount" name="minAmount" type="text" class="right" />
+			<label for="maxAmount" class="left">Maximum amount:</label>
+			<input id="maxAmount" name="maxAmount" type="text" class="right" />
+			<label for="search" class="left">Search:</label>
+			<input id="search" name="search" type="text" class="right" />
+			<div id="feedback" class="feedback"></div>
+			<button class="submit" onclick="_updateQueryFromInputs">Update</button>
+		</form>
+		<div class="heading">
+			<div class="transaction">
+				<div class="date">Date</div>
+				<div class="description">Description</div>
+				<div class="category">Category</div>
+				<div class="amount">Amount</div>
+			</div>
 		</div>
+		<div class="rows"></div>
 	</div>
-	<div class="rows"></div>
 	`;
 
 TransactionList.css = /*css*/`

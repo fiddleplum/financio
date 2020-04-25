@@ -18,21 +18,16 @@ export class Menu extends Financio.Page {
 Menu.html = /*html*/`
 	<div>
 		<h1>Main Menu</h1>
-		<h2><a href='javascript:' ref="listAccounts" onclick="{{goToPage}}">Accounts</a></h2>
-		<h2><a href='javascript:' ref="listCategories" onclick="{{goToPage}}">Categories</a></h2>
-		<h2><a href='javascript:' ref="listFunds" onclick="{{goToPage}}">Funds</a></h2>
-		<h2><a href='javascript:' ref="rules" onclick="{{goToPage}}">Rules</a></h2>
-		<h2><a href='javascript:' ref="budgets" onclick="{{goToPage}}">Budgets</a></h2>
-		<h2><a href='javascript:' ref="reports" onclick="{{goToPage}}">Reports</a></h2>
+		<h2><button ref="listAccounts" onclick="{{goToPage}}">Accounts</button></h2>
+		<h2><button ref="listCategories" onclick="{{goToPage}}">Categories</button></h2>
+		<h2><button ref="listFunds" onclick="{{goToPage}}">Funds</button></h2>
+		<h2><button ref="rules" onclick="{{goToPage}}">Rules</button></h2>
+		<h2><button ref="budgets" onclick="{{goToPage}}">Budgets</button></h2>
+		<h2><button ref="reports" onclick="{{goToPage}}">Reports</button></h2>
 	</div>
 	`;
 
 Menu.css = /*css*/`
-	.Menu button {
-		display: block;
-		margin: 1rem auto;
-		width: 10rem;
-	}
 	`;
 
 Menu.register();
