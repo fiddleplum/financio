@@ -6,6 +6,8 @@ export class ListAccounts extends Financio.Page {
 	constructor(params: Component.Params) {
 		super(params);
 
+		this.app.section = '';
+
 		// Populate the list of account names.
 		this.app.server.send({
 			command: 'list accounts'

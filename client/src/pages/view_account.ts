@@ -12,6 +12,8 @@ export class ViewAccount extends Financio.Page {
 		// Set the name of the account.
 		this._id = this.app.router.getValue('id');
 
+		this.app.section = /*html*/`<button onclick="{{_goToListAccounts}}">Accounts</button>`;
+
 		// Get the info on the account.
 		this.app.server.send({
 			command: 'list accounts'
@@ -63,7 +65,6 @@ ViewAccount.html = /*html*/`
 		<h1 ref="accountName"></h1>
 		<button ref="menuButton" onclick="{{_toggleMenu}}"><icon src="assets/svgs/menu.svg"/></button>
 		<div ref="menu" style="display: none;">
-			<p><button onclick="{{_goToListAccounts}}">Accounts</button></p>
 			<p><button onclick="{{_goToRenameAccount}}">Rename</button></p>
 			<p><button onclick="{{_goToDeleteAccount}}">Delete</button></p>
 		</div>
