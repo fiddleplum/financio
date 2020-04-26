@@ -6,10 +6,9 @@
 	"scripts": {
 		"setup": "yarn install; mkdir -p dist; cp www/config.example.js dist/config.js",
 		"update": "yarn install --no-default-rc",
-		"rsync_www": "mkdir -p dist; rsync -r --delete --exclude=\"config.js\" --exclude=\"config.example.js\" www/ dist/",
-		"build": "yarn rsync_www; webpack --config webpack.dev.js",
-		"build-production": "yarn rsync_www; webpack --config webpack.prod.js",
-		"start": "yarn rsync_www; webpack-dev-server --config webpack.dev.js --content-base dist/"
+		"build": "webpack --config webpack.dev.js",
+		"build-production": "webpack --config webpack.prod.js",
+		"start": "webpack-dev-server --config webpack.dev.js --content-base src/"
 	},
 	"repository": {
 		"type": "git",
@@ -31,6 +30,7 @@
 		"webpack": "latest",
 		"webpack-cli": "latest",
 		"webpack-dev-server": "latest",
-		"webpack-merge": "latest"
+		"webpack-merge": "latest",
+		"copy-webpack-plugin": "latest"
 	}
 }

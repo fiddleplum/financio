@@ -1,3 +1,5 @@
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
 module.exports = {
 	entry: './src/index.ts',
 	output: {
@@ -14,5 +16,15 @@ module.exports = {
 			test: /\.(css|svg|html)$/,
 			use: 'raw-loader'
 		}]
-	}
+	},
+	plugins: [
+		new CopyWebpackPlugin([{
+			from: 'src/index.html'
+		}, {
+			from: 'src/config.js'
+		}, {
+			from: 'src/assets',
+			to: 'assets'
+		}])
+	]
 };
