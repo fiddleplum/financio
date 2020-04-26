@@ -1,4 +1,4 @@
-import { Component } from '../../../../app-ts/src/index';
+import { Component, ShowHide } from '../../../../app-ts/src/index';
 import { Financio, Account } from '../internal';
 
 /** The view accounts page. */
@@ -33,6 +33,10 @@ export class ViewAccount extends Financio.Page {
 		}
 	}
 
+	private _toggleMenu(): void {
+		ShowHide.toggle(this.__element('menu'));
+	}
+
 	private _goToListAccounts(): void {
 		this.app.router.pushQuery({
 			page: 'listAccounts'
@@ -58,7 +62,7 @@ ViewAccount.html = /*html*/`
 	<div>
 		<h1 ref="accountName"></h1>
 		<button ref="menuButton" onclick="{{_toggleMenu}}"><icon src="assets/svgs/menu.svg"/></button>
-		<div ref="menu">
+		<div ref="menu" style="display: none;">
 			<p><button onclick="{{_goToListAccounts}}">Accounts</button></p>
 			<p><button onclick="{{_goToRenameAccount}}">Rename</button></p>
 			<p><button onclick="{{_goToDeleteAccount}}">Delete</button></p>
