@@ -4,6 +4,7 @@ import { Menu, ListAccounts, AddAccount, ViewAccount, RenameAccount, DeleteAccou
 // import ListCategories from './pages/list_categories';
 import css from './financio.css';
 
+/** The main Financio app. */
 export class Financio extends SimpleApp {
 	/** The WebSocket host url. */
 	private serverHost = '//localhost:8081';
@@ -18,7 +19,7 @@ export class Financio extends SimpleApp {
 		this.server = new WS(this.serverHost);
 
 		// Set the title.
-		this.title = 'Financio';
+		this.title('Financio');
 
 		// Register the pages.
 		this.registerPage('', Menu);
@@ -35,7 +36,7 @@ export class Financio extends SimpleApp {
 			this.router.processURL();
 		}).catch((e) => {
 			console.log(e);
-			this.message = 'No connection could be made.';
+			this.message('No connection could be made.');
 		});
 	}
 }

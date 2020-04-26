@@ -100,8 +100,8 @@ AddAccount.html = /*html*/`
 				<select name="placement" id="placement" ref="placement"></select>
 			</div>
 			<div>
-				<button class="right" onclick="{{_submitForm}}">Add Account</button>
 				<button class="left" onclick="{{_goToListCategories}}">Cancel</button>
+				<button class="right" onclick="{{_submitForm}}">Add Account</button>
 			</div>
 		</form>
 		<div ref="feedback"></div>
@@ -114,7 +114,7 @@ AddAccount.css = /*css*/`
 	}
 
 	.AddAccount form #currency {
-		max-width: 5rem;
+		max-width: 10rem;
 	}
 
 	.AddAccount form #type {

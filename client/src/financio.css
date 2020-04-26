@@ -33,9 +33,17 @@ body {
 	color: var(--fg-light);
 }
 
+h1:first-child, h2:first-child, h3:first-child, p:first-child {
+	margin-top: 0;
+}
+
+h1:last-child, h2:last-child, h3:last-child, p:last-child {
+	margin-bottom: 0;
+}
+
 h1 {
 	position: relative;
-	margin: .5rem 0 1rem 0;
+	margin: .5rem 0 .5rem 0;
 	font-size: 1.5rem;
 	line-height: 1.5rem;
 	border-bottom: 1px solid var(--fg-light);
@@ -50,7 +58,7 @@ h2 {
 }
 
 p {
-	margin: .5rem .5rem .5rem .5rem;
+	margin: .5rem 0 .5rem 0;
 }
 
 button {
@@ -78,12 +86,16 @@ form {
 
 form .input {
 	display: inline-block;
-	margin: 0 1.5rem 1rem 0;
+	margin: 0 1rem 1rem 0;
 }
 
 form label {
 	display: block;
 	margin-bottom: 0.25rem;
+}
+
+form .buttons {
+	margin: 0 0 1rem 0;
 }
 
 form .left {

@@ -22,7 +22,7 @@ export class TransactionList extends Component {
 					<div class="amount">${transaction.amount.toFixed(2)}</div>
 				</div>`;
 		}
-		this.__setHtml(this.__element('rows'), html);
+		this.__setHtml(this.__element('rows'), this, html);
 	}
 }
 

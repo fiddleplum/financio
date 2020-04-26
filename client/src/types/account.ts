@@ -21,7 +21,10 @@ export class Account {
 				return account;
 			}
 			else if (account.children !== undefined) {
-				return this.getById(account.children, id);
+				const child = this.getById(account.children, id);
+				if (child !== undefined) {
+					return child;
+				}
 			}
 		}
 		return undefined;

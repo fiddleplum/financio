@@ -12,7 +12,7 @@ export class ViewAccount extends Financio.Page {
 		// Set the name of the account.
 		this._id = this.app.router.getValue('id');
 
-		this.app.section = /*html*/`<button onclick="{{_goToListAccounts}}">Accounts</button>`;
+		this.app.nav(this, /*html*/`<button onclick="{{_goToListAccounts}}">Accounts</button>`);
 
 		// Get the info on the account.
 		this.app.server.send({
@@ -25,7 +25,7 @@ export class ViewAccount extends Financio.Page {
 
 	private _populateAccountInfo(account: Account | undefined): void {
 		if (account === undefined) {
-			this.app.message = 'The account could not be found.';
+			this.app.message('The account could not be found.');
 			this.__element('accountName').innerHTML = 'Unknown';
 			return;
 		}
@@ -85,13 +85,8 @@ ViewAccount.css = /*css*/`
 		right: 0;
 		border: 1px solid var(--fg-light);
 		border-radius: 0 0 .25rem .25rem;
+		padding: .5rem;
 		text-align: right;
-	}
-	.ViewAccount .toolbar {
-		float: right;
-		font-size: 1rem;
-		line-height: 2rem;
-		height: 2rem;
 	}
 	`;
 

@@ -1,36 +1,54 @@
 import { Component } from '../../../../app-ts/src/index';
-import { Financio } from '../internal';
+import { Financio, Account } from '../internal';
 
 /** The delete account page. */
 export class DeleteAccount extends Financio.Page {
-	/** The name of the account to delete. */
-	private name: string;
+	/** The id of the account to delete. */
+	private _id: string;
+
+	/** The name of the account for verification. */
+	private _name: string | undefined;
 
 	constructor(params: Component.Params) {
 		super(params);
 
 		// Set the name of the account.
-		this.name = this.app.router.getValue('name');
+		this._id = this.app.router.getValue('id');
 
-		this.__element('name').innerHTML = this.name;
+		// Get the info on the account.
+		this.app.server.send({
+			command: 'list accounts'
+		}).then((accounts: Account[]) => {
+			const account = Account.getById(accounts, this._id);
+			if (account === undefined) {
+				this.app.message('The account could not be found.');
+				this.__element('name').innerHTML = 'Unknown';
+				return;
+			}
+			this._name = account.name;
+			this.__element('name').innerHTML = account.name;
+			if (account.children !== undefined && account.children.length > 0) {
+				this.__element('childMessage').style.display = 'block';
+			}
+		});
 	}
 
 	/** Goes to the view account page. */
 	private goToViewAccount(): void {
 		this.app.router.pushQuery({
 			page: 'viewAccount',
-			name: this.name
+			id: this._id
 		});
 	}
 
 	private submitForm(): void {
 		const formElem = this.__element('form');
 		const inputs = Component.getFormInputs(formElem);
-		if (inputs.delete === this.name) {
+		if (inputs.delete === this._name) {
 			// Send the command to the server.
 			this.app.server.send({
 				command: 'delete account',
-				name: this.name
+				id: this._id
 			}).then(() => {
 				this.app.router.pushQuery({
 					page: 'listAccounts'
@@ -50,11 +68,16 @@ DeleteAccount.html = /*html*/`
 		<h1>Delete Account</h1>
 		<p>The name of the account to be deleted is <b ref="name"></b>.</p>
 		<p>All data associated with the account will be irrecoverably deleted, with no undoing the action.</p>
+		<p ref="childMessage" style="display: none;">All child accounts will be moved up to the parent of this account.</p>
 		<form ref="form" action="javascript:">
-			<p>If you want to delete your account, enter the name in of the account (case sensitive).</p>
-			<p><input name="delete" type="text" /></p>
-			<button class="left" onclick="{{goToViewAccount}}">Cancel</button>
-			<button class="right" onclick="{{submitForm}}">Delete Account</button>
+			<div class="input">
+				<p>If you want to delete your account, enter the name in of the account (case sensitive).</p>
+				<p><input name="delete" type="text" /></p>
+			</div>
+			<div class="buttons">
+				<button class="left" onclick="{{goToViewAccount}}">Cancel</button>
+				<button class="right" onclick="{{submitForm}}">Delete Account</button>
+			</div>
 		</form>
 		<p ref="feedback"></p>
 	</div>

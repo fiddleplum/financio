@@ -151,12 +151,12 @@ export class Calendar extends Component {
 		let daysNeedUpdate = false;
 		if (this._shownYear !== year) {
 			this._shownYear = year;
-			this.__setHtml(this.__element('year_current'), this._shownYear.toString());
+			this.__setHtml(this.__element('year_current'), this, this._shownYear.toString());
 			daysNeedUpdate = true;
 		}
 		if (this._shownMonth !== month) {
 			this._shownMonth = month;
-			this.__setHtml(this.__element('month_current'), Calendar._monthNames[month - 1]);
+			this.__setHtml(this.__element('month_current'), this, Calendar._monthNames[month - 1]);
 			daysNeedUpdate = true;
 		}
 		if (daysNeedUpdate || forceUpdate) {

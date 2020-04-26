@@ -6,7 +6,7 @@ export class ListAccounts extends Financio.Page {
 	constructor(params: Component.Params) {
 		super(params);
 
-		this.app.section = '';
+		this.app.nav(this, /*html*/``);
 
 		// Populate the list of account names.
 		this.app.server.send({
@@ -15,7 +15,7 @@ export class ListAccounts extends Financio.Page {
 			const html = Account.surroundByText(accounts, (account: Account, depth: number) => {
 				return `<h2 style="margin-left: ${depth}em"><button ref="${account.id}" onclick="{{_goToViewAccount}}">${account.name}</button></h2>`;
 			});
-			this.__setHtml(this.__element('list'), html);
+			this.__setHtml(this.__element('list'), this, html);
 		});
 	}
 
@@ -56,9 +56,10 @@ ListAccounts.css = /*css*/`
 		font-size: 1.25rem;
 	}
 	.ListAccounts [ref="list"] {
-		font-size: 1.5rem;
-		border-bottom: 1px solid var(--fg-light);
 		margin-bottom: 1rem;
+		border-bottom: 1px solid var(--fg-light);
+		padding-bottom: 1rem;
+		font-size: 1.5rem;
 	}
 	`;
 
