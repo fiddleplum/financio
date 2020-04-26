@@ -160,7 +160,7 @@ export default class AccountUtils {
 			throw new Error('The account "' + id + '" does not exist.');
 		}
 
-		// Delete the account in the JSON.
+		// Get the parent's account array for deleting the child.
 		let deleteArray: Account[];
 		if (account.parent !== undefined) {
 			const parent = this.getAccount(account.parent, accounts);
@@ -172,9 +172,20 @@ export default class AccountUtils {
 		else {
 			deleteArray = accounts;
 		}
+
+		// Delete the account.
 		for (let i = 0; i < deleteArray.length; i++) {
 			if (deleteArray[i].id === account.id) {
-				deleteArray.splice(i, 1);
+				if (account.children !== undefined) {
+					// Replace it with its children.
+					deleteArray.splice(i, 1, ...account.children);
+					for (const child of account.children) {
+						child.parent = account.parent;
+					}
+				}
+				else {
+					deleteArray.splice(i, 1);
+				}
 				break;
 			}
 		}
