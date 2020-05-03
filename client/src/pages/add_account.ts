@@ -1,5 +1,5 @@
 import { Component } from '../../../../app-ts/src/index';
-import { Financio, Account } from '../internal';
+import { Financio, Account, NiceForm } from '../internal';
 
 /** The add account page. */
 export class AddAccount extends Financio.Page {
@@ -13,27 +13,47 @@ export class AddAccount extends Financio.Page {
 			command: 'list accounts'
 		}).then((accounts: Account[]) => {
 			this._accounts = accounts;
-			this.__element('placement').innerHTML = this._populatePlacement(accounts);
+			const entries: NiceForm.Entry[] = [];
+			
+			entries.push(new NiceForm.Entry('name', 'Name', 'text'));
+			entries.push(new NiceForm.Entry('group', 'Group', 'choice', [
+				new NiceForm.Option('no', 'No'),
+				new NiceForm.Option('yes', 'Yes')]));
+			entries.push(new NiceForm.Entry('currency', 'Currency', 'text', undefined, 'Write a currency in the format "singular/plural". For example, you can write "dollar/dollars", "share/shares", or "house/houses".'));
+			entries.push(new NiceForm.Entry('placement', 'Insert before', 'choice', this._populatePlacement(accounts)));
+
+			(this.__component('niceform') as NiceForm).entries = entries;
+
+			// this.__element('placement').innerHTML = this._populatePlacement(accounts);
+
+		}).catch((error) => {
+			throw new Error('While loading AddAccounts: ' + error);
 		});
 	}
 
-	private _populatePlacement(accounts: Account[], parent: Account | undefined = undefined, depth: number = 0): string {
+	private _populatePlacement(accounts: Account[], parent: Account | undefined = undefined, depth: number = 0): NiceForm.Option[] {
 		const spacing = '&#x2001;'.repeat(depth);
-		let html = ``;
+		const optionList: NiceForm.Option[] = [];
+		// let html = ``;
 		for (let i = 0; i < accounts.length; i++) {
 			const  account = accounts[i];
-			html += `<option style="text-indent: ${depth}em" value="${account.id}">${spacing}${account.name}</option>`;
+			optionList.push(new NiceForm.Option(account.id, spacing + account.name));
+			// html += `<option style="text-indent: ${depth}em" value="${account.id}">${spacing}${account.name}</option>`;
 			if (account.children !== undefined) {
-				html += this._populatePlacement(account.children, account, depth + 1);
+				optionList.push(...this._populatePlacement(account.children, account, depth + 1));
+				// html += this._populatePlacement(account.children, account, depth + 1);
 			}
 		}
 		if (parent !== undefined) {
-			html += `<option style="text-indent: ${depth}em" value="end_of_${parent.id}">${spacing}*end of ${parent.name}*</option>`;
+			optionList.push(new NiceForm.Option('end_of_' + parent.id, `${spacing}*end of ${parent.name}*`));
+			// html += `<option style="text-indent: ${depth}em" value="end_of_${parent.id}">${spacing}*end of ${parent.name}*</option>`;
 		}
 		else {
-			html += `<option style="text-indent: ${depth}em" value="end_of_">${spacing}*end*</option>`;
+			optionList.push(new NiceForm.Option('end_of_', `${spacing}*end*`));
+			// html += `<option style="text-indent: ${depth}em" value="end_of_">${spacing}*end*</option>`;
 		}
-		return html;
+		// return html;
+		return optionList;
 	}
 
 	private _onGroupChange() {
@@ -56,22 +76,23 @@ export class AddAccount extends Financio.Page {
 		this._showFeedback('Write a currency in the format "singular/plural". For example, you can write "dollar/dollars", "share/shares", or "house/houses".');
 	}
 
-	private _submitForm(): void {
-		const inputs = Component.getFormInputs(this.__element('form'));
-		console.log(inputs);
+	private async _submitForm(results: NiceForm.Results) {
 		// Send the command to the server.
-		this.app.server.send({
-			command: 'create account',
-			name: inputs.name,
-			isGroup: inputs.group === 'yes',
-			currency: inputs.currency,
-			placement: inputs.placement
-		}).then(() => {
-			this.app.router.pushQuery({
-				page: 'listAccounts'
-			});
-		}).catch((error) => {
-			this._showFeedback(error.message);
+		try {
+			await this.app.server.send({
+				command: 'create account',
+				name: results.name,
+				isGroup: results.group === 'yes',
+				currency: results.currency,
+				placement: results.placement });
+		}
+		catch (error) {
+			return error.message;
+		}
+
+		// Go to the list accounts page.
+		this.app.router.pushQuery({
+			page: 'listAccounts'
 		});
 	}
 }
@@ -79,32 +100,7 @@ export class AddAccount extends Financio.Page {
 AddAccount.html = /*html*/`
 	<div>
 		<h1>Add an Account</h1>
-		<form ref="form" action="javascript:">
-			<div class="input">
-				<label for="name">Name:</label>
-				<input name="name" id="name" type="text" />
-			</div>
-			<div class="input">
-				<label for="group">Group:</label>
-				<select name="group" id="group">
-					<option value="no">No</option>
-					<option value="yes">Yes</option>
-				</select>
-			</div>
-			<div class="input">
-				<label for="currency">Currency: <a href="javascript:" class="circled" onclick="{{_showCurrencyHelp}}">?</a></label>
-				<input name="currency" id="currency" type="text" />
-			</div>
-			<div class="input">
-				<label for="placement">Insert before:</label>
-				<select name="placement" id="placement" ref="placement"></select>
-			</div>
-			<div>
-				<button class="left" onclick="{{_goToListCategories}}">Cancel</button>
-				<button class="right" onclick="{{_submitForm}}">Add Account</button>
-			</div>
-		</form>
-		<div ref="feedback"></div>
+		<NiceForm ref='niceform' submitText="Add Account" onCancel="{{_goToListCategories}}" onSubmit="{{_submitForm}}"></NiceForm>
 	</div>
 	`;
 
@@ -129,11 +125,6 @@ AddAccount.css = /*css*/`
 		border-radius: 1em;
 		font-size: .75em;
 		text-align: center;
-	}
-
-	.AddAccount [ref="feedback"] {
-		opacity: 0;
-		transition: opacity .25s;
 	}
 	`;
 

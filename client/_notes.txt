@@ -17,10 +17,6 @@ Account properties:
 hasTransactions (everything but single assets, this can just be true and there are no transactions in the single assets)
 currency (stocks have shares, house/car have currency of items, and you can update the price per item)
 
-# Account Hierarchy
-
-I would like to add a hierarchy to accounts. I could make a check box when creating an account that says if it is an account category. All of the other options would disappear.
-
 # Add opposite transaction to other account.
 
 When categorizing a transaction, make an option to add an opposite amount in another account. For instance, when my checking account transfers out $ to my mortgage, my mortgage account doesn't have automatic transactions (possibly), so I may need to manually add a transaction of the opposite amount. Or, I could have the nice button that does it for me.

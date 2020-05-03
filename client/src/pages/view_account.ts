@@ -10,7 +10,7 @@ export class ViewAccount extends Financio.Page {
 		super(params);
 
 		// Set the name of the account.
-		this._id = this.app.router.getValue('id');
+		this._id = this.app.router.getValue('id') || '';
 
 		this.app.nav(this, /*html*/`<button onclick="{{_goToListAccounts}}">Accounts</button>`);
 
@@ -69,6 +69,7 @@ ViewAccount.html = /*html*/`
 			<p><button onclick="{{_goToDeleteAccount}}">Delete</button></p>
 		</div>
 		<div ref="accountInfo"></div>
+		<Transactions app="{{app}}"></Transactions>
 	</div>
 	`;
 

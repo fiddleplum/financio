@@ -13,7 +13,7 @@ export class DeleteAccount extends Financio.Page {
 		super(params);
 
 		// Set the name of the account.
-		this._id = this.app.router.getValue('id');
+		this._id = this.app.router.getValue('id') || '';
 
 		// Get the info on the account.
 		this.app.server.send({

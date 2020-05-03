@@ -2,7 +2,7 @@ import { Component, ShowHide } from '../../../../app-ts/src/index';
 import { YMD, Calendar } from '../internal';
 
 /** A generic date chooser. */
-export default class DateChooser extends Component {
+export class DateChooser extends Component {
 	/** The displayed date. */
 	private _date = new YMD();
 
