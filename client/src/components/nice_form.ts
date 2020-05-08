@@ -11,15 +11,6 @@ export class NiceForm extends Component {
 	constructor(params: Component.Params) {
 		super(params);
 
-		// Process the entries attribute.
-		const entries = params.attributes.get('entries');
-		if (entries !== undefined) {
-			if (!(entries instanceof Array)) {
-				throw new Error('Attribute "entries" must be an array.');
-			}
-			this.entries = entries;
-		}
-
 		// Process the submit button text.
 		const submitText = params.attributes.get('submittext');
 		if (typeof submitText === 'string') {
@@ -37,43 +28,90 @@ export class NiceForm extends Component {
 		if (onSubmit instanceof Function) {
 			this.onSubmit = onSubmit as SubmitFunction;
 		}
+
+		// Process the children.
+		for (const child of params.children) {
+			if (child instanceof Element && child.tagName === 'ENTRY') {
+				const name = child.getAttribute('name');
+				const type = child.getAttribute('type') || 'text';
+				const tooltip = child.getAttribute('tooltip') || '';
+				const options: NiceForm.Option[] = [];
+				if (type === 'choice') {
+					const grandchildrenToRemove: Element[] = [];
+					for (const grandchild of child.childNodes) {
+						if (grandchild instanceof Element && grandchild.tagName === 'OPTION') {
+							const value = grandchild.getAttribute('value') || '';
+							const label = grandchild.innerHTML;
+							const option = new NiceForm.Option(value, label);
+							options.push(option);
+							grandchildrenToRemove.push(grandchild);
+						}
+					}
+					for (const element of grandchildrenToRemove) {
+						child.removeChild(element);
+					}
+				}
+				const label = child.innerHTML;
+				if (name !== null && name !== '') {
+					this.insertEntry(name, label, type, options, tooltip);
+				}
+			}
+		}
 	}
 
-	set entries(entries: NiceForm.Entry[]) {
-		let html = ``;
-		for (let i = 0; i < entries.length; i++) {
-			const entry = entries[i];
-			if (!(entry instanceof NiceForm.Entry)) {
-				throw new Error('Element ' + i + ' of attribute "entries" must be a Form.Entry.');
-			}
+	/** Inserts an entry into a form. */
+	insertEntry(name: string, label: string, type: string, options?: NiceForm.Option[], tooltip?: string, beforeName?: string) {
+		let html = /*html*/`
+			<div class="entry" ref="${name}">
+				<label for="${name}">${label}:</label>`;
+		if (type === 'text') {
 			html += /*html*/`
-				<div class="input">
-					<label for="${entry.name}">${entry.label}:</label>`;
-			if (entry.type === 'text') {
-				html += /*html*/`
-					<input name="${entry.name}" id="${entry.name}" type="text" />`;
-			}
-			else if (entry.type === 'password') {
-				html += /*html*/`
-					<input name="${entry.name}" id="${entry.name}" type="password" />`;
-			}
-			else if (entry.type === 'choice') {
-				if (!(entry.options instanceof Array)) {
-					throw new Error('Element ' + i + ' of attribute "entries" must have options as a choice type.');
-				}
-				html += /*html*/`
-					<select name="${entry.name}" id="${entry.name}">`;
-				for (const option of entry.options) {
+				<input name="${name}" id="${name}" type="text" />`;
+		}
+		else if (type === 'password') {
+			html += /*html*/`
+				<input name="${name}" id="${name}" type="password" />`;
+		}
+		else if (type === 'choice') {
+			html += /*html*/`
+				<select name="${name}" id="${name}">`;
+			if (options instanceof Array) {
+				for (const option of options) {
 					html += /*html*/`
 						<option value="${option.value}">${option.label}</option>`;
 				}
-				html += /*html*/`
-					</select>`;
 			}
 			html += /*html*/`
-				</div>`;
+				</select>`;
 		}
-		this.__setHtml(this.__element('inputs'), this, html);
+		html += /*html*/`
+			</div>`;
+		let beforeElem = null;
+		if (beforeName !== undefined) {
+			beforeElem = this.__element(beforeName);
+		}
+		this.__insertHtml(this.__element('inputs'), beforeElem, this, html);
+	}
+
+	/** Remove an entry from the form. */
+	removeEntry(name: string) {
+		const element = this.__element(name);
+		this.__removeElement(element);
+	}
+
+	/** Inserts an option into a choice. */
+	insertOption(choiceName: string, value: string, label: string, before?: number) {
+		const selectElement = this.__element(choiceName).children[1];
+		const beforeElement = before !== undefined ? selectElement.children[before] : null;
+		const html = /*html*/`<option value="${value}">${label}</option>`;
+		this.__insertHtml(selectElement, beforeElement, this, html);
+	}
+
+	/** Removes an option from a choice. */
+	removeOption(choiceName: string, option: number) {
+		const selectElement = this.__element(choiceName).children[1];
+		const optionElement = selectElement.children[option];
+		this.__removeElement(optionElement);
 	}
 
 	/** Gets the inputs from a form along with their values. Each key/value pair is an input's name and
@@ -191,7 +229,7 @@ NiceForm.css = /*css*/`
 		overflow: auto;
 	}
 	
-	.NiceForm .input {
+	.NiceForm .entry {
 		display: inline-block;
 		margin: 0 1rem 1rem 0;
 	}
