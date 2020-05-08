@@ -1,5 +1,5 @@
 import { Component } from '../../../../app-ts/src/index';
-import { Financio, Account } from '../internal';
+import { Financio, Account, NiceForm } from '../internal';
 
 /** The delete account page. */
 export class DeleteAccount extends Financio.Page {
@@ -30,18 +30,22 @@ export class DeleteAccount extends Financio.Page {
 			if (account.children !== undefined && account.children.length > 0) {
 				this.__element('childMessage').style.display = 'block';
 			}
+
+			// (this.__component('niceform') as NiceForm).entries = entries;
+
+
 		});
 	}
 
 	/** Goes to the view account page. */
-	private goToViewAccount(): void {
+	private _goToViewAccount(): void {
 		this.app.router.pushQuery({
 			page: 'viewAccount',
 			id: this._id
 		});
 	}
 
-	private submitForm(): void {
+	private _submitForm(): void {
 		const formElem = this.__element('form');
 		const inputs = Component.getFormInputs(formElem);
 		if (inputs.delete === this._name) {
@@ -69,6 +73,7 @@ DeleteAccount.html = /*html*/`
 		<p>The name of the account to be deleted is <b ref="name"></b>.</p>
 		<p>All data associated with the account will be irrecoverably deleted, with no undoing the action.</p>
 		<p ref="childMessage" style="display: none;">All child accounts will be moved up to the parent of this account.</p>
+		<NiceForm ref='niceform' submitText="Add Account" onCancel="{{_goToViewAccount}}" onSubmit="{{_submitForm}}"></NiceForm>
 		<form ref="form" action="javascript:">
 			<div class="input">
 				<p>If you want to delete your account, enter the name in of the account (case sensitive).</p>

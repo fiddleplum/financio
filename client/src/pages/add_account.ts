@@ -15,17 +15,10 @@ export class AddAccount extends Financio.Page {
 			this._accounts = accounts;
 			const entries: NiceForm.Entry[] = [];
 			
-			entries.push(new NiceForm.Entry('name', 'Name', 'text'));
-			entries.push(new NiceForm.Entry('group', 'Group', 'choice', [
-				new NiceForm.Option('no', 'No'),
-				new NiceForm.Option('yes', 'Yes')]));
-			entries.push(new NiceForm.Entry('currency', 'Currency', 'text', undefined, 'Write a currency in the format "singular/plural". For example, you can write "dollar/dollars", "share/shares", or "house/houses".'));
-			entries.push(new NiceForm.Entry('placement', 'Insert before', 'choice', this._populatePlacement(accounts)));
-
-			(this.__component('niceform') as NiceForm).entries = entries;
-
-			// this.__element('placement').innerHTML = this._populatePlacement(accounts);
-
+			const placementOptions = this._populatePlacement(accounts);
+			for (const option of placementOptions) {
+				(this.__component('niceform') as NiceForm).insertOption('placement', option.value, option.label);
+			}
 		}).catch((error) => {
 			throw new Error('While loading AddAccounts: ' + error);
 		});
@@ -100,7 +93,15 @@ export class AddAccount extends Financio.Page {
 AddAccount.html = /*html*/`
 	<div>
 		<h1>Add an Account</h1>
-		<NiceForm ref='niceform' submitText="Add Account" onCancel="{{_goToListCategories}}" onSubmit="{{_submitForm}}"></NiceForm>
+		<NiceForm ref='niceform' submitText="Add Account" onCancel="{{_goToListCategories}}" onSubmit="{{_submitForm}}">
+			<Entry name="name" type="text">Name</Entry>
+			<Entry name="group" type="choice">Group
+				<Option value="no">No</Option>
+				<Option value="yes">Yes</Option>
+			</Entry>
+			<Entry name="currency">Currency</Entry>
+			<Entry name="placement" type="choice">Place before</Entry>
+		</NiceForm>
 	</div>
 	`;
 
