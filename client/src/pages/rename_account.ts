@@ -1,5 +1,5 @@
 import { Component } from '../../../../app-ts/src/index';
-import { Financio, Account } from '../internal';
+import { Financio, Account, NiceForm } from '../internal';
 
 /** The rename account page. */
 export class RenameAccount extends Financio.Page {
@@ -27,28 +27,24 @@ export class RenameAccount extends Financio.Page {
 	}
 
 	/** Goes to the view account page. */
-	private goToViewAccount(): void {
+	private _goToViewAccount(): void {
 		this.app.router.pushQuery({
 			page: 'viewAccount',
 			id: this._id
 		});
 	}
 
-	private submitForm(): void {
-		const formElem = this.__element('form');
-		const inputs = Component.getFormInputs(formElem);
+	private async _submitForm(results: NiceForm.Results) {
 		// Send the command to the server.
-		this.app.server.send({
+		return this.app.server.send({
 			command: 'rename account',
 			id: this._id,
-			newName: inputs.newName
+			newName: results.newName
 		}).then(() => {
 			this.app.router.pushQuery({
 				page: 'viewAccount',
 				id: this._id
 			});
-		}).catch((error) => {
-			this.__element('feedback').innerHTML = error.message;
 		});
 	}
 }
@@ -57,16 +53,9 @@ RenameAccount.html = `
 	<div>
 		<h1>Rename Account</h1>
 		<p>The name of the account to be renamed is <b ref="name"></b>.</p>
-		<form ref="form" action="javascript:">
-			<div class="input">
-				<label for="newName">New name:</label>
-				<input id="newName" name="newName" type="text" />
-			</div>
-			<div class="buttons">
-				<button class="left" onclick="{{goToViewAccount}}">Cancel</button>
-				<button class="right" onclick="{{submitForm}}">Rename Account</button>
-			</div>
-		</form>
+		<NiceForm submitText="Rename Account" onCancel="{{_goToViewAccount}}" onSubmit="{{_submitForm}}">
+			<Entry name="newName">New name</Entry>
+		</NiceForm>
 		<p ref="feedback"></p>
 	</div>
 	`;

@@ -45,24 +45,20 @@ export class DeleteAccount extends Financio.Page {
 		});
 	}
 
-	private _submitForm(): void {
-		const formElem = this.__element('form');
-		const inputs = Component.getFormInputs(formElem);
-		if (inputs.delete === this._name) {
+	private async _submitForm(results: NiceForm.Results): Promise<string | void> {
+		if (results.delete === this._name) {
 			// Send the command to the server.
-			this.app.server.send({
+			return this.app.server.send({
 				command: 'delete account',
 				id: this._id
 			}).then(() => {
 				this.app.router.pushQuery({
 					page: 'listAccounts'
 				});
-			}).catch((error) => {
-				this.__element('feedback').innerHTML = error.message;
 			});
 		}
 		else {
-			this.__element('feedback').innerHTML = 'Please enter the name of the account exactly.';
+			throw new Error('Please enter the name of the account exactly.');
 		}
 	}
 }
@@ -73,18 +69,10 @@ DeleteAccount.html = /*html*/`
 		<p>The name of the account to be deleted is <b ref="name"></b>.</p>
 		<p>All data associated with the account will be irrecoverably deleted, with no undoing the action.</p>
 		<p ref="childMessage" style="display: none;">All child accounts will be moved up to the parent of this account.</p>
-		<NiceForm ref='niceform' submitText="Add Account" onCancel="{{_goToViewAccount}}" onSubmit="{{_submitForm}}"></NiceForm>
-		<form ref="form" action="javascript:">
-			<div class="input">
-				<p>If you want to delete your account, enter the name in of the account (case sensitive).</p>
-				<p><input name="delete" type="text" /></p>
-			</div>
-			<div class="buttons">
-				<button class="left" onclick="{{goToViewAccount}}">Cancel</button>
-				<button class="right" onclick="{{submitForm}}">Delete Account</button>
-			</div>
-		</form>
-		<p ref="feedback"></p>
+		<p>If you want to delete your account, enter the name in of the account (case sensitive).</p>
+		<NiceForm ref='niceform' submitText="Add Account" onCancel="{{_goToViewAccount}}" onSubmit="{{_submitForm}}">
+			<Entry name="delete"></Entry>
+		</NiceForm>
 	</div>
 	`;
 

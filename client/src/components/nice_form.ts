@@ -63,7 +63,7 @@ export class NiceForm extends Component {
 	insertEntry(name: string, label: string, type: string, options?: NiceForm.Option[], tooltip?: string, beforeName?: string) {
 		let html = /*html*/`
 			<div class="entry" ref="${name}">
-				<label for="${name}">${label}:</label>`;
+				<label for="${name}">${label}</label>`;
 		if (type === 'text') {
 			html += /*html*/`
 				<input name="${name}" id="${name}" type="text" />`;
@@ -146,16 +146,12 @@ export class NiceForm extends Component {
 	private _submit() {
 		if (this.onSubmit) {
 			const result = this._getFormResults(this.root);
+			const feedbackElem = this.__element('feedback');
 			this.onSubmit(result).then((feedback: string) => {
-				if (feedback.length > 0) {
-					const feedbackElem = this.__element('feedback');
-					feedbackElem.innerHTML = feedback;
-					feedbackElem.style.opacity = '1';
-				}
-				else {
-					const feedbackElem = this.__element('feedback');
-					feedbackElem.style.opacity = '0';
-				}
+				feedbackElem.style.opacity = '0';
+			}).catch((error: Error) => {
+				feedbackElem.innerHTML = error.message;
+				feedbackElem.style.opacity = '1';
 			});
 		}
 	}

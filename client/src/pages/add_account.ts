@@ -71,21 +71,17 @@ export class AddAccount extends Financio.Page {
 
 	private async _submitForm(results: NiceForm.Results) {
 		// Send the command to the server.
-		try {
-			await this.app.server.send({
-				command: 'create account',
-				name: results.name,
-				isGroup: results.group === 'yes',
-				currency: results.currency,
-				placement: results.placement });
-		}
-		catch (error) {
-			return error.message;
-		}
-
-		// Go to the list accounts page.
-		this.app.router.pushQuery({
-			page: 'listAccounts'
+		return this.app.server.send({
+			command: 'create account',
+			name: results.name,
+			isGroup: results.group === 'yes',
+			currency: results.currency,
+			placement: results.placement
+		}).then(() => {
+			// Go to the list accounts page.
+			this.app.router.pushQuery({
+				page: 'listAccounts'
+			});
 		});
 	}
 }

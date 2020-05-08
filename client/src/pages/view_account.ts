@@ -69,7 +69,7 @@ ViewAccount.html = /*html*/`
 			<p><button onclick="{{_goToDeleteAccount}}">Delete</button></p>
 		</div>
 		<div ref="accountInfo"></div>
-		<Transactions app="{{app}}"></Transactions>
+		<!--<Transactions app="{{app}}"></Transactions>-->
 	</div>
 	`;
 
