@@ -10,6 +10,7 @@ export class Transactions extends Component {
 
 		// Get Financio.
 		const financio = params.attributes.get('app');
+		console.log(financio);
 		if (!(financio instanceof Financio)) {
 			throw new Error('While constructing component, app is not Financio.');
 		}
@@ -74,71 +75,6 @@ export class Transactions extends Component {
 		(this.__component('transactionList') as TransactionList).transactions = transactions;
 	}
 
-	private _toggleFilterForm() {
-		const filterForm = this.__element('filterForm');
-		ShowHide.toggle(filterForm);
-	}
-
-	private _goToImportTransactions() {
-		this._app.router.pushQuery({
-			page: 'importTransactions',
-			id: this._app.router.getValue('id') || ''
-		});
-	}
-
-	/**
-	 * Updates the list of transactions.
-	 * @private
-	 */
-	private async _updateQueryFromInputs() {
-		// Get the form inputs.
-		const filterInputs = Transactions.getFormInputs(this.__element('filterForm'));
-
-		// Set the start date.
-		let startDate = '';
-		const startDateAsDate = (this.__component('startDate') as DateChooser).date;
-		if (!isNaN(startDateAsDate.year)) {
-			// Get the date inputs and parse them as Date objects.
-			try {
-				startDate = startDateAsDate.toString();
-			}
-			catch (e) {
-				this._showFeedback('Please enter a valid start date.');
-				return;
-			}
-		}
-
-		// Set the end date.
-		let endDate = '';
-		const endDateAsDate = (this.__component('endDate') as DateChooser).date;
-		if (!isNaN(endDateAsDate.year)) {
-			try {
-				endDate = endDateAsDate.toString();
-			}
-			catch (e) {
-				this._showFeedback('Please enter a valid end date.');
-				return;
-			}
-		}
-
-		// Get the min and max amounts.
-		const minAmount = filterInputs.minAmount as string;
-		const maxAmount = filterInputs.maxAmount as string;
-
-		// Get the search.
-		const search = filterInputs.search as string;
-
-		// Do the query.
-		this._app.router.pushQuery({
-			page: this._app.router.getValue('page') || '',
-			name: this._app.router.getValue('name') || '',
-			startDate: startDate,
-			endDate: endDate,
-			minAmount: minAmount,
-			maxAmount: maxAmount,
-			search: search });
-	}
-
 	/** Shows the feedback. */
 	private _showFeedback(message: string): void {
 		const feedbackElem = this.__element('feedback');
@@ -157,8 +93,8 @@ export class Transactions extends Component {
 Transactions.html = /*html*/`
 	<div>
 		<p>
-			<button id="filterButton" onclick="_toggleFilterForm"><icon src="assets/svgs/filter.svg"></icon></button>
-			<button id="importButton" onclick="_goToImportTransactions"><icon src="assets/svgs/import.svg"</icon></button>
+			<button id="filterButton" onclick="{{_toggleFilterForm}}"><icon src="assets/svgs/filter.svg"></icon></button>
+			<button id="importButton" onclick="{{_goToImportTransactions}}"><icon src="assets/svgs/import.svg"</icon></button>
 		</p>
 		<div id="dateChooser"></div>
 		<form id="filterForm" style="display: none;" action="javascript:">
@@ -173,7 +109,7 @@ Transactions.html = /*html*/`
 			<label for="search" class="left">Search:</label>
 			<input id="search" name="search" type="text" class="right" />
 			<div id="feedback" class="feedback">{{feedback}}</div>
-			<button class="submit" onclick="_updateQueryFromInputs">Update</button>
+			<button class="submit" onclick="{{_updateQueryFromInputs}}">Update</button>
 		</form>
 		<TransactionList ref="transactionList"></TransactionList>
 	</div>

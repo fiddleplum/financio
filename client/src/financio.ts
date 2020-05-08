@@ -43,16 +43,12 @@ export class Financio extends SimpleApp {
 
 export namespace Financio {
 	export class Page extends SimpleApp.Page {
-		public readonly app: Financio;
-
 		constructor(params: Component.Params) {
 			super(params);
+		}
 
-			const financio = params.attributes.get('app');
-			if (!(financio instanceof Financio)) {
-				throw new Error('While constructing page ' + this.constructor.name + ', app is not a SimpleApp.');
-			}
-			this.app = financio;
+		public get app(): Financio {
+			return super.app as Financio;
 		}
 	}
 }

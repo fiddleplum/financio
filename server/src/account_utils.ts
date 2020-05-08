@@ -2,6 +2,7 @@ import fs from 'fs';
 import crypto from 'crypto';
 import { Transaction } from '../../client/src/types/transaction';
 import { Account } from '../../client/src/types/account';
+import { YMD } from '../../client/src/types/ymd';
 
 export default class AccountUtils {
 	/** Sets up the folder structure. */
@@ -282,16 +283,21 @@ export default class AccountUtils {
 		let transactions: Transaction[] = [];
 		const accountFolder = 'data/accounts/' + id;
 		if (fs.existsSync(accountFolder + '/transactions/')) {
-			let date = new Date(startDate);
-			const end = new Date(endDate);
-			end.setUTCDate(end.getUTCDate() + 1); // Make it the next day to include the actual end date's transactions.
-			while (date.getTime() < end.getTime()) {
-				const filePath = this.getTransactionsFilePath(accountFolder, date);
+			const start = new YMD(startDate);
+			const end = new YMD(endDate);
+			const current = new YMD(start);
+			current.day = 1;
+			// end.day += 1; // Make it the next day to include the actual end date's transactions.
+			// end.setUTCDate(end.getUTCDate() + 1); 
+			while (current <= end) {
+				const filePath = this.getTransactionsFilePath(accountFolder, current);
 				if (fs.existsSync(filePath)) {
 					const newTransactions: Transaction[] = JSON.parse(fs.readFileSync(filePath).toString());
 					for (let i = 0, l = newTransactions.length; i < l; i++) {
 						const newTransaction = newTransactions[i];
-						if (newTransaction.date < startDate || end.toISOString() <= newTransaction.date) {
+						const transactionDate = new YMD(newTransaction.date);
+						console.log(transactionDate + ' ' + start + ' ' + end);
+						if (transactionDate < start || end < transactionDate) {
 							continue;
 						}
 						if (!regExp.test(newTransaction.description) && !regExp.test(newTransaction.notes)) {
@@ -303,7 +309,7 @@ export default class AccountUtils {
 						transactions.push(newTransaction);
 					}
 				}
-				date.setUTCMonth(date.getUTCMonth() + 1);
+				current.month += 1;
 			}
 		}
 		return transactions;
@@ -320,8 +326,8 @@ export default class AccountUtils {
 		let currentTransactionsFilePath = '';
 		let currentTransactions: Transaction[] | null = null;
 		for (let transaction of transactions) {
-			let date = new Date(transaction.date);
-			let transactionFilePath = this.getTransactionsFilePath(accountFolder, date);
+			const date = new YMD(transaction.date);
+			const transactionFilePath = this.getTransactionsFilePath(accountFolder, date);
 			if (currentTransactionsFilePath !== transactionFilePath) {
 				if (currentTransactions !== null) {
 					this.sortTransactions(currentTransactions);
@@ -369,8 +375,8 @@ export default class AccountUtils {
 		let currentTransactionsFilePath = '';
 		let currentTransactions: Transaction[] | null = null;
 		for (let transaction of transactions) {
-			let date = new Date(transaction.date);
-			let transactionFilePath = this.getTransactionsFilePath(accountFolder, date);
+			const date = new YMD(transaction.date);
+			const transactionFilePath = this.getTransactionsFilePath(accountFolder, date);
 			if (currentTransactionsFilePath !== transactionFilePath) {
 				if (currentTransactions !== null) {
 					this.sortTransactions(currentTransactions);
@@ -414,8 +420,8 @@ export default class AccountUtils {
 	}
 
 	/** Gets the file path of a given transaction file given a date. */
-	static getTransactionsFilePath(accountFolder: string, date: Date): string {
-		return accountFolder + '/transactions/' + date.getUTCFullYear().toString().padStart(4, '0') + (date.getUTCMonth() + 1).toString().padStart(2, '0') + '.json';
+	static getTransactionsFilePath(accountFolder: string, date: YMD): string {
+		return accountFolder + '/transactions/' + date.year.toString().padStart(4, '0') + date.month.toString().padStart(2, '0') + '.json';
 	}
 
 	static sortTransactions(transactions: Transaction[]) {

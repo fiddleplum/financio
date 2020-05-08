@@ -1,4 +1,5 @@
 import { Component } from '../../../../app-ts/src/index';
+import { DateChooser, YMD } from '../internal';
 
 /** A generic form. */
 export class NiceForm extends Component {
@@ -21,6 +22,9 @@ export class NiceForm extends Component {
 		const onCancel = params.attributes.get('oncancel');
 		if (onCancel instanceof Function) {
 			this.onCancel = onCancel as () => {};
+		}
+		else {
+			this.__removeElement(this.__element('cancel'));
 		}
 
 		// Process the submit callback.
@@ -84,6 +88,13 @@ export class NiceForm extends Component {
 			html += /*html*/`
 				</select>`;
 		}
+		else if (type === 'date') {
+			html += /*html*/`
+				<DateChooser ref="${name}DateChooser" name="${name}"></DateChooser>`;
+		}
+		else if (type === 'p') {
+			html += /*html*/`<p>${label}</p>`;
+		}
 		html += /*html*/`
 			</div>`;
 		let beforeElem = null;
@@ -112,6 +123,22 @@ export class NiceForm extends Component {
 		const selectElement = this.__element(choiceName).children[1];
 		const optionElement = selectElement.children[option];
 		this.__removeElement(optionElement);
+	}
+
+	/** Sets the value of an named entry. */
+	public setValue(name: string, value: string) {
+		const element = this.__element(name);
+		const input = element.querySelector('input, select, textarea');
+		if (input instanceof HTMLInputElement
+			|| input instanceof HTMLSelectElement
+			|| input instanceof HTMLTextAreaElement) {
+			input.value = value;
+		}
+		try {
+			const dateChooser = this.__component(name + 'DateChooser') as DateChooser;
+			dateChooser.date = new YMD(value);
+		}
+		catch(e) {}
 	}
 
 	/** Gets the inputs from a form along with their values. Each key/value pair is an input's name and
@@ -194,7 +221,7 @@ NiceForm.html = /*html*/`
 		<div ref="inputs">
 		</div>
 		<div ref="buttons">
-			<button class="left" onclick="{{_cancel}}">Cancel</button>
+			<button ref="cancel" class="left" onclick="{{_cancel}}">Cancel</button>
 			<button ref="submit" class="right" onclick="{{_submit}}">Submit</button>
 		</div>
 		<div ref="feedback"></div>
@@ -226,7 +253,7 @@ NiceForm.css = /*css*/`
 	}
 	
 	.NiceForm .entry {
-		display: inline-block;
+		display: block;
 		margin: 0 1rem 1rem 0;
 	}
 	

@@ -12,6 +12,14 @@ export class DateChooser extends Component {
 	constructor(params: Component.Params) {
 		super(params);
 
+		// Set the name and id attributes of the input.
+		if (params.attributes.has('name')) {
+			const name = params.attributes.get('name') as string;
+			const inputElement = this.__element('date');
+			inputElement.setAttribute('name', name);
+			inputElement.setAttribute('id', name);
+		}
+
 		/** The calendar. */
 		this._calendar = this.__component('calendar') as Calendar;
 
@@ -159,7 +167,7 @@ export class DateChooser extends Component {
 
 DateChooser.html = /*html*/`
 	<span>
-		<input ref="date" class="date" type="text" placeholder="YYYY-MM-DD" maxlength=10 title="Please use the format YYYY-MM-DD" pattern="\\d\\d\\d\\d-\\d\\d-\\d\\d" onkeydown="_onDateInputKeyDown" oninput="_onDateInputInput" onchange="_onDateChange"/><button onclick="_toggleCalendar"><icon src="assets/svgs/calendar.svg" /></button>
+		<input ref="date" class="date" type="text" placeholder="YYYY-MM-DD" maxlength=10 title="Please use the format YYYY-MM-DD" pattern="\\d\\d\\d\\d-\\d\\d-\\d\\d" onkeydown="{{_onDateInputKeyDown}}" oninput="{{_onDateInputInput}}" onchange="{{_onDateChange}}"/><button onclick="{{_toggleCalendar}}"><icon src="assets/svgs/calendar.svg" /></button>
 		<Calendar ref="calendar" style="display: none;" onclick="{{_onDateSelected}}"/>
 	</span>
 	`;
@@ -169,6 +177,10 @@ DateChooser.css = /*css*/`
 		width: 7rem;
 		text-align: left;
 		margin-right: .25rem;
+	}
+
+	.DateChooser > button {
+		font-size: 2rem;
 	}
 
 	.DateChooser > .Calendar {
