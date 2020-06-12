@@ -287,8 +287,6 @@ export default class AccountUtils {
 			const end = new YMD(endDate);
 			const current = new YMD(start);
 			current.day = 1;
-			// end.day += 1; // Make it the next day to include the actual end date's transactions.
-			// end.setUTCDate(end.getUTCDate() + 1); 
 			while (current <= end) {
 				const filePath = this.getTransactionsFilePath(accountFolder, current);
 				if (fs.existsSync(filePath)) {
@@ -300,12 +298,16 @@ export default class AccountUtils {
 						if (transactionDate < start || end < transactionDate) {
 							continue;
 						}
+						console.log('here1');
 						if (!regExp.test(newTransaction.description) && !regExp.test(newTransaction.notes)) {
 							continue;
 						}
+						console.log('here2');
+						console.log((typeof newTransaction.amount) + ' ' + typeof(minAmount) + ' ' + typeof(maxAmount));
 						if (newTransaction.amount < minAmount || maxAmount < newTransaction.amount) {
 							continue;
 						}
+						console.log('here3');
 						transactions.push(newTransaction);
 					}
 				}
@@ -331,11 +333,11 @@ export default class AccountUtils {
 			if (currentTransactionsFilePath !== transactionFilePath) {
 				if (currentTransactions !== null) {
 					this.sortTransactions(currentTransactions);
-					fs.writeFileSync(currentTransactionsFilePath, JSON.stringify(currentTransactions));
+					// fs.writeFileSync(currentTransactionsFilePath, JSON.stringify(currentTransactions));
 				}
 				currentTransactionsFilePath = transactionFilePath;
 				if (!fs.existsSync(currentTransactionsFilePath)) {
-					fs.writeFileSync(currentTransactionsFilePath, '');
+					// fs.writeFileSync(currentTransactionsFilePath, '');
 					currentTransactions = [];
 				}
 				else {

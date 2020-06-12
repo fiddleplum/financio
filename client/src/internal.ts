@@ -19,3 +19,4 @@ export * from './pages/add_account';
 export * from './pages/view_account';
 export * from './pages/rename_account';
 export * from './pages/delete_account';
+export * from './pages/import_transactions';

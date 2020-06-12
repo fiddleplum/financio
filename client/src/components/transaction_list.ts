@@ -33,7 +33,7 @@ export class TransactionList extends Component {
 
 TransactionList.html = /*html*/`
 	<div>
-		<div class="heading">
+		<div ref="heading">
 			<div class="transaction">
 				<div class="date">Date</div>
 				<div class="description">Description</div>
@@ -41,7 +41,7 @@ TransactionList.html = /*html*/`
 				<div class="amount">Amount</div>
 			</div>
 		</div>
-		<div class="rows"></div>
+		<div ref="rows"></div>
 	</div>
 	`;
 
@@ -79,12 +79,12 @@ TransactionList.css = /*css*/`
 		line-height: 1.5rem;
 		padding-right: .125rem;
 	}
-	.TransactionList.rows .even {
+	.TransactionList [ref=rows] .even {
 		background: var(--bg-medium);
 		color: var(--bg-light);
 	}
 	@media (max-width: 52rem) {
-		.TransactionList.heading {
+		.TransactionList [ref=heading] {
 			display: none;
 		}
 		.TransactionList .transaction {
@@ -96,7 +96,7 @@ TransactionList.css = /*css*/`
 		}
 	}
 	@media (max-width: 46rem) {
-		.TransactionList.heading {
+		.TransactionList [ref=heading] {
 			display: none;
 		}
 		.TransactionList .transaction {

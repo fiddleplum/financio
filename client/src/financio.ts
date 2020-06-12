@@ -1,5 +1,12 @@
 import { SimpleApp, Component, WS } from '../../../app-ts/src/index';
-import { Menu, ListAccounts, AddAccount, ViewAccount, RenameAccount, DeleteAccount } from './internal';
+import {
+	Menu,
+	ListAccounts,
+	AddAccount,
+	ViewAccount,
+	RenameAccount,
+	DeleteAccount,
+	ImportTransactions } from './internal';
 // import ImportTransactions from './pages/import_transactions';
 // import ListCategories from './pages/list_categories';
 import css from './financio.css';
@@ -28,7 +35,7 @@ export class Financio extends SimpleApp {
 		this.registerPage('viewAccount', ViewAccount);
 		this.registerPage('renameAccount', RenameAccount);
 		this.registerPage('deleteAccount', DeleteAccount);
-		// this.registerPage('importTransactions', ImportTransactions);
+		this.registerPage('importTransactions', ImportTransactions);
 		// this.registerPage('listCategories', ListCategories);
 
 		// Wait until the web socket is connected.

@@ -48,14 +48,15 @@ async function processMessage(ws: WebSocket, message: string) {
 			responseData = AccountUtils.listTransactions(id, startDate, endDate, search, minAmount, maxAmount);
 		}
 		else if (requestData.command === 'check duplicate transactions') {
-			let name = requestData.name;
+			console.log(requestData);
+			let id = requestData.id;
 			let transactions = requestData.transactions;
-			responseData = AccountUtils.checkDuplicateTransactions(name, transactions);
+			responseData = AccountUtils.checkDuplicateTransactions(id, transactions);
 		}
 		else if (requestData.command === 'add transactions') {
-			let name = requestData.name;
+			let id = requestData.id;
 			let transactions = requestData.transactions;
-			responseData = AccountUtils.addTransactions(name, transactions);
+			responseData = AccountUtils.addTransactions(id, transactions);
 		}
 		else if (requestData.command === 'get categories') {
 			responseData = CategoryUtils.get();
